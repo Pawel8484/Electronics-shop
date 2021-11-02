@@ -1,0 +1,29 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId"
+                access="global">
+    <aura:attribute name="account" type="Account" access="public"/>
+    <aura:attribute name="accountId" type="String" access="public"/>
+
+    <aura:method name="select" action="{!c.select}"/>
+    <aura:method name="deselect" action="{!c.deselect}"/>
+    <aura:method name="toggle" action="{!c.toggle}"/>
+    <aura:method name="activate" action="{!c.activate}"/>
+    <aura:method name="isSelected" action="{!c.isSelected}"/>
+    <aura:attribute name="checked" type="Boolean" default="false"/>
+
+    <div class="slds-visual-picker slds-visual-picker_medium">
+        <input aura:id="checkbox" type="checkbox" id="{!v.account.Id}" value="{!v.account.Id}" checked="{!v.checked}" onclick="{!c.handleClick}"/>
+        <label for="{!v.account.Id}">
+        <span aura:id="picker" class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center">
+          <span>
+            <span class="slds-text-heading_small">{!v.account.Name}</span>
+              <br/>
+              <span class="slds-text-title">{!v.account.BillingCity}</span>
+              <span class="slds-text-title">{!v.account.BillingCountry}</span>
+          </span>
+        </span>
+            <span class="slds-icon_container slds-visual-picker__text-check">
+                <lightning:icon iconName="utility:check" size="x-small" variant="bare"></lightning:icon>
+        </span>
+        </label>
+    </div>
+</aura:component>

@@ -1,0 +1,16 @@
+.THIS .article-carousel-item {
+    width: 100%;
+    height: 30%;
+}
+
+.THIS .article {
+    margin:5px;
+    padding:10px;
+    height:175px;
+    cursor:pointer;
+}
+
+.THIS .article-carousel-item:hover {
+    box-shadow: 3px 3px 3px grey;
+    transform: scale(1.02);
+}

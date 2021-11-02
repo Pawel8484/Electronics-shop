@@ -1,0 +1,110 @@
+<apex:page id="GD_OrgInfo" controller="GD_OrgInfoController" lightningStylesheets="true">
+    <apex:form >
+        <apex:slds />
+        <apex:pageBlock >
+            <div style="text-align:right">
+                <apex:commandButton styleClass="slds-button slds-button_brand" value="{!$Label.Session_Id}"
+                                    action="{!getSessionIdNumber}">
+                </apex:commandButton>
+            </div>
+            <apex:outputPanel rendered="{!openModal}">
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                         aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <div id="modal-heading-01" class="slds-modal__title slds-hyphenate"
+                             style="font-size:15px; background-color:white; padding:20px">{!sesId}</div>
+                        <footer class="slds-modal__footer">
+                            <apex:commandButton value="{!$Label.Close}" action="{!close}"
+                                                styleClass="slds-button slds-button_neutral"/>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </apex:outputPanel>
+            <div class="slds-page-header__name-title, slds-p-vertical_small" style="text-align:center">
+                <h1>
+                                                <span class="slds-page-header__title slds-truncate">{!$Label.Org_Information}</span>
+                </h1>
+            </div>
+            <div class="slds-col slds-size_2-of-12">
+            </div>
+            <div class="slds-col slds-size_3-of-12">
+                <label class="slds-form-element__label" for="apex classes">{!$Label.Apex_classes}: </label>
+                <div class="slds-form-element__control">
+                    <apex:outputText styleClass="slds-output" value="{!numberOfApexClasses}"/>
+                </div>
+            </div>
+            <div class="slds-col slds-size_2-of-12">
+            </div>
+            <div class="slds-col slds-size_3-of-12">
+                <label class="slds-form-element__label" for="total licenses">{!$Label.Total_Licenses}: </label>
+                <div class="slds-form-element__control">
+                    <apex:outputText styleClass="slds-output" value="{!totalLicenses}"/>
+                </div>
+            </div>
+            <div class="slds-col slds-size_2-of-12">
+            </div>
+            <div class="slds-col slds-size_2-of-12">
+            </div>
+            <div class="slds-col slds-size_3-of-12">
+                <label class="slds-form-element__label" for="number of users">{!$Label.Number_of_users}: </label>
+                <div class="slds-form-element__control">
+                    <apex:outputText styleClass="slds-output" value="{!usersNumber}"/>
+                </div>
+            </div>
+            <div class="slds-col slds-size_2-of-12">
+            </div>
+            <div class="slds-col slds-size_3-of-12">
+                <label class="slds-form-element__label" for="number of active users">{!$Label.Number_of_active_users}
+                    : </label>
+                <div class="slds-form-element__control">
+                    <apex:outputText styleClass="slds-output" value="{!activeUsersNumber}"/>
+                </div>
+            </div>
+            <div class="slds-col slds-size_2-of-12">
+            </div>
+            <br/>
+            <apex:outputPanel layout="block"
+                    styleClass="slds-panel slds-grid slds-grid--vertical slds-nowrap slds-form--compound">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered"
+                       aria-label="Example table" id="searchBlock">
+                    <thead>
+                    <tr class="slds-line-height_reset">
+
+                        <th class="" scope="col">
+                            <div class="slds-truncate">{!$Label.Full_Name}</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Username">{!$Label.Username}</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Time zone">{!$Label.Time_zone}</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Last login">{!$Label.Last_login}</div>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <apex:repeat value="{!usersList}" var="user">
+                        <tr class="slds-hint-parent">
+                            <td>
+                                <div class="slds-truncate">{!user.Name}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!user.Username}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!user.TimeZoneSidKey}</div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate">{!user.LastLoginDate}</div>
+                            </td>
+                        </tr>
+                    </apex:repeat>
+                    </tbody>
+                </table>
+            </apex:outputPanel>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

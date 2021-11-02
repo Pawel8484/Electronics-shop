@@ -1,0 +1,35 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId">
+
+    <aura:attribute name="article" type="Object" access="public"/>
+    <!--    <aura:attribute name="checked" type="Boolean" default="false"/>-->
+    <!--    <aura:registerEvent name="objectTransfer" type="c:objectTransfer"/>-->
+    <aura:registerEvent name="hotNewsTransfer" type="c:hotNewsTransfer"/>
+
+        <a href="{!v.article.url}" target="_blank" style="text-decoration:none">
+    <div class="slds-m-around_small slds-align_absolute-center" article="{!v.article}"
+         onclick="{!c.selectedArticle}">
+        <article class="slds-post article article-carousel-item slds-box slds-theme_default">
+            <lightning:layout>
+                <lightning:layoutItem size="4" class="slds-p-top_medium">
+                    <img src="{!v.article.urlToImage}"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="8" class="slds-p-around_small">
+                    <header class="slds-post__header slds-media">
+                        <div class="slds-media__body" >
+                            <div class="slds-text-title">
+                                    {!v.article.title}
+                            </div>
+                            <lightning:relativeDateTime class="slds-text-body_small" value="{!v.article.publishedAt}"/>
+                        </div>
+                    </header>
+                    <div>
+                    <img onerror="{!c.imageError}" src="{!v.article.iconUrl}"
+                         style="height:25px; width:25px;display:inline;"/>&nbsp;
+
+                    </div>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </article>
+    </div>
+        </a>
+</aura:component>

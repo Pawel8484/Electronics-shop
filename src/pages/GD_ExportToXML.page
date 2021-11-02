@@ -1,0 +1,17 @@
+<apex:page id="GD_ExportToXML" controller="DoctorsListWithController"
+           contentType="application/azerty#ListOfDoctors.xml">
+    <apex:pageBlock >
+        <apex:form >
+            <apex:pageblockTable value="{!DoctorsList}" var="dr">
+                <apex:column value="{! dr.Last_Name__c } {! dr.Name }" headerValue="{!$Label.Full_Name}">
+                </apex:column>
+                <apex:column value="{! dr.Email__c }">
+                </apex:column>
+                <apex:column value="{! dr.License_Number__c }">
+                </apex:column>
+                <apex:column value="{! dr.Country__c } {! dr.Street__c } {! dr.Postal_Code__c } {! dr.City__c }" headerValue="{!$Label.Full_Address}">
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:form>
+    </apex:pageBlock>
+</apex:page>

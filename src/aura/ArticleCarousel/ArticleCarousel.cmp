@@ -1,0 +1,55 @@
+<aura:component controller="NewsController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global">
+
+    <aura:attribute name="category" type="String" access="global"/>
+    <aura:attribute name="articles" type="Object" access="global"/>
+    <aura:attribute name="newsPage" type="Object"/>
+    <aura:attribute name="selectedArticle" type="Object"/>
+
+    <aura:attribute name="autoplay" type="Boolean" default="true" description="Sets carousel automatic slides switching"/>
+    <aura:attribute name="autoplaySpeed" type="Integer" default="5000" description="Time to display each slide[ms]"/>
+    <aura:attribute name="arrows" type="Boolean" default="true" description="Display previous and next slide navigation arrows"/>
+    <aura:attribute name="dots" type="Boolean" default="true" description="Display navigation dots"/>
+    <aura:attribute name="infinite" type="Boolean" default="true" description="Is navigation looped"/>
+    <aura:attribute name="speed" type="Integer" default="300" description="Slides change speed"/>
+
+    <aura:handler name="hotNewsTransfer" event="c:hotNewsTransfer" action="{!c.onArticleSelect}"/>
+    <aura:handler name="BackToResults" event="c:BackToResults" action="{!c.changeSelectedArticleValueToNull}"/>
+
+    <ltng:require
+            scripts="{!join(',',
+    $Resource.jQuery,
+    $Resource.slick_js)}"
+            styles="{!join(',',
+    $Resource.slick_theme_css,
+    $Resource.slick_css)}"
+                  afterScriptsLoaded="{!c.afterScriptsLoaded}"/>
+
+<!--    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>-->
+<!--    <aura:if isTrue="{!v.selectedArticle == null}">-->
+    <lightning:card>
+    <div id="carousel-container" class="banner">
+        <lightning:layout verticalAlign="center" horizontalAlign="center" multipleRows="true">
+            <lightning:layoutItem size="12">
+                <div class="carousel">
+                    <aura:iteration items="{!v.newsPage.articles}" var="article">
+                        <c:ArticleCarouselItem article="{!article}"/>
+                    </aura:iteration>
+                </div>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" class="arrow-container">
+                <aura:if isTrue="{!v.arrows}">
+                    <span id="prevArr" class="arrow prevArr"><lightning:icon iconName="utility:chevronleft" id="prevArr"/></span>
+                    <span id="nextArr" class="arrow nextArr"><lightning:icon iconName="utility:chevronright" id="nextArr"/></span>
+                </aura:if>
+            </lightning:layoutItem>
+        </lightning:layout>
+
+        <div id="dots"></div>
+    </div>
+    </lightning:card>
+<!--    </aura:if>-->
+
+<!--    <aura:if isTrue="{!v.selectedArticle != null}">-->
+<!--        <c:ArticleDetails article="{!v.selectedArticle}"/>-->
+<!--    </aura:if>-->
+</aura:component>

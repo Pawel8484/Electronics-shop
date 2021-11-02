@@ -1,0 +1,64 @@
+<aura:component controller="GD_RandomDoctorsList">
+    <aura:attribute name="drList" type="Doctor__c[]" />
+    <aura:handler name="init" value="{!this}" action="{!c.invoke}"/>
+    <div class="slds-page-header">
+  <div class="slds-page-header__row">
+    <div class="slds-page-header__col-title">
+      <div class="slds-media">
+        <div class="slds-media__figure">
+          <span class="slds-icon_container slds-icon-standard-opportunity" title="opportunity">
+             <lightning:icon iconName="utility:warning" size="x-small" />
+            <span class="slds-assistive-text">opportunity</span>
+          </span>
+        </div>
+        <div class="slds-media__body">
+          <div class="slds-page-header__name">
+            <div class="slds-page-header__name-title">
+              <h1>
+                <span class="slds-page-header__title slds-truncate" title="Custom Doctors List">Custom Doctors List</span>
+              </h1>
+            </div>
+          </div>
+         
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <table class="slds-table slds-table_cell-buffer slds-table_bordered" aria-label="Example default base table of Opportunities">
+  <thead>
+    <tr class="slds-line-height_reset">
+      <th class="" scope="col">
+        <div class="slds-truncate" title="Name">Doctor Name</div>
+      </th>
+      <th class="" scope="col">
+        <div class="slds-truncate" title="Last Name">Last Name</div>
+      </th>
+      <th class="" scope="col">
+        <div class="slds-truncate" title="Phone">Phone</div>
+      </th>
+      <th class="" scope="col">
+        <div class="slds-truncate" title="License Number">License Number</div>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+        <aura:iteration items="{!v.drList}" var="dr">
+            <tr>
+      <td data-label="Account Name">
+        <div class="slds-truncate" title="Name">{!dr.Name}</div>
+      </td>
+      <td data-label="Close Date">
+        <div class="slds-truncate" title="Last Name">{!dr.Last_Name__c}</div>
+      </td>
+      <td data-label="Prospecting">
+        <div class="slds-truncate" title="Phone">{!dr.Phone__c}</div>
+      </td>
+      <td data-label="Confidence">
+        <div class="slds-truncate" title="License Number">{!dr.License_Number__c}</div>
+      </td>  
+    </tr>
+            </aura:iteration>
+  </tbody>
+</table>
+</aura:component>

@@ -1,0 +1,5 @@
+<apex:page id="GD_ExportToCSV" controller="DoctorsListWithController" cache="true"
+           contentType="application/octet-stream#ListOfDoctors.csv"
+           showHeader="false" sidebar="false" standardStylesheets="false">
+    {!toCSV}
+</apex:page>

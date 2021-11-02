@@ -1,0 +1,7 @@
+<aura:component>
+    <aura:attribute name="isVisible" type="Boolean" default="false"/>
+
+    <aura:if isTrue="{!v.isVisible}">
+        <lightning:spinner/>
+    </aura:if>
+</aura:component>

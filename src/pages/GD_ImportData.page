@@ -1,0 +1,35 @@
+<apex:page id="GD_ImportData" controller="GD_ImportDataController">
+    <apex:form >
+        <apex:pageMessages />
+        <apex:pageBlock >
+            <apex:pageBlockSection columns="2">
+                <apex:inputFile accept=".csv" value="{!csvFileBody}" filename="{!csvAsString}"/>
+                <br/>
+                <apex:commandButton value="{!$Label.Read_File}" action="{!importCSVFile}"/>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+        <apex:pageBlock rendered="{!showButtons}">
+            <apex:pageBlockTable value="{!wrapDoctorList}" var="drWrap">
+                <apex:column >
+                    <apex:inputCheckbox value="{!drWrap.selected}"/>
+                </apex:column>
+                <apex:column headerValue="{!$Label.First_Name}" value="{!drWrap.dr.name}"/>
+                <apex:column headerValue="{!$Label.Last_Name}" value="{!drWrap.dr.Last_Name__c}"/>
+                <apex:column headerValue="{!$Label.Country}" value="{!drWrap.dr.Country__c}"/>
+                <apex:column headerValue="{!$Label.City}" value="{!drWrap.dr.City__c}"/>
+                <apex:column headerValue="{!$Label.Street}" value="{!drWrap.dr.Street__c }"/>
+                <apex:column headerValue="{!$Label.Postal_Code}" value="{!drWrap.dr.Postal_Code__c }"/>
+                <apex:column headerValue="{!$Label.License_Number}" value="{!drWrap.dr.License_Number__c }"/>
+                <apex:column headerValue="{!$Label.Status}" value="{!drWrap.status }"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+        <apex:pageBlock rendered="{!showButtons}">
+            <apex:commandButton value="{!$Label.Select_All}" action="{!selectAll}"/>
+            <apex:commandButton value="{!$Label.Deselect}" action="{!deselect}"/>
+            <apex:commandButton value="{!$Label.Invert}" action="{!invert}"/>
+            <div style="text-align:center;">
+                <apex:commandButton value="{!$Label.Import}" action="{!insertSelectedDoctors}"/>
+            </div>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

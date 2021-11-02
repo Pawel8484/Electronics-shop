@@ -1,0 +1,29 @@
+<aura:component controller="AccountSearchResults" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+    <aura:attribute type="Account[]" name="accounts"/>
+    <aura:attribute type="Account" name="chosenAccount"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="accountId" type="String"/>
+    <aura:attribute name="accountName" type="String"/>
+    <aura:handler event="c:Formsubmit" action="{!c.onFormSubmit}"/>
+    <aura:handler name="AccountListAction" event="c:AccountListAction" action="{!c.handleAction}"/>
+
+    <lightning:layout horizontalAlign="end">
+    <c.AccountSearchButtons/>
+    </lightning:layout>
+
+
+    <lightning:layout multipleRows="true">
+        <aura:if isTrue="{!v.accounts.length > 0}">
+            <aura:iteration items="{!v.accounts}" var="acc">
+                <lightning:layoutItem  padding="around-small">
+                    <c:AccountTile aura:id="accountTile" account="{!acc}" accountId="{!acc.Id}" />
+                </lightning:layoutItem>
+            </aura:iteration>
+            <aura:set attribute="else">
+                <lightning:layoutItem class="slds-align_absolute-center" flexibility="auto" padding="around-small">
+                    <ui:outputText value="No accounts found" />
+                </lightning:layoutItem>
+            </aura:set>
+        </aura:if>
+    </lightning:layout>
+</aura:component>

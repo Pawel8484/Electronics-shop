@@ -1,0 +1,129 @@
+<aura:component
+        implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,lightning:isUrlAddressable"
+        description="c:articleDetails component"
+        controller="NewsController" access="global">
+
+    <!--    <aura:attribute name="useSalesforceData" type="Boolean" default="false" access="public"/>-->
+    <aura:attribute name="article" type="Object" access="public"/>
+    <aura:attribute name="searchParams" type="Object" access="public"/>
+    <aura:attribute name="subscribers" type="List" access="public"/>
+    <aura:attribute name="isSaved" type="Boolean" access="global"/>
+    <aura:attribute name="userId" type="String" access="global"/>
+
+    <aura:attribute name="showSpinner" type="Boolean" default="false"/>
+
+    <aura:registerEvent name="BackToResults" type="c:BackToResults"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler name="change" value="{!v.pageReference}" action="{!c.onSelectedArticle}"/>
+
+    <lightning:navigation aura:id="navService"/>
+    <div class="slds-box slds-theme_default">
+        <c:Modal aura:id="modal" header="Select user to share this article with:">
+            <aura:set attribute="content">
+                <lightning:recordEditForm objectApiName="Article__c" onsuccess="{!c.handleSuccess}">
+                    <lightning:inputField fieldName="User__c" onchange="{!c.handleChange}"/>
+                </lightning:recordEditForm>
+            </aura:set>
+            <aura:set attribute="footer">
+                <div class="slds-m-top_medium">
+                    <lightning:button label="Share" onclick="{!c.shareArticle}" type="submit"/>
+                </div>
+            </aura:set>
+        </c:Modal>
+
+        <lightning:layout horizontalAlign="center" multipleRows="true">
+            <lightning:layoutItem size="12">
+                <lightning:layout>
+                    <lightning:layoutItem>
+                        <lightning:button label="Back" iconName="utility:left" variant="base" iconPosition="left"
+                                          onclick="{!c.backToResults}"/>
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12">
+                <lightning:layout horizontalAlign="end">
+                    <lightning:layoutItem>
+<!--                        <aura:if isTrue="{!not(empty(v.article.id))}">-->
+                            <lightning:button variant="neutral" label="Share" title="Share article with friends"
+                                              iconPosition="left"
+                                              onclick="{!c.openModal}"/>
+<!--                        </aura:if>-->
+                        <lightning:button variant="neutral" label="Save" title="Save article in database"
+                                          iconPosition="left"
+                                          onclick="{!c.saveArticle}" disabled="{!v.isSaved}"/>
+                        <aura:if isTrue="{!not(empty(v.article.id))}">
+                            <lightning:button variant="neutral" label="Delete"
+                                              title="Delete article from your saved articles" iconPosition="left"
+                                              onclick="{!c.deleteArticle}" disabled="{!not(v.isSaved)}"/>
+                        </aura:if>
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </lightning:layoutItem>
+
+            <lightning:layoutItem size="12">
+                <lightning:layout horizontalAlign="center">
+                    <lightning:layoutItem>
+                        <div class="slds-text-heading_large slds-p-around_xx-small"><img onerror="{!c.imageError}"
+                                                                                         src="{!v.article.iconUrl}"
+                                                                                         style="height:25px; width:25px;"/>&nbsp;{!v.article.title}
+                        </div>
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12">
+                <lightning:layout horizontalAlign="center">
+                    <lightning:layoutItem class="slds-p-around_xx-medium">
+                        <div>
+                            <aura:if isTrue="{!not(empty(v.article.author))}">
+                                Author: {!v.article.author},
+                            </aura:if>
+                            Published at:
+                            <lightning:formattedDateTime value="{!v.article.publishedAt}" year="numeric" month="short"
+                                                         day="2-digit"/>
+                        </div>
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12">
+                <aura:if isTrue="{!not(empty(v.article.urlToImage))}">
+                    <img src="{!v.article.urlToImage}" onerror="{!c.imageError}"
+                         class="slds-align_absolute-center img-style"/>
+                </aura:if>
+                <aura:if isTrue="{!empty(v.article.urlToImage)}">
+                    <img onerror="{!c.imageError}" class="slds-align_absolute-center img-style"
+                         src="{!$Resource.emptyImage}"/>
+                </aura:if>
+            </lightning:layoutItem>
+
+            <lightning:layoutItem size="12" class="slds-p-around_xx-large">
+                <lightning:layout horizontalAlign="center">
+                    <lightning:layoutItem>
+                        <div>
+                        {!v.article.content}&nbsp;
+                            <a href="{!v.article.url}" target="_blank">Go to article</a>
+                        </div>
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </lightning:layoutItem>
+            <lightning:layoutItem >
+                <div>
+                    <p><u>You have already sent this article to the following users:</u></p>
+
+                </div>
+            <aura:iteration items="{!v.subscribers}" var="subscriber">
+
+                <ul>
+                    <li>{!subscriber.Username}</li>
+                </ul>
+
+
+<!--                <p>{!subscriber.Username}</p>-->
+            </aura:iteration>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+
+
+    <c:Spinner isVisible="{!v.showSpinner}"/>
+</aura:component>

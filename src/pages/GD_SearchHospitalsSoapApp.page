@@ -1,0 +1,505 @@
+<apex:page id="GD_SearchHospitalsSoapApp" standardController="Hospital__c"
+           extensions="GD_SearchHospitalsSoapAppController"
+           lightningStylesheets="true">
+    <apex:includeScript value="{!URLFOR($Resource.jQueryTest,'/js/jquery-1.10.2.js')}"/>
+    <apex:form id="allPage">
+        <style type="text/css">
+        .transition {
+            transition: all 1s linear;
+        }
+        .toastStyle{
+            height:4rem;
+             position: absolute;
+              left:50%;
+               transform: translate(-50%,0);
+                z-index:999;
+        }
+        </style>
+        <apex:slds />
+        <apex:actionStatus id="fetchStatus">
+            <apex:facet name="start">
+                <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.25; z-index: 10000; background-color: black;">
+                </div>
+                <div style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 10001; margin: 15% 50%">
+                    <div style="display: inline-block; padding: 0px; background-color: #fff; width: 0px; margin-left: -60px;">
+                        <img src="{!$Resource.spinner_small}"/>
+                    </div>
+                </div>
+            </apex:facet>
+        </apex:actionStatus>
+        <apex:outputPanel rendered="{!newHospitalPopup}">
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                     aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <apex:outputPanel rendered="{!showNewHospitalError}">
+                            <div class="demo-only" style="height:4rem">
+                                <div class="slds-notify_container slds-is-relative">
+                                    <div class="slds-notify slds-notify_toast slds-theme_error" role="status">
+                                        <span class="slds-assistive-text">error</span>
+                                        <span class="slds-icon_container slds-icon-utility-error slds-m-right_small slds-no-flex slds-align-top"
+                                              title="Description of icon when needed">
+                                      </span>
+                                        <div class="slds-notify__content">
+                                            <h2 class="slds-text-heading_small ">{!errorMessage}</h2>
+                                        </div>
+                                        <div class="slds-notify__close">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </apex:outputPanel>
+                        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Add new hospital</h2>
+                    </header>
+                    <body>
+                    <div style="background-color:white;" class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_1-of-12">
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                            <label class="slds-form-element__label" for="name">* {!$Label.Hospital_Name}</label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" value="{!hospitalToPost.Name}"/>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_2-of-12">
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                            <label class="slds-form-element__label"
+                                   for="numberOfAmbulances">{!$Label.Number_Of_Ambulances}</label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" value="{!hospitalToPost.No_Ambulances__c}"/>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                        </div>
+                        <div class="slds-col slds-size_1-of-12">
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                            <label class="slds-form-element__label" for="phone">* {!$Label.Phone_Number}</label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" value="{!hospitalToPost.Phone_Number__c}"/>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_2-of-12">
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                            <label class="slds-form-element__label" for="fax">{!$Label.Fax}</label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" value="{!hospitalToPost.Fax_Number__c}"/>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                        </div>
+                        <div class="slds-col slds-size_1-of-12">
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                            <label class="slds-form-element__label" for="street">* {!$Label.Street}</label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" value="{!hospitalToPost.Street__c}"/>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_2-of-12">
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                            <label class="slds-form-element__label" for="city">* {!$Label.City}</label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" value="{!hospitalToPost.City__c}"/>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                        </div>
+                        <div class="slds-col slds-size_1-of-12">
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                            <label class="slds-form-element__label" for="country">* {!$Label.Country}</label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" value="{!hospitalToPost.Country__c}"/>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_2-of-12">
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                            <div align="left" class="slds-form-element__control">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="checkbox-unique-id-73">Helicopter
+                                        Access</label>
+                                    <apex:inputCheckbox required="false"
+                                                        styleClass="slds-checkbox"
+                                                        value="{!hospitalToPost.Helicopter_Access__c}"/>
+                                    <span class="slds-checkbox_faux"></span>
+                                    <span class="slds-form-element__label"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                        </div>
+                    </div>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    </div>
+                    </body>
+                    <footer class="slds-modal__footer">
+                        <apex:commandButton value="{!$Label.Close}" action="{!clear}"
+                                            styleClass="slds-button slds-button_neutral"/>
+                        <apex:commandButton styleClass="slds-button slds-button_brand" value="{!$Label.Create}"
+                                            action="{!addNewHospital}"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </apex:outputPanel>
+        <apex:outputPanel rendered="{!updateHospitalPopup}">
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                     aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <apex:outputPanel rendered="{!showError}">
+                            <div class="demo-only" style="height:4rem">
+                                <div class="slds-notify_container slds-is-relative">
+                                    <div class="slds-notify slds-notify_toast slds-theme_error" role="status">
+                                        <span class="slds-assistive-text">error</span>
+                                        <span class="slds-icon_container slds-icon-utility-error slds-m-right_small slds-no-flex slds-align-top"
+                                              title="Description of icon when needed">
+                                        </span>
+                                        <div class="slds-notify__content">
+                                            <h2 class="slds-text-heading_small ">{!errorMessage}</h2>
+
+                                        </div>
+                                        <div class="slds-notify__close">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </apex:outputPanel>
+                        <h2 id="modal-heading-01"
+                            class="slds-modal__title slds-hyphenate">{!$Label.Update_hospital}</h2>
+                    </header>
+                    <body>
+                    <div style="background-color:white;" class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_1-of-12">
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                            <label class="slds-form-element__label" for="name">* {!$Label.Hospital_Name}</label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" value="{!hospitalToUpdate.Name}"/>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_2-of-12">
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                            <label class="slds-form-element__label"
+                                   for="numberOfAmbulances">{!$Label.Number_Of_Ambulances}</label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" value="{!hospitalToUpdate.No_Ambulances__c}"/>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                        </div>
+                        <div class="slds-col slds-size_1-of-12">
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                            <label class="slds-form-element__label" for="phone">* {!$Label.Phone_Number}</label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" value="{!hospitalToUpdate.Phone_Number__c}"/>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_2-of-12">
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                            <label class="slds-form-element__label" for="fax">{!$Label.Fax}</label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" value="{!hospitalToUpdate.Fax_Number__c}"/>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                        </div>
+                        <div class="slds-col slds-size_1-of-12">
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                            <label class="slds-form-element__label" for="street">* {!$Label.Street}</label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" value="{!hospitalToUpdate.Street__c}"/>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_2-of-12">
+                        </div>
+
+                        <div class="slds-col slds-size_3-of-12">
+                            <label class="slds-form-element__label" for="city">* {!$Label.City}</label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" value="{!hospitalToUpdate.City__c}"/>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                        </div>
+                        <div class="slds-col slds-size_1-of-12">
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                            <label class="slds-form-element__label" for="country">* {!$Label.Country}</label>
+                            <div class="slds-form-element__control">
+                                <apex:inputField styleClass="slds-input" value="{!hospitalToUpdate.Country__c}"/>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_2-of-12">
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+
+                            <div align="left" class="slds-form-element__control">
+                                <div class="slds-form-element">
+                                    <label class="slds-form-element__label" for="checkbox-unique-id-73">Helicopter
+                                        Access</label>
+                                    <apex:inputCheckbox required="false"
+                                                        styleClass="slds-checkbox"
+                                                        value="{!hospitalToUpdate.Helicopter_Access__c}"/>
+                                    <span class="slds-checkbox_faux"></span>
+                                    <span class="slds-form-element__label"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_3-of-12">
+                        </div>
+                    </div>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    </div>
+                    </body>
+
+                    <footer class="slds-modal__footer">
+                        <apex:commandButton value="{!$Label.Close}" action="{!closeUpdateHospitalWindow}"
+                                            styleClass="slds-button slds-button_neutral"/>
+                        <apex:commandButton styleClass="slds-button slds-button_brand" value="{!$Label.Update}"
+                                            onClick="closeToast()"
+                                            action="{!updateHospital}"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </apex:outputPanel>
+
+        <apex:outputPanel style="z-index:999;" rendered="{!deleteHospitalPopup}">
+            <div style="position: fixed;" role="dialog" tabindex="-1" aria-labelledby="modal-heading-01"
+                 aria-modal="true"
+                 aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <div class="slds-modal__header">
+                        <h3 id="modal-heading-01" class="slds-modal__title slds-hyphenate">
+                                {!$Label.Confirmation}
+                        </h3>
+                    </div>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p>{!deleteConfirmationMessage} </p>
+                    </div>
+                    <div>
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        </div>
+                    </div>
+                    <div class="slds-modal__footer">
+                        <apex:commandButton styleclass="slds-button slds-button_neutral"
+                                            action="{!closeDeleteHospitalConfirmationWindow}" value="{!$Label.No}"/>
+                        <apex:commandButton styleclass="slds-button slds-button_brand" action="{!deleteHospital}"
+                                            value="{!$Label.Yes}"/>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </apex:outputPanel>
+        <apex:actionFunction name="changeFlag" action="{!changeFlag}" reRender="PageBlock"/>
+        <apex:actionFunction name="changeFlag2" action="{!changeFlag2}" reRender="PageBlock"/>
+        <apex:actionFunction name="changeFlag3" action="{!changeFlag3}" reRender="PageBlock"/>
+        <apex:pageBlock id="PageBlock">
+            <apex:outputPanel rendered="{!recordAdded}">
+                <script>
+                            setTimeout(addSuccess1, 3000);
+                            function addSuccess1(){
+                                changeFlag2();
+                                document.getElementById('addSuccessToast').classList.add('slds-transition-hide');
+                            }
+                </script>
+                <div class="demo-only toastStyle transition">
+                    <div id="addSuccessToast" class="slds-notify_container slds-is-relative">
+                        <div class="slds-notify slds-notify_toast slds-theme_success" role="status">
+                            <span class="slds-assistive-text">success</span>
+                            <span class="slds-icon_container slds-icon-utility-success slds-m-right_small slds-no-flex slds-align-top"
+                                  title="Description of icon when needed">
+                            </span>
+                            <div class="slds-notify__content">
+                                <h2 class="slds-text-heading_small">
+                                        {!$Label.Record_added}
+                                </h2>
+                            </div>
+                            <div class="slds-notify__close">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!recordUpdated}">
+                <script>
+                            setTimeout(updateSuccess1, 3000);
+                            function updateSuccess1(){
+                                changeFlag();
+                                document.getElementById('updateSuccessToast').classList.add('slds-transition-hide');
+                            }
+                </script>
+                <div class="demo-only toastStyle transition">
+                    <div id="updateSuccessToast" class="slds-notify_container slds-is-relative">
+                        <div class="slds-notify slds-notify_toast slds-theme_success" role="status">
+                            <span class="slds-assistive-text">success</span>
+                            <span class="slds-icon_container slds-icon-utility-success slds-m-right_small slds-no-flex slds-align-top"
+                                  title="Description of icon when needed">
+                            </span>
+                            <div class="slds-notify__content">
+                                <h2 class="slds-text-heading_small">
+                                        {!$Label.Record_updated}
+                                </h2>
+                            </div>
+                            <div class="slds-notify__close">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!recordDeleted}">
+                <script>
+                                setTimeout(deleteSuccess, 3000);
+                                function deleteSuccess(){
+                                    changeFlag3();
+                                    document.getElementById('deleteSuccessToast').classList.add('slds-transition-hide');
+                                }
+                </script>
+                <div class="demo-only toastStyle transition">
+                    <div id="deleteSuccessToast" class="slds-notify_container slds-is-relative">
+                        <div class="slds-notify slds-notify_toast slds-theme_success" role="status">
+                            <span class="slds-assistive-text">success</span>
+                            <span class="slds-icon_container slds-icon-utility-success slds-m-right_small slds-no-flex slds-align-top"
+                                  title="Description of icon when needed">
+                                        </span>
+                            <div class="slds-notify__content">
+                                <h2 class="slds-text-heading_small">
+                                        {!$Label.Record_deleted}
+                                </h2>
+                            </div>
+                            <div class="slds-notify__close">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </apex:outputPanel>
+            <div class="slds-page-header__name-title, slds-p-vertical_small">
+                <h2>
+                                                <span class="slds-page-header__title slds-truncate"
+                                                      title="Random Hospitals List">{!$Label.Search_Hospital}</span>
+                </h2>
+            </div>
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size_2-of-12">
+                </div>
+                <div class="slds-col slds-size_3-of-12">
+                    <label class="slds-form-element__label" for="name">{!$Label.Hospital_Name}</label>
+                    <div class="slds-form-element__control">
+                        <apex:inputText styleClass="slds-input" value="{!name}"/>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_2-of-12">
+                </div>
+                <div class="slds-col slds-size_3-of-12">
+                    <label class="slds-form-element__label" for="street">{!$Label.Street}</label>
+                    <div class="slds-form-element__control">
+                        <apex:inputText styleClass="slds-input" value="{!street}"/>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_2-of-12">
+                </div>
+                <div class="slds-col slds-size_2-of-12">
+                </div>
+                <div class="slds-col slds-size_3-of-12">
+                    <label class="slds-form-element__label" for="city">{!$Label.City}</label>
+                    <div class="slds-form-element__control">
+                        <apex:inputText styleClass="slds-input" value="{!city}"/>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_2-of-12">
+                </div>
+                <div class="slds-col slds-size_3-of-12">
+                    <label class="slds-form-element__label" for="country">{!$Label.Country}</label>
+                    <div class="slds-form-element__control">
+                        <apex:inputText styleClass="slds-input" value="{!country}"/>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_2-of-12">
+                </div>
+            </div>
+            <div class="slds-align_absolute-center" style="height:5rem">
+                <apex:commandButton styleClass="slds-button slds-button_neutral" value="{!$Label.Search}"
+                                    action="{!searchHospitals}"/>
+                <apex:commandButton styleClass="slds-button slds-button_neutral" value="{!$Label.Clear}"
+                                    action="{!clear}"/>
+                <apex:commandButton styleClass="slds-button slds-button_outline-brand" value="{!$Label.New_Hospital}"
+                                    action="{!openNewHospitalWindow}"/>
+            </div>
+            <apex:outputPanel id="searchBlock"
+                    layout="block"
+                    styleClass="slds-panel slds-grid slds-grid--vertical slds-nowrap slds-form--compound"
+                    rendered="{!showResult}">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered"
+                       aria-label="Example table" id="searchBlock">
+                    <thead>
+                    <tr class="slds-line-height_reset">
+
+                        <th class="" scope="col" width="25%">
+                            <div class="slds-truncate" title="Hospital">{!$Label.Hospital_Name}</div>
+                        </th>
+                        <th class="" scope="col" width="35%">
+                            <div class="slds-truncate" title="Full Address">{!$Label.Address}</div>
+                        </th>
+                        <th class="" scope="col" width="20%">
+                            <div class="slds-truncate" title="Phone Number">{!$Label.Phone_Number}</div>
+                        </th>
+                        <th class="" scope="col" width="10%">
+                            <div class="slds-truncate" title="Number of Ambulances">{!$Label.Number_Of_Ambulances}</div>
+                        </th>
+                        <th class="" scope="col">
+                            <div class="slds-truncate" title="Action">{!$Label.Action}</div>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <apex:repeat value="{!hospitalsList}" var="hospital">
+                        <tr class="slds-hint-parent">
+                            <td data-label="Full Name">
+                                <div class="slds-truncate">{!hospital.Name}</div>
+                            </td>
+                            <td data-label="Full Address">
+                                <div class="slds-truncate">{!hospital.Street__c} {!hospital.Postal_Code__c}
+                                    {!hospital.City__c}
+                                    {!hospital.Country__c}
+                                </div>
+                            </td>
+                            <td data-label="Phone">
+                                <div class="slds-truncate">{!hospital.Phone_Number__c}</div>
+                            </td>
+                            <td data-label="License Number">
+                                <div class="slds-truncate">{!hospital.No_Ambulances__c}</div>
+                            </td>
+                            <th data-label="Link" scope="row">
+                                <div class="slds-truncate">
+                                    <apex:commandLink styleClass="slds-button slds-button_brand" value="{!$Label.Edit}"
+                                                      id="Edit" action="{!editHospital}">
+                                        <apex:param name="paramEdit" value="{!hospital.External_Id__c}"
+                                                    assignTo="{!hospitalIdsel}"/>
+                                    </apex:commandLink>
+                                    <apex:commandButton reRender="allPage"
+                                                        styleClass="slds-button slds-button_destructive"
+                                                        value="{!$Label.Delete}"
+                                                        id="Delete" action="{!openDeleteHospitalConfirmationWindow}">
+                                        <apex:param name="paramEdit" value="{!hospital.External_Id__c}"
+                                                    assignTo="{!hospitalIdsel}"/>
+                                    </apex:commandButton>
+                                </div>
+                            </th>
+                        </tr>
+                    </apex:repeat>
+                    </tbody>
+                </table>
+            </apex:outputPanel>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

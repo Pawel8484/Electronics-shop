@@ -1,0 +1,11 @@
+<aura:component description="AccountSearchButtons">
+    <aura:registerEvent name="AccountListAction" type="c:AccountListAction"/>
+    <lightning:buttonGroup>
+        <lightning:button label="SelectAll" value="selectAll" onclick="{!c.handleButtonClick}"/>
+        <lightning:button label="Deselect" value="deselect" onclick="{!c.handleButtonClick}"/>
+        <lightning:button label="Invert" value="invert" onclick="{!c.handleButtonClick}"/>
+        <lightning:button label="Remove" value="remove" onclick="{!c.handleButtonClick}"/>
+        <lightning:button label="Clone" value="clone" onclick="{!c.handleButtonClick}"/>
+        <lightning:button label="Activate" value="activate" onclick="{!c.handleButtonClick}"/>
+    </lightning:buttonGroup>
+</aura:component>

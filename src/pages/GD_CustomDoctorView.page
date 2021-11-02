@@ -1,0 +1,127 @@
+<apex:page id="GD_CustomDoctorView" standardController="Doctor__c" extensions="GD_CustomDoctorPageController">
+    <apex:form >
+        <apex:stylesheet value="{!URLFOR($Resource.jQueryTest,'/css/jquery-ui.css')}"/>
+
+        <div style="font-size:20px">
+            {!$Label.Custom_Doctor}: <br/> {!record.Name} {!record.Last_Name__c}
+        </div>
+        <apex:pageBlock id="DoctorViewPageBlock">
+            <apex:pageMessage severity="info" rendered="{!okInfo}" detail="{!$Label.Message_Sent}"/>
+            <apex:pageBlockSection title="{!$Label.Doctor_Detail}" columns="2">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$Label.First_Name}"/>
+                    <apex:outputPanel >
+                        <apex:outputText value="{!record.Name}"/>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:outputText label="{!$Label.License_Number}" value="{!record.License_Number__c}"/>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$Label.Last_Name}"/>
+                    <apex:outputPanel >
+                        <apex:outputText value="{!record.Last_Name__c}"/>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$Label.Speciality}"/>
+                    <apex:outputPanel >
+                        <apex:outputText value="{!record.Speciality__c}"/>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$Label.Date_Of_Birth}"/>
+                    <apex:outputText label="Date Of Birth" value="{0,date,dd'/'MM'/'yyyy}">
+                        <apex:param value="{!record.Date_Of_Birth__c}"/>
+                    </apex:outputText>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$Label.Start_Of_Career}"/>
+                    <apex:outputText value="{0,date,dd'/'MM'/'yyyy}">
+                        <apex:param value="{!record.Start_Of_Career__c}"/>
+                    </apex:outputText>
+                </apex:pageBlockSectionItem>
+                <apex:outputText label="{!$Label.Nationality}" value="{!record.Nationality__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="{!$Label.Contact_Details}" columns="2">
+                <apex:outputText label="{!$Label.Phone}" value="{!record.Phone__c}"/>
+                <apex:outputText label="{!$Label.Email}" value="{!record.Email__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="{!$Label.Address}" columns="1">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$Label.Street}"/>
+                    <apex:outputText value="{!record.Street__c}"/>
+                </apex:pageBlockSectionItem>
+                <apex:outputText label="{!$Label.Postal_Code}" value="{!record.Postal_Code__c}"/>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$Label.City}"/>
+                    <apex:outputText value="{!record.City__c}"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$Label.Country}"/>
+                    <apex:outputText value="{!record.Country__c}"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            <div style="text-align:center;">
+                <apex:commandButton reRender="DoctorViewPageBlock" value="{!$Label.Edit}" action="{!editDoctor}"/>
+                <apex:commandButton reRender="DoctorViewPageBlock" value="{!$Label.Delete}" action="{!deleteDoctor}"/>
+                <apex:commandButton reRender="DoctorViewPageBlock" value="{!$Label.Clone}" action="{!clone}"/>
+                <apex:commandButton reRender="DoctorViewPageBlock" value="{!$Label.Sharing}" action="{!sharingDoctor}"/>
+                <apex:commandButton reRender="DoctorViewPageBlock" value="{!$Label.Send_Email}"
+                                    onClick="sendEmailToDoctor();"/>
+            </div>
+        </apex:pageBlock>
+    </apex:form>
+    <div style="display: none;" id="dialog" title="{!$Label.Send_Email}">
+        <apex:pageBlock id="popUpPageBlock">
+            <apex:form >
+                <apex:actionFunction name="changeFlag" action="{!changeFlag}" rerender="popUpPageBlock"/>
+                <apex:pageMessages />
+                <apex:pageBlockSection columns="1">
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="{!$Label.From}"/>
+                        <apex:selectList value="{!orgWideAddressId}" size="1">
+                            <apex:selectOptions value="{!orgEmails}"/>
+                        </apex:selectList>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="{!$Label.To}"/>
+                        <apex:outputLabel value="{!doctorEmailAddress}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="{!$Label.Subject}"/>
+                        <apex:inputText value="{!emailSubject}"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="{!$Label.Body}"/>
+                        <apex:inputTextarea value="{!emailBody}" id="theTextInput" rows="10" cols="40"/>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+                <div style="text-align:center;">
+                    <apex:commandButton reRender="DoctorViewPageBlock,popUpPageBlock" action="{!sendEmail}" value="{!$Label.Send}"
+                                        onComplete="closeAndRefresh();"/>
+                    <apex:commandButton reRender="popUpPageBlock" action="{!cancel}" value="{!$Label.Cancel}"/>
+                </div>
+                <script>
+        function sendEmailToDoctor(){
+  $( function() {
+$( "#dialog" ).dialog({
+  width: 480
+});
+  } );
+  }
+
+        function closeAndRefresh(){
+        var isSend = '{!isSend}';
+      if('{!isSend}'=='yes'){
+
+          $( "#dialog" ).dialog( "close" );
+        changeFlag();
+        }
+        }
+    </script>
+            </apex:form>
+        </apex:pageBlock>
+    </div>
+    <apex:includeScript value="{!URLFOR($Resource.jQueryTest,'/js/jquery-1.10.2.js')}"/>
+    <apex:includeScript value="{!URLFOR($Resource.jQueryTest,'/js/jquery-ui.js')}"/>
+
+</apex:page>

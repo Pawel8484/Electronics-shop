@@ -1,0 +1,45 @@
+<!--<aura:component controller="NewsController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction"-->
+<!--                access="global">-->
+<!--    <aura:attribute name="useSalesforceData" type="Boolean" default="false" access="global"/>-->
+<!--    <aura:attribute name="newsPage" type="Object"/>-->
+<!--    <aura:attribute name="selectedArticle" type="Object"/>-->
+<!--    <aura:attribute name="requestData" type="Object"/>-->
+<!--    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>-->
+
+<!--    <lightning:card title="Saved articles">-->
+<!--    &lt;!&ndash;    <aura:if isTrue="{!v.selectedArticle == null}">&ndash;&gt;-->
+<!--    <lightning:layout multipleRows="true" class="slds-align_absolute-center">-->
+<!--        <aura:if isTrue="{!v.newsPage.totalResults > 0}">-->
+<!--            <aura:iteration items="{!v.newsPage.articles}" var="article">-->
+<!--                <c:ArticleListItem article="{!article}"/>-->
+<!--            </aura:iteration>-->
+<!--            <aura:set attribute="else">-->
+<!--                <div class="slds-align_absolute-center slds-box slds-theme_default slds-large-size_1-of-1">-->
+<!--                    <lightning:layoutItem padding="around-small">-->
+<!--                        <ui:outputText value="No news found"/>-->
+<!--                    </lightning:layoutItem>-->
+<!--                </div>-->
+<!--            </aura:set>-->
+<!--        </aura:if>-->
+<!--    </lightning:layout>-->
+<!--    </lightning:card>-->
+    <aura:component implements="force:appHostable,flexipage:availableForAllPageTypes" description="Main column
+ and right sidebar. On a phone, the regions are of equal width">
+        <aura:attribute name="left" type="Aura.Component[]" />
+        <aura:attribute name="right" type="Aura.Component[]" />
+
+        <div>
+            <lightning:layout>
+                <lightning:layoutItem flexibility="grow"
+                                      class="slds-m-right_small">
+                        {!v.left}
+                </lightning:layoutItem>
+                <lightning:layoutItem size="{! $Browser.isDesktop ? '4' : '6' }"
+                                      class="slds-m-left_small">
+                        {!v.right}
+                </lightning:layoutItem>
+            </lightning:layout>
+        </div>
+
+    </aura:component>
+<!--</aura:component>-->

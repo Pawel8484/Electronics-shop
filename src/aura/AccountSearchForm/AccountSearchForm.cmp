@@ -1,0 +1,25 @@
+<aura:component controller="AccountSearchController" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <aura:attribute type="Account[]" name="Accounts"/>
+    <aura:attribute type="String" name="selectedBillingCountry"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:registerEvent name="formsubmit" type="c:Formsubmit"/>
+
+    <lightning:layout horizontalAlign="center" verticalAlign="end">
+        <lightning:layoutItem padding="around-small">
+            <lightning:input name="input" aura:id="name" label="Company name" />
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small">
+            <lightning:select name="selectBillingCountry" aura:id="accounts" label="" variant="label-hidden" onchange="{!c.onCountryChange}">
+                <option value=""> Select country </option>
+                <aura:iteration items="{!v.Accounts}" var="acc">
+                    <option value="{!acc.Id}" text="{!acc.BillingCountry}"/>
+                </aura:iteration>
+            </lightning:select>
+        </lightning:layoutItem>
+
+        <lightning:layoutItem padding="around-small">
+            <lightning:button variant="brand" label="Search" onclick="{!c.onFormSubmit}"/>
+        </lightning:layoutItem>
+    </lightning:layout>
+
+</aura:component>

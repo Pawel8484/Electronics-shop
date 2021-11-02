@@ -1,0 +1,197 @@
+<apex:page id="GD_CustomHospitalView" standardController="Hospital__c" extensions="GD_CustomHospitalPageController">
+    <apex:form >
+        <apex:stylesheet value="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css"/>
+        <apex:stylesheet value="{!URLFOR($Resource.jQueryTest,'/css/jquery-ui.css')}"/>
+
+        <style>
+        .no-close .ui-dialog-titlebar-close {
+            display: none
+            }
+            .ui-dialog > .ui-widget-header {background: #3895d3;}
+        </style>
+
+        <div style="font-size:20px">
+        {!$Label.Custom_Hospital_Name}: {!record.Name}
+        </div>
+        <apex:pageBlock id="HospitalViewPageBlock">
+            <apex:pageMessage severity="info" rendered="{!okInfo}" detail="{!$Label.Contract_concluded}"/>
+            <apex:pageBlockSection title="{!$Label.Hospital_Details}" columns="2">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$Label.Hospital_Name}"/>
+                    <apex:outputPanel >
+                        <apex:outputText id="hospitalName" label="Name" value="{!record.Name}"/>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <br/>
+                <apex:outputText label="{!$Label.Number_Of_Ambulances}" value="{!record.No_Ambulances__c}"/>
+                <apex:outputText label="{!$Label.Helicopter_Access}">
+                    <input type="checkbox" disabled="disabled"/>
+                </apex:outputText>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$Label.Phone_Number}"/>
+                    <apex:outputText label="Phone number" value="{!record.Phone_Number__c}"/>
+                </apex:pageBlockSectionItem>
+                <apex:outputText label="{!$Label.Fax}" value="{!record.Fax_Number__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="{!$Label.Address}" columns="1">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$Label.Street}"/>
+                    <apex:outputText label="Street" value="{!record.Street__c}"/>
+                </apex:pageBlockSectionItem>
+                <apex:outputText label="{!$Label.Postal_Code}" value="{!record.Postal_Code__c}"/>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$Label.City}"/>
+                    <apex:outputText label="City" value="{!record.City__c}"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$Label.Country}"/>
+                    <apex:outputText label="Country" value="{!record.Country__c}"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="{!$Label.Details}">
+                <div id="map" style="width: 600px; height: 400px"></div>
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons >
+                <apex:commandButton reRender="HospitalViewPageBlock" value="{!$Label.Edit}" action="{!editHospital}"/>
+                <apex:commandButton reRender="HospitalViewPageBlock" value="{!$Label.Delete}"
+                                    action="{!deleteHospital}"/>
+                <apex:commandButton reRender="HospitalViewPageBlock" value="{!$Label.Clone}" action="{!clone}"/>
+                <apex:commandButton reRender="HospitalViewPageBlock" value="{!$Label.Sharing}"
+                                    action="{!sharingHospital}"/>
+                <apex:commandButton reRender="HospitalViewPageBlock" value="Hire Doctor" onClick="showDoctorsList();"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+        <apex:includeScript value="{! $Resource.jQuery }"/>
+        <apex:includeScript value="{! $Resource.leaflet }"/>
+        <apex:includeScript value="{! $Resource.geosearch }"/>
+        <script>
+        var city = '{!record.City__c}';
+        var postal = '{!record.Postal_Code__c}';
+        var street = '{!record.Street__c}';
+        var country = '{!record.Country__c}';
+        var addressToSearch = street+' '+city+' '+postal+' '+country;
+        $.get(location.protocol + '//nominatim.openstreetmap.org/search?format=json&q='+addressToSearch, function(data){
+            var lon = JSON.stringify(data[0].lon);
+            lon = lon.substring(1, lon.length - 1);
+            var lat = JSON.stringify(data[0].lat);
+            lat = lat.substring(1, lat.length - 1);
+            var marker = L.marker([lat, lon]).addTo(map);
+            L.marker([lon, lat]).addTo(map);
+        });
+        var map = L.map('map').setView([51.91, 19.14], 5);
+        mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+        L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '&copy; ' + mapLink + ' Contributors', maxZoom: 18,}).addTo(map);
+        </script>
+    </apex:form>
+    <apex:relatedList list="Contracts__r"/>
+    <div style="display: none;" id="dialog" title="Search Doctor">
+        <apex:pageBlock id="popUpPageBlock">
+            <apex:form >
+                <apex:pageMessages />
+                <apex:pageBlockSection columns="2">
+                    <apex:inputText value="{!doctor.Name}" label="{!$Label.First_Name}"/>
+                    <apex:inputText value="{!doctor.Last_Name__c}" label="{!$Label.Last_Name}"/>
+                    <apex:inputText value="{!doctor.Email__c}" label="{!$Label.Email}"/>
+                    <apex:inputText value="{!doctor.Country__c}" label="{!$Label.Country}"/>
+                </apex:pageBlockSection>
+                <div style="text-align:center;">
+                    <apex:commandButton reRender="searchBlock,popUpPageBlock" action="{!searchDoctor}"
+                                        value="{!$Label.Search}"/>
+                    <apex:commandButton reRender="searchBlock" onClick="close();" value="{!$Label.Cancel}"
+                                        oncomplete="window.top.location.reload()"/>
+                </div>
+            </apex:form>
+        </apex:pageBlock>
+        <apex:form id="searchBlock">
+            <apex:pageBlock rendered="{!noRecord}">
+            {!$Label.There_is_no_record_which_matches_this_criteria}.
+            </apex:pageBlock>
+            <apex:pageBlock title="{!$Label.Search_Results}" rendered="{!showResult}">
+                <apex:pageblockTable value="{!doctorsList}" var="dr">
+                    <apex:column headerValue="Action">
+                        <apex:commandButton reRender="popUpPageBlock2" value="{!$Label.Hire}" onClick="hireDoctor()">
+                            <apex:param name="doctorParam" value="{!dr.Id}"
+                                        assignTo="{!doctorIdSel}"/>
+                            <apex:param name="doctorParam2" value="{!dr.Last_Name__c}"
+                                        assignTo="{!doctorLastNameSel}"/>
+                        </apex:commandButton>
+                    </apex:column>
+                    <apex:column headerValue="Full Name" value="{! dr.Last_Name__c } {! dr.Name }"/>
+                    <apex:column headerValue="Email" value="{! dr.Email__c }">
+                    </apex:column>
+                    <apex:column headerValue="License number" value="{! dr.License_Number__c }">
+                    </apex:column>
+                    <apex:column headerValue="Full Address"
+                                 value="{! dr.Country__c } {! dr.Street__c } {! dr.Postal_Code__c } {! dr.City__c } ">
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:pageBlock>
+        </apex:form>
+    </div>
+    <div style="display: none; margin-top:75px;" id="dialog2" title="Hire Doctor">
+        <apex:pageBlock id="popUpPageBlock2">
+            <apex:form >
+                <apex:actionFunction name="changeFlag" action="{!changeFlag}"
+                                     rerender="popUpPageBlock2,HospitalViewPageBlock,searchBlock"/>
+                <apex:pageMessages />
+                <apex:pageBlockSection columns="2">
+                    <apex:inputText value="{!doctorLastNameSel}" label="{!$Label.Name}"/>
+                    <apex:inputText value="{!record.Name}" label="{!$Label.Hospital_Name}"/>
+                    <apex:inputField value="{!contract.Start_Date__c}" label="{!$Label.Start_Date}"/>
+                    <apex:inputField value="{!contract.End_Date__c}" label="{!$Label.End_Date}"/>
+                    <apex:inputField value="{!contract.Supervisor__c}" label="{!$Label.Supervisor}"/>
+                    <apex:inputField value="{!contract.Part_Time__c}" label="{!$Label.Part_Time}"/>
+                </apex:pageBlockSection>
+                <div style="text-align:center;">
+                    <apex:commandButton reRender="searchBlock,popUpPageBlock2,HospitalViewPageBlock,popUpPageBlock"
+                                        action="{!hire}" value="{!$Label.Hire}"
+                                        onComplete="closeAndRefresh();"/>
+                    <apex:commandButton reRender="popUpPageBlock" action="{!cancel}" onClick="closeHireWindow();"
+                                        value="{!$Label.Cancel}" oncomplete="window.top.location.reload()"/>
+                </div>
+                <script>
+                       function closeAndRefresh(){
+        var isSend = '{!isSend}';
+        if('{!isSend}'=='yes'){
+          $( "#dialog2" ).dialog( "close" );
+          $( "#dialog" ).dialog( "close" );
+        setTimeout(addSuccess1, 3000);
+        function addSuccess1(){
+        window.top.location.reload();
+        }
+        changeFlag();
+        }
+                }
+                </script>
+            </apex:form>
+        </apex:pageBlock>
+    </div>
+    <script>
+            <apex:includeScript value="{!URLFOR($Resource.jQueryTest,'/js/jquery-1.10.2.js')}"/>
+            <apex:includeScript value="{!URLFOR($Resource.jQueryTest,'/js/jquery-ui.js')}"/>
+        function showDoctorsList(){
+        $( function() {
+            $( "#dialog" ).dialog({
+            dialogClass: 'no-close',
+            width: 850,
+            height: 450
+        });
+        } );
+        }
+          function hireDoctor(){
+        $( function() {
+            $( "#dialog2" ).dialog({
+            dialogClass: 'no-close',
+            width: 850,
+            height: 450
+         });
+        } );
+        }
+        function close(){
+          $( "#dialog" ).dialog( "close" );;
+       }
+        function closeHireWindow(){
+          $( "#dialog2" ).dialog( "close" );
+       }
+    </script>
+</apex:page>

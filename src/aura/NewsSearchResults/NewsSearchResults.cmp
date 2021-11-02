@@ -1,0 +1,38 @@
+<aura:component controller="NewsController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction"
+                access="global">
+
+    <aura:attribute name="useSalesforceData" type="Boolean" default="false" access="global"/>
+    <aura:attribute name="newsPage" type="Object"/>
+    <aura:attribute name="selectedArticle" type="Object"/>
+    <aura:attribute name="requestData" type="Object"/>
+    <aura:attribute name="searchParams" type="Object"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="false"/>
+<!--    <aura:attribute name="actualRequestData" type="Object"/>-->
+    <aura:handler name="change" value="{!v.requestData}" action="{!c.dataChange}"/>
+    <aura:handler name="BackToResults" event="c:BackToResults" action="{!c.changeSelectedArticleValueToNull}"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler event="c:objectTransfer" action="{!c.onArticleSelect}"/>
+
+<!--    <aura:if isTrue="{!v.selectedArticle == null}">-->
+        <lightning:layout multipleRows="true" class="slds-align_absolute-center">
+            <aura:if isTrue="{!v.newsPage.totalResults > 0}">
+                <aura:iteration items="{!v.newsPage.articles}" var="article">
+                    <c:ArticleTile article="{!article}" searchParams="{!v.requestData}" useSalesforceData="{!v.useSalesforceData}"/>
+                </aura:iteration>
+                <aura:set attribute="else">
+                    <div class="slds-align_absolute-center slds-box slds-theme_default slds-large-size_1-of-1">
+                    <lightning:layoutItem padding="around-small" >
+                        <ui:outputText value="No news found" />
+                    </lightning:layoutItem>
+                    </div>
+                </aura:set>
+            </aura:if>
+        </lightning:layout>
+    <c:Spinner isVisible="{!v.showSpinner}"/>
+<!--    </aura:if>-->
+
+<!--    <aura:if isTrue="{!v.selectedArticle != null}">-->
+<!--        <c:ArticleDetails article="{!v.selectedArticle}" useSalesforceData="{!v.useSalesforceData}"/>-->
+<!--    </aura:if>-->
+</aura:component>

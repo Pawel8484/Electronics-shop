@@ -1,0 +1,44 @@
+<apex:page id="GD_CustomHospitalPage" standardController="Hospital__c" extensions="GD_CustomHospitalPageController">
+    <apex:form >
+        <div style="font-size:20px">
+            {!$Label.Custom_Hospital}
+        </div>
+        <apex:pageBlock >
+            <apex:pageBlockSection title="{!$Label.Information}" columns="2">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$Label.Hospital_Name}"/>
+                    <apex:inputField label="Hospital Name" value="{!record.Name}" required="true"/>
+                </apex:pageBlockSectionItem>
+                <br/>
+                <apex:inputText label="{!$Label.Number_Of_Ambulances}" value="{!record.No_Ambulances__c}"/>
+                <apex:inputCheckbox label="{!$Label.Helicopter_Access}"
+                                    value="{!record.Helicopter_Access__c}"/>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$Label.Phone_Number}"/>
+                    <apex:inputField label="Phone number:" value="{!record.Phone_Number__c}" required="true"/>
+                </apex:pageBlockSectionItem>
+                <apex:inputText label="{!$Label.Fax}" value="{!record.Fax_Number__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="{!$Label.Address}" columns="1">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$Label.Street}"/>
+                    <apex:inputField label="Street" value="{!record.Street__c}" required="true"/>
+                </apex:pageBlockSectionItem>
+                <apex:inputText label="{!$Label.Postal_Code}" value="{!record.Postal_Code__c}"/>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$Label.City}"/>
+                    <apex:inputField label="City" value="{!record.City__c}" required="true"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$Label.Country}"/>
+                    <apex:inputField label="Country" value="{!record.Country__c}" required="true"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons >
+                <apex:commandButton value="{!$Label.Save}" action="{!newHospital}"/>
+                <apex:commandButton value="{!$Label.Save_And_New}" action="{!saveAndNew}"/>
+                <apex:commandButton value="{!$Label.Cancel}" action="{!cancel}"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

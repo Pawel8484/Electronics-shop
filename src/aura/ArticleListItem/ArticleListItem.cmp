@@ -1,0 +1,28 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId">
+    <aura:attribute name="article" type="Object" access="public"/>
+    <aura:attribute name="checked" type="Boolean" default="false"/>
+    <aura:registerEvent name="objectTransfer" type="c:objectTransfer"/>
+    <lightning:navigation aura:id="navService"/>
+    <aura:attribute name="pageReference" type="Object"/>
+
+    <div class="slds-box slds-theme_default slds-m-around_small article-tile"
+         article="{!v.article}" onclick="{!c.selectedArticle}">
+        <article class="slds-post">
+            <lightning:layout>
+                <lightning:layoutItem size="12" class="slds-p-around_small">
+                    <header class="slds-post__header slds-media">
+                        <div class="slds-media__body">
+                            <div class="slds-text-heading_medium">
+                                    {!v.article.title}
+                            </div>
+                            <lightning:relativeDateTime value="{!v.article.publishedAt}"/>
+                        </div>
+                    </header>
+                    <div>
+                        <img onerror="{!c.imageError}" src="{!v.article.iconUrl}" style="height:25px; width:25px;"/>
+                    </div>
+                </lightning:layoutItem>
+            </lightning:layout>
+        </article>
+    </div>
+</aura:component>

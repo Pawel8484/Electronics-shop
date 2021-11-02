@@ -1,0 +1,49 @@
+<apex:page id="GD_CustomDoctor" standardController="Doctor__c" extensions="GD_CustomDoctorPageController">
+    <apex:form >
+        <div style="font-size:20px">
+            {!$Label.Custom_Doctor}
+        </div>
+        <apex:pageBlock >
+            <apex:pageBlockSection title="{!$Label.Information}" columns="2">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$Label.First_Name}"/>
+                    <apex:inputField label="First Name" value="{!record.Name}" required="true"/>
+                </apex:pageBlockSectionItem>
+                <apex:inputText label="{!$Label.License_Number}" value="{!record.License_Number__c}"/>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$Label.Last_Name}"/>
+                    <apex:inputField label="Last Name" value="{!record.Last_Name__c}"/>
+                </apex:pageBlockSectionItem>
+                <apex:inputText label="{!$Label.Speciality}" value="{!record.Speciality__c}"/>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$Label.Date_Of_Birth}"/>
+                    <apex:outputPanel >
+                        <apex:inputField value="{!record.Date_Of_Birth__c}"/>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$Label.Start_Of_Career}"/>
+                    <apex:outputPanel >
+                        <apex:inputField value="{!record.Start_Of_Career__c}"/>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:inputText label="{!$Label.Nationality}" value="{!record.Nationality__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="{!$Label.Contact_Details}" columns="2">
+                <apex:inputText label="{!$Label.Phone}" value="{!record.Phone__c}"/>
+                <apex:inputText label="{!$Label.Email}" value="{!record.Email__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="{!$Label.Address}" columns="1">
+                <apex:inputText label="{!$Label.Street}" value="{!record.Street__c}"/>
+                <apex:inputText label="{!$Label.Postal_Code}" value="{!record.Postal_Code__c}"/>
+                <apex:inputText label="{!$Label.City}" value="{!record.City__c}"/>
+                <apex:inputText label="{!$Label.Country}" value="{!record.Country__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons >
+                <apex:commandButton value="{!$Label.Save}" action="{!newDoctor}"/>
+                <apex:commandButton value="{!$Label.Save_And_New}" action="{!saveAndNew}"/>
+                <apex:commandButton value="{!$Label.Cancel}" action="{!cancel}"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

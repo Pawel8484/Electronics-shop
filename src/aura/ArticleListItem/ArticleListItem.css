@@ -1,0 +1,11 @@
+.THIS.article-tile {
+    width: 50%;
+    height: 15%;
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+
+.THIS.article-tile:hover {
+    box-shadow: 3px 3px 3px grey;
+    transform: scale(1.02);
+}

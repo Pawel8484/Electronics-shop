@@ -1,0 +1,114 @@
+<apex:page id="GD_CustomHospitalPage" standardController="Hospital__c" extensions="GD_CustomHospitalPageController">
+    <apex:form >
+        <apex:pageBlock title="Custom Hospital">
+            <apex:pageBlockSection columns="2">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel id="ol" value="Hospital Name"/>
+                    <apex:outputPanel >
+                        <div class="requiredInput">
+                            <div class="requiredBlock"></div>
+                            <apex:inputText id="hospitalName" label="Hospital Name" value="{!hospitalName}"></apex:inputText>
+                            <apex:outputPanel >
+                                <div id="hospitalNameDiv" style="transform: translate(0%, -50%); display: none; ">
+                                    <p style="color: red;"><strong>error:</strong> enter value
+                                    </p>
+                                </div>
+                            </apex:outputPanel>
+                        </div>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <br/>
+                <apex:inputText label="Number of Ambulances" value="{!numberOfAmbulances}"></apex:inputText>
+                <apex:inputCheckbox label="Helicopter access:"></apex:inputCheckbox>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Phone Number"/>
+                    <apex:outputPanel >
+                        <div class="requiredInput">
+                            <div class="requiredBlock"></div>
+                            <apex:inputText label="Phone number:" value="{!phoneNumber}"></apex:inputText>
+                            <apex:outputPanel >
+                                <div id="errorDiv" style="transform: translate(0%, -50%); display: none; ">
+                                    <p style="color: red;"><strong>error:</strong> enter value
+                                    </p>
+                                </div>
+                            </apex:outputPanel>
+                        </div>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:inputText label="Fax:" value="{!faxNumber}"></apex:inputText>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Address" columns="1">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Street:"/>
+                    <apex:outputPanel >
+                        <div class="requiredInput">
+                            <div class="requiredBlock"></div>
+                            <apex:inputText label="Street:" value="{!street}"></apex:inputText>
+                            <apex:outputPanel >
+                                <div id="errorDiv" style="transform: translate(0%, -50%); display: none; ">
+                                    <p style="color: red;"><strong>error:</strong> enter value
+                                    </p>
+                                </div>
+                            </apex:outputPanel>
+                        </div>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:inputText label="Postal Code:" value="{!postalCode}"></apex:inputText>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="City:"/>
+                    <apex:outputPanel >
+                        <div class="requiredInput">
+                            <div class="requiredBlock"></div>
+                            <apex:inputText label="City:" value="{!city}"></apex:inputText>
+                            <apex:outputPanel >
+                                <div id="errorDiv" style="transform: translate(0%, -50%); display: none; ">
+                                    <p style="color: red;"><strong>error:</strong> enter value
+                                    </p>
+                                </div>
+                            </apex:outputPanel>
+                        </div>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Country:"/>
+                    <apex:outputPanel >
+
+                        <div class="requiredInput">
+                            <div class="requiredBlock"></div>
+                            <apex:inputText label="Country:" value="{!country}"></apex:inputText>
+                            <apex:outputPanel >
+                                <div id="errorDiv" style="transform: translate(0%, -50%); display: none; ">
+                                    <p style="color: red;"><strong>error:</strong> enter value
+                                    </p>
+                                </div>
+                            </apex:outputPanel>
+                        </div>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save"/>
+                <apex:commandButton value="Save & New"/>
+                <apex:commandButton value="Cancel"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+        <script>
+        function displayEmailError(idInputName, divName){
+            divName = $("[id$='+"+divName+"]");
+            var errorMessage = $("[id$='+"+idInputName+"]");
+                if(errorMessage.val() == ''){
+                 divName.style.display = 'block';
+                }else{
+                  divName.style.display = 'none';
+                }
+           }
+           function checkAllErrors(){
+               displayEmailError("hospitalName", "hospitalNameDiv");
+           }
+
+
+
+        </script>
+    </apex:form>
+
+</apex:page>

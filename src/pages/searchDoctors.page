@@ -1,0 +1,112 @@
+<apex:page id="filterPage" controller="DoctorsListWithController">
+    <apex:form id="searchForm">
+        <apex:actionStatus id="fetchStatus">
+            <apex:facet name="start">
+                <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.25; z-index: 10000; background-color: black;">
+                </div>
+                <div style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 10001; margin: 15% 50%">
+                    <div style="display: inline-block; padding: 0px; background-color: #fff; width: 0px; margin-left: -60px;">
+                        <img src="{!$Resource.spinner_small}"/>
+                    </div>
+                </div>
+            </apex:facet>
+        </apex:actionStatus>
+        <apex:actionFunction name="refreshPageSize" action="{!refreshPageSize}" status="fetchStatus"
+                             reRender="searchBlock"/>
+        <apex:pageBlock title="{!$Label.Search_Doctors}">
+            <apex:pageBlockSection columns="2">
+                <apex:inputText value="{!name}" label="{!$Label.First_Name}"/>
+                <apex:inputText value="{!lastName}" label="{!$Label.Last_Name}"/>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$Label.Email}"/>
+                    <apex:outputPanel >
+                        <div class="requiredInput">
+                            <div class="requiredBlock"></div>
+                            <apex:inputField value="{!record.Email__c}" label="{!$Label.Email}" id="requiredInputText"/>
+                        </div>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+                <apex:inputText value="{!country}" label="{!$Label.Country}"/>
+            </apex:pageBlockSection>
+            <apex:pageblockButtons location="bottom">
+                <div style="text-align:left; transform: translate(22.5%, 0%);">
+                    <apex:commandButton status="fetchStatus" value="{!$Label.Search}" action="{!search}"/>
+                    <apex:commandButton status="fetchStatus" value="{!$Label.Clear}" action="{!clear}"/>
+                </div>
+            </apex:pageblockButtons>
+        </apex:pageBlock>
+        <apex:pageBlock title="{!$Label.Search_Results}" rendered="{!showResult}" id="searchBlock">
+            <apex:pageblockTable value="{!Doctors}" var="dr">
+                <apex:column headerValue="Link">
+                    <apex:outputLink target="_blank" value="{!URLFOR($Action.Doctor__c.View, dr.id)}">Link
+                    </apex:outputLink>
+                </apex:column>
+                <apex:column value="{! dr.Last_Name__c } {! dr.Name }">
+                    <apex:facet name="header">
+                        <apex:commandLink action="{!search}"
+                                          value="{!$Label.Full_Name} {!IF(sortExpression=='Last_Name__c',IF(sortDirection='ASC','▼','▲'),'')}">
+                            <apex:param value="Last_Name__c" name="column" assignTo="{!sortExpression}"/>
+                        </apex:commandLink>
+                    </apex:facet>
+                </apex:column>
+                <apex:column value="{! dr.Email__c }">
+                    <apex:facet name="header">
+                        <apex:commandLink action="{!search}"
+                                          value="{!$Label.Email} {!IF(sortExpression=='Email__c',IF(sortDirection='ASC','▼','▲'),'')}">
+                            <apex:param value="Email__c" name="column" assignTo="{!sortExpression}"/>
+                        </apex:commandLink>
+                    </apex:facet>
+                </apex:column>
+                <apex:column value="{! dr.License_Number__c }">
+                    <apex:facet name="header">
+                        <apex:commandLink action="{!search}"
+                                          value="{!$Label.License_Number} {!IF(sortExpression=='License_Number__c',IF(sortDirection='ASC','▼','▲'),'')}">
+                            <apex:param value="License_Number__c" name="column" assignTo="{!sortExpression}"/>
+                        </apex:commandLink>
+                    </apex:facet>
+                </apex:column>
+                <apex:column value="{! dr.Country__c } {! dr.Street__c } {! dr.Postal_Code__c } {! dr.City__c } ">
+                    <apex:facet name="header">
+                        <apex:commandLink action="{!search}"
+                                          value="{!$Label.Full_Address} {!IF(sortExpression=='Country__c',IF(sortDirection='ASC','▼','▲'),'')}">
+                            <apex:param value="Country__c" name="column" assignTo="{!sortExpression}"/>
+                        </apex:commandLink>
+                    </apex:facet>
+                </apex:column>
+            </apex:pageBlockTable>
+            <div style="text-align:center;">
+                <apex:selectList value="{!size}" multiselect="false" size="1" onchange="refreshPageSize();">
+                    <apex:selectOptions value="{!paginationSizeOptions}"/>
+                </apex:selectList>
+                <apex:commandButton status="fetchStatus" reRender="searchBlock" value="{!$Label.First}"
+                                    action="{!setCon.first}"
+                                    disabled="{!!setCon.hasPrevious}" title="First Page"/>
+                <apex:commandButton status="fetchStatus" reRender="searchBlock" value="{!$Label.Previous}"
+                                    action="{!setCon.previous}"
+                                    disabled="{!!setCon.hasPrevious}" title="Previous Page"/>
+                <apex:commandButton status="fetchStatus" reRender="searchBlock" value="{!$Label.Next}"
+                                    action="{!setCon.next}"
+                                    disabled="{!!setCon.hasNext}" title="Next Page"/>
+                <apex:commandButton status="fetchStatus" reRender="searchBlock" value="{!$Label.Last}"
+                                    action="{!setCon.last}"
+                                    disabled="{!!setCon.hasNext}" title="Last Page"/>
+                <br/>
+                <apex:outputText >{!(setCon.pageNumber * size)+1-size}
+                    -{!IF((setCon.pageNumber * size)>noOfRecords, noOfRecords,
+                    (setCon.pageNumber * size))} {!$Label.Of} {!noOfRecords}
+                </apex:outputText>
+            </div>
+            <apex:outputPanel >
+            </apex:outputPanel>
+            <div style="text-align:right;">
+                <apex:commandLink status="fetchStatus" action="/apex/GD_ExportToCSV" target="_blank"
+                                  style="text-decoration:none;padding:4px;" styleClass="btn"> {!$Label.Export_to_CSV}
+                </apex:commandLink>
+                <apex:commandLink status="fetchStatus" action="/apex/GD_ExportToXML" target="_blank"
+                                  style="text-decoration:none;padding:4px;" styleClass="btn"> {!$Label.Export_to_XML}
+                </apex:commandLink>
+
+            </div>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>
