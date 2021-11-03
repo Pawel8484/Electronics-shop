@@ -1,7 +1,7 @@
 <apex:page id="Registration" showHeader="false" controller="SiteRegisterController" title="{!$Label.site.register}">
   <apex:composition template="{!$Site.Template}">
     <apex:define name="body">  
-      <center>
+      <center> 
         <apex:panelGrid bgcolor="white" columns="1"> 
           <br/>
           <br/>
