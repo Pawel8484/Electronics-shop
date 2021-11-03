@@ -111,7 +111,7 @@
             <fieldset>
                 <legend><span class="number">1</span> Contact Us</legend>
                 <input type="hidden" name="oid" value="00D09000007z0ZH"/>
-                <input type="hidden" name="retURL" value="pawelbritenet-developer-edition.eu40.force.com/thank-you"/>
+                <input type="hidden" name="retURL" value="https://bri-dev-ed--c.visualforce.com/apex/ES_ThankYou"/>
                 <label for="first_name"><span class="star">*</span> First Name</label><input  id="first_name" maxlength="40" name="first_name" size="20" type="text" required="true"/><br/>
                 <label for="last_name"><span class="star">*</span> Last Name</label><input  id="last_name" maxlength="80" name="last_name" size="20" type="text" required="true"/><br/>
                 <label for="email"><span class="star">*</span> Email</label><input  id="email" maxlength="80" name="email" size="20" type="text" required="true"/><br/>

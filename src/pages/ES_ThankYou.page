@@ -1,0 +1,32 @@
+<apex:page id="ES_ThankYou" lightningStylesheets="true" showHeader="false">
+    <html>
+    <head>
+        <META HTTP-EQUIV="Content-type" CONTENT="text/html; charset=UTF-8"/>
+        <style type="text/css">
+    body{
+        background-image: url({!$Resource.ContactBackground});
+    }
+
+    .form-style-5{
+    max-width: 500px;
+    margin: 120px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    font-size: medium;
+    text-align: center;
+    }
+
+    .form-style-5 .text{
+    margin-top: 40px;
+    }
+        </style>
+    </head>
+    <body>
+    <div class="form-style-5">
+        <img src="{!$Resource.Checkmark}"/><br/>
+        <div class="text">Thank you for filling out our form</div>
+    </div>
+    </body>
+    </html>
+</apex:page>
