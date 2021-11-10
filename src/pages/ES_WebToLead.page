@@ -116,7 +116,7 @@
                 <label for="last_name"><span class="star">*</span> Last Name</label><input  id="last_name" maxlength="80" name="last_name" size="20" type="text" required="true"/><br/>
                 <label for="email"><span class="star">*</span> Email</label><input  id="email" maxlength="80" name="email" size="20" type="text" required="true"/><br/>
                 <label for="phone"><span class="star">*</span> Phone</label><input  id="phone" maxlength="40" name="phone" size="20" type="text" required="true"/><br/>
-                <label for="company">Company</label><input  id="company" maxlength="40" name="company" size="20" type="text" /><br/>
+                <label for="company"><span class="star">*</span> Company</label><input  id="company" maxlength="40" name="company" size="20" type="text" required="true"/><br/>
                 <input type="submit" name="submit"/>
             </fieldset>
         </form>
