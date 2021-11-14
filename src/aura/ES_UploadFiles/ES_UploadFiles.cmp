@@ -1,0 +1,52 @@
+<aura:component description="ES_UploadFiles" controller="ES_ProductController">
+
+    <aura:attribute name="filetype" type="List" default="['.png', '.jpg', '.jpeg']"/>
+    <aura:attribute name="multiple" type="Boolean" default="true"/>
+    <aura:attribute name="disabled" type="Boolean" default="true"/>
+    <aura:attribute name="uploadFinished" type="Boolean" default="false"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="files" type="Object[]"/>
+    <aura:attribute name="selectedMain" type="String" default=""/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
+
+    <aura:registerEvent name="reviewEdited" type="c:ES_SetMainImage"/>
+
+    <div>
+        <div class="uploadContainer">
+            <lightning:card>
+                <div class="slds-align_absolute-center">
+                    <lightning:fileUpload name="fileUploader"
+                                          multiple="true"
+                                          accept="{!v.filetype}"
+                                          recordId="{!v.recordId}"
+                                          onuploadfinished="{!c.handleUploadFinished}"/>
+
+
+                </div>
+                <div class="slds-m-around_medium">
+                    <aura:if isTrue="{!not(empty(v.files))}">
+                        <div class="slds-text-heading_medium slds-p-around_medium slds-align_absolute-center">Select main image</div>
+                        <table class="slds-p-around_medium tableContainer">
+                            <aura:iteration items="{!v.files}" var="file" indexVar="index">
+                                <tr class="slds-p-around_medium" aura:id="row" onclick="{!c.onClickRow}" data-id="{!file.contentVersionId}" data-index="{!index}"
+                                    style="{!if(v.selectedMain == file.contentVersionId, 'background-color: rgba(135,206,250); border-radius: 5%; transform: scale(1.02); box-shadow: 3px 3px 3px grey;', '')}">
+                                    <td>
+                                        <img src="{!'/sfc/servlet.shepherd/version/download/' + file.contentVersionId}"/>
+                                    </td>
+                                    <td class="slds-text-heading_small">
+                                        <p style="max-height: 30px; overflow: hidden; max-width: 250px; text-align: left">
+                                                {!file.name}
+                                        </p>
+                                    </td>
+                                </tr>
+                            </aura:iteration>
+                        </table>
+                    </aura:if>
+                </div>
+            </lightning:card>
+        </div>
+    </div>
+
+</aura:component>
+
