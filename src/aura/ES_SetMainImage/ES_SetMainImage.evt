@@ -1,0 +1,3 @@
+<aura:event type="APPLICATION" description="ES_SetMainImage">
+    <aura:attribute name="mainPictureId" type="String"/>
+</aura:event>

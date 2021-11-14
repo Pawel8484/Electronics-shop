@@ -1,0 +1,28 @@
+.THIS .uploadContainer {
+    width: 800px;
+    min-height: 450px;
+    margin: auto;
+}
+
+.THIS img {
+    border-radius: 5%;
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    vertical-align: center;
+}
+
+.THIS tr {
+    margin-bottom: 20px;
+    height: 150px;
+    cursor: pointer;
+}
+
+.THIS .tableContainer {
+    width: 50%;
+    margin: auto;
+}
+
+.THIS td {
+    text-align: center;
+}
