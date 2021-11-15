@@ -1,0 +1,42 @@
+<aura:component description="ES_ProductSearchForm"
+                implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId"
+                access="global">
+
+    <aura:attribute name="options" type="List" default="[
+    {'label': 'all', 'value': 'all'},
+    {'label': 'Mobile Phone', 'value': 'phone'},
+    {'label': 'Laptop', 'value': 'laptop'},
+    ]"/>
+
+    <aura:attribute name="initialData" type="Object" default="{}"/>
+    <aura:attribute name="searchInput" type="String"/>
+    <aura:attribute name="selectedCategory" type="String"/>
+    <aura:attribute name="selectedStartDate" type="String"/>
+    <aura:attribute name="selectedEndDate" type="String"/>
+<!--    <aura:handler name="change" value="{!v.initialData}" action="{!c.doInit}"/>-->
+
+    <aura:registerEvent name="requestData" type="c:ES_RequestData"/>
+
+    <lightning:card class="slds-p-horizontal_medium">
+        <lightning:layout horizontalAlign="center" verticalAlign="end">
+            <lightning:layoutItem size="3">
+                <lightning:input name="searchInput" aura:id="searchInput" placeholder="Keywords..."/>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="1">
+                <lightning:combobox name="selectedCategory" aura:id="selectedCategory"
+                                    value="Select category..."
+                                    placeholder="Category"
+                                    options="{! v.options }"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem>
+                <lightning:button variant="brand" iconName="utility:search" onclick="{!c.onFormSubmit}"/>
+            </lightning:layoutItem>
+        </lightning:layout>
+        <br/>
+        <!--        <lightning:layout horizontalAlign="center" verticalAlign="end">-->
+        <!--            <lightning:layoutItem padding="around-small">-->
+        <!--                <lightning:input type="date" name="selectedStartDate" aura:id="selectedStartDate" label="From"/>-->
+        <!--            </lightning:layoutItem>-->
+        <!--        </lightning:layout>-->
+    </lightning:card>
+</aura:component>

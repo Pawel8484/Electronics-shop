@@ -1,0 +1,19 @@
+<aura:component description="ES_ProductSearch"
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction,lightning:isUrlAddressable"
+                access="global">
+
+    <aura:attribute name="requestData" type="Object"/>
+    <aura:handler name="requestData" event="c:ES_RequestData" action="{!c.onRequestData}"/>
+<!--    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>-->
+
+    <div>
+        <lightning:card>
+            <c:ES_ProductSearchForm/>
+        </lightning:card>
+    </div>
+    <div class="slds-m-vertical_small">
+        <lightning:card title="Search Results">
+            <c:ES_ProductSearchResults requestData="{!v.requestData}"/>
+        </lightning:card>
+    </div>
+</aura:component>

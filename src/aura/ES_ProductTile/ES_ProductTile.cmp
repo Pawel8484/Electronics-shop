@@ -1,0 +1,47 @@
+<aura:component description="c:ES_ProductTile component"
+                implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" controller="ES_ProductSearchController">
+
+    <aura:attribute name="product" type="Product2" access="public"/>
+    <aura:attribute name="checked" type="Boolean" default="false"/>
+    <aura:attribute name="searchParams" type="Object" access="public"/>
+
+    <aura:registerEvent name="objectTransfer" type="c:objectTransfer"/>
+    <lightning:navigation aura:id="navService"/>
+    <aura:attribute name="pageReference" type="Object"/>
+
+<!--    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>-->
+
+    <div class="slds-box slds-theme_default slds-m-around_small slds-align_absolute-center article-tile"
+         product="{!v.product}">
+<!--         onclick="{!c.selectedArticle}">-->
+        <article class="slds-post">
+            <lightning:layout>
+                <lightning:layoutItem size="6">
+
+                    <aura:if isTrue="{!not(empty(v.product.MainPicture__c))}">
+                    <img src="{!'/sfc/servlet.shepherd/version/download/' + v.product.MainPicture__c}"/>
+<!--                        <img src="{!v.product.MainPicture__c}" onerror="{!c.imageError}" class="pic"/>-->
+                    </aura:if>
+                    <aura:if isTrue="{!empty(v.product.MainPicture__c)}">
+                        <img onerror="{!c.imageError}" class="slds-align_absolute-center article-image"
+                             src="{!$Resource.emptyImage}"/>
+                    </aura:if>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="6" class="slds-p-around_small">
+                    <header class="slds-post__header slds-media">
+                        <div class="slds-media__body">
+                            <div class="slds-text-heading_medium">
+                                    {!v.product.Name}
+                            </div>
+<!--                            <lightning:relativeDateTime value="{!v.article.publishedAt}"/>-->
+                        </div>
+                    </header>
+<!--                    <div class="slds-post__content slds-text-longform">-->
+<!--                        {!v.article.description}-->
+<!--                    </div>-->
+                </lightning:layoutItem>
+            </lightning:layout>
+        </article>
+    </div>
+
+</aura:component>
