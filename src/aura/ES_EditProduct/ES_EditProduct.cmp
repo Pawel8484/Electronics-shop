@@ -1,9 +1,8 @@
-<aura:component description="ES_EditProduct" implements="force:appHostable,flexipage:availableForAllPageTypes,lightning:isUrlAddressable,force:lightningQuickAction"
+<aura:component description="ES_EditProduct" implements="force:appHostable,flexipage:availableForAllPageTypes,lightning:isUrlAddressable,force:lightningQuickActionWithoutHeader"
                 controller="ES_ProductController">
 
     <aura:attribute type="String" name="recordId" default=""/>
     <aura:attribute type="String" name="standardPrice"/>
-
 
     <aura:attribute type="String" name="isUpdated" default="true"/>
 

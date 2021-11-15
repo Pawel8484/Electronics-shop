@@ -9,13 +9,6 @@
     setSecondStep: function (component, event) {
         const record = event.getParam("response");
         const productId = record.id;
-//         const toastEvent = $A.get("e.force:showToast");
-//         toastEvent.setParams({
-//             "title": "Success!",
-//             "message": "The product has been added",
-//             "type": "success",
-//         });
-//         toastEvent.fire();
         component.set("v.productAdded", true);
         component.set("v.currentStep", "step2");
         component.set("v.recordId", productId);
@@ -29,6 +22,14 @@
             "productId": component.get("v.recordId"),
         });
         $A.enqueueAction(setPicture);
+    },
+
+    backToFirstStep: function (component, event) {
+        component.set("v.currentStep", "step1");
+    },
+
+    backToSecondStep: function (component, event) {
+        component.set("v.currentStep", "step2");
     },
 
 //    addPrice: function (component) {
@@ -83,17 +84,26 @@
                     "type": "success",
                 });
                 toastEvent.fire();
+                let recordId = component.get("v.recordId");
+                 component.find("navService").navigate({
+                   "type": "standard__recordPage",
+                        "attributes": {
+                            "recordId": recordId,
+                            "objectApiName": "Product2",
+                            "actionName": "view"
+                        }
+                });
                 component.set("v.mainPictureId", null);
                 component.set("v.standardPrice", null);
                 component.set("v.prod", null);
                 component.set("v.recordId", "");
                 component.set("v.currentStep", "step1");
-                    var navEvent = $A.get("e.force:navigateToList");
-                    navEvent.setParams({
-                        "scope": "Product2"
-                    });
-                    navEvent.fire();
-        },
+//                    var navEvent = $A.get("e.force:navigateToList");
+//                    navEvent.setParams({
+//                        "scope": "Product2"
+//                    });
+//                    navEvent.fire();
+    },
 
     saveUpdatedProduct: function (component) {
                 let setPrice = component.get("c.setPrice");
@@ -117,12 +127,32 @@
                             "objectApiName": "Product2",
                             "actionName": "view"
                         }
-     });
+                });
                 component.set("v.mainPictureId", null);
                 component.set("v.standardPrice", null);
                 component.set("v.prod", null);
                 component.set("v.recordId", "");
                 component.set("v.currentStep", "step1");
 
-        },
+    },
+
+    saveAndNewProduct: function (component) {
+                let setPrice = component.get("c.setPrice");
+                setPrice.setParams({
+                    "price": component.get("v.standardPrice"),
+                    "productId": component.get("v.recordId"),
+                });
+                $A.enqueueAction(setPrice);
+                let toastEvent = $A.get("e.force:showToast");
+                toastEvent.setParams({
+                    "title": "Success",
+                    "message": "Product has been added.",
+                    "type": "success",
+                });
+                component.set("v.mainPictureId", null);
+                component.set("v.standardPrice", null);
+                component.set("v.prod", null);
+                component.set("v.recordId", "");
+                component.set("v.currentStep", "step1");
+    },
 })

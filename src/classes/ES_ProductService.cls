@@ -1,7 +1,7 @@
 public with sharing class ES_ProductService {
 
     public static List<ContentVersion> getPictures(String productId) {
-        return [SELECT ContentDocumentId, Title from ContentVersion WHERE FirstPublishLocationId =:productId];
+        return [SELECT ContentDocumentId, Title from ContentVersion WHERE FirstPublishLocationId = :productId];
     }
 
     public static void setMainPicture(String mainPictureId, String productId) {
@@ -38,6 +38,10 @@ public with sharing class ES_ProductService {
     public static PricebookEntry getPrice(String productId) {
         Pricebook2 standardPB = [select id from Pricebook2 where isStandard = true];
         return [SELECT Id, UnitPrice FROM PricebookEntry WHERE Product2Id = :productId AND Pricebook2Id = :standardPB.Id LIMIT 1];
+    }
+
+    public static Product2 getMainPictureId(String productId) {
+        return [SELECT MainPicture__c FROM Product2 WHERE Id = :productId LIMIT 1];
     }
 
 }

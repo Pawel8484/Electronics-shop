@@ -20,4 +20,9 @@ public with sharing class ES_ProductController {
         PricebookEntry pbe = ES_ProductService.getPrice(productId);
         return pbe.UnitPrice;
     }
+
+    @AuraEnabled
+    public static String getMainPictureId(String productId) {
+        return ES_ProductService.getMainPictureId(productId).MainPicture__c;
+    }
 }
