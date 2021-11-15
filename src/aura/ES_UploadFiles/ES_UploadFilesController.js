@@ -1,6 +1,7 @@
 ({
     onInit: function (component, event, helper) {
-    helper.downloadPictures(component, event);
+        helper.downloadPictures(component, event);
+        helper.downloadMainPictureId(component, event);
     },
 
     handleUploadFinished: function (component, event, helper) {
