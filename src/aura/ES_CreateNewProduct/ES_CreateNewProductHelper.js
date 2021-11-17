@@ -33,6 +33,8 @@
     },
 
     saveNewProduct: function (component) {
+        var fieldValue = component.find("price").get("v.validity");
+        if(fieldValue.valueMissing === false){
         let setPrice = component.get("c.setPrice");
         setPrice.setParams({
             "price": component.get("v.standardPrice"),
@@ -60,6 +62,15 @@
         component.set("v.prod", null);
         component.set("v.recordId", "");
         component.set("v.currentStep", "step1");
+        } else {
+                const toastEvent = $A.get("e.force:showToast");
+                toastEvent.setParams({
+                    "title": "Error",
+                    "message": "Complete this field.",
+                    "type": "error"
+                });
+                toastEvent.fire();
+        }
     },
 
     saveUpdatedProduct: function (component) {
