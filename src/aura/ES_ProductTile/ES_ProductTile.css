@@ -1,6 +1,6 @@
 .THIS.article-tile {
-    width: 30%;
-    height: 30%;
+    width: 20%;
+    height: 20%;
     transition: transform 0.2s;
     cursor: pointer;
 }
@@ -10,9 +10,16 @@
     transform: scale(1.02);
 }
 
-.THIS.article-image {
+.THIS .empty-photo-image {
     min-height: 200px;
     max-height: 200px;
-    min-width: 200px;
-    max-width: 200px;
+    min-width: 225px;
+    max-width: 225px;
+}
+
+.THIS .photo-image {
+    min-height: 200px;
+    max-height: 200px;
+    min-width: 225px;
+    max-width: 225px;
 }

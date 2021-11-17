@@ -2,31 +2,19 @@
                 implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction"
                 access="global" controller="ES_ProductSearchController">
 
-    <aura:attribute name="selectedProducts" type="Product2[]"/>
+    <aura:attribute name="wrapProducts" type="Object"/>
     <aura:attribute name="selectedArticle" type="Object"/>
     <aura:attribute name="requestData" type="Object"/>
     <aura:attribute name="searchParams" type="Object"/>
-
     <aura:attribute name="showSpinner" type="Boolean" default="false"/>
 
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
     <aura:handler name="change" value="{!v.requestData}" action="{!c.dataChange}"/>
-<!--    <aura:handler name="BackToResults" event="c:BackToResults" action="{!c.changeSelectedArticleValueToNull}"/>-->
-<!--    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>-->
-<!--    <aura:handler event="c:objectTransfer" action="{!c.onArticleSelect}"/>-->
 
     <lightning:layout multipleRows="true" class="slds-align_absolute-center">
-<!--        <aura:if isTrue="{!v.selectedProducts > 0}">-->
-            <aura:iteration items="{!v.selectedProducts}" var="product">
-                <c:ES_ProductTile product="{!product}" searchParams="{!v.requestData}"/>
-            </aura:iteration>
-<!--            <aura:set attribute="else">-->
-<!--                <div class="slds-align_absolute-center slds-box slds-theme_default slds-large-size_1-of-1">-->
-<!--                    <lightning:layoutItem padding="around-small">-->
-<!--                        <ui:outputText value="No product found"/>-->
-<!--                    </lightning:layoutItem>-->
-<!--                </div>-->
-<!--            </aura:set>-->
-<!--        </aura:if>-->
+        <aura:iteration items="{!v.wrapProducts.products}" var="product">
+            <c:ES_ProductTile product="{!product}" searchParams="{!v.requestData}"/>
+        </aura:iteration>
     </lightning:layout>
-    <c:Spinner isVisible="{!v.showSpinner}"/>
+
 </aura:component>

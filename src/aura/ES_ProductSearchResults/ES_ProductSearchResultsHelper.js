@@ -6,8 +6,8 @@
         action.setCallback(this,function(response) {
             const state = response.getState();
               if(state ==='SUCCESS'){
-                  const selectedProducts = response.getReturnValue();
-                  component.set("v.selectedProducts", selectedProducts);
+                  const wrapProducts = response.getReturnValue();
+                  component.set("v.wrapProducts", wrapProducts);
               } else {
                   this.handleErrors(response.getError());
               }

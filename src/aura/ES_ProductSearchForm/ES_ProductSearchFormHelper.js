@@ -7,10 +7,9 @@
                 searchTerm: searchTerm,
                 selectedCategory: selectedCategory,
             };
-                    requestData.setParams({
-                        formData: data
-                    });
-                    console.log('Before fire term: ' + data.searchTerm + ' category: ' + data.selectedCategory);
-                    requestData.fire();
-         },
+        requestData.setParams({
+            formData: data
+        });
+        requestData.fire();
+    },
 })

@@ -13,16 +13,18 @@
     <aura:attribute name="selectedCategory" type="String"/>
     <aura:attribute name="selectedStartDate" type="String"/>
     <aura:attribute name="selectedEndDate" type="String"/>
-<!--    <aura:handler name="change" value="{!v.initialData}" action="{!c.doInit}"/>-->
 
     <aura:registerEvent name="requestData" type="c:ES_RequestData"/>
 
     <lightning:card class="slds-p-horizontal_medium">
-        <lightning:layout horizontalAlign="center" verticalAlign="end">
+        <lightning:layout horizontalAlign="center" verticalAlign="center">
             <lightning:layoutItem size="3">
+                <img class="logo" src="{!$Resource.shop_logo}"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="3" class="searchbox">
                 <lightning:input name="searchInput" aura:id="searchInput" placeholder="Keywords..."/>
             </lightning:layoutItem>
-            <lightning:layoutItem size="1">
+            <lightning:layoutItem size="1" class="searchbox">
                 <lightning:combobox name="selectedCategory" aura:id="selectedCategory"
                                     value="Select category..."
                                     placeholder="Category"
@@ -31,12 +33,9 @@
             <lightning:layoutItem>
                 <lightning:button variant="brand" iconName="utility:search" onclick="{!c.onFormSubmit}"/>
             </lightning:layoutItem>
+            <lightning:layoutItem size="4">
+            </lightning:layoutItem>
         </lightning:layout>
         <br/>
-        <!--        <lightning:layout horizontalAlign="center" verticalAlign="end">-->
-        <!--            <lightning:layoutItem padding="around-small">-->
-        <!--                <lightning:input type="date" name="selectedStartDate" aura:id="selectedStartDate" label="From"/>-->
-        <!--            </lightning:layoutItem>-->
-        <!--        </lightning:layout>-->
     </lightning:card>
 </aura:component>

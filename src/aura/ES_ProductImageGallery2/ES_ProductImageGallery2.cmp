@@ -1,0 +1,60 @@
+<aura:component description="ES_ProductImageGallery2"
+                implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId"
+                controller="ES_ProductController">
+
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="files" type="Object[]"/>
+    <aura:attribute name="hasModalOpen" type="Boolean"/>
+    <aura:attribute name="selectedDocumentId" type="Id"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
+
+    <lightning:card >
+    <lightning:layout multipleRows="true" class="slds-align_absolute-center">
+
+<!--    <div class="slds-border_right slds-border_left">-->
+<!--        <table class="slds-table slds-table_cell-buffer slds-table_bordered">-->
+<!--            <thead>-->
+<!--            <tr class="slds-line-height_reset">-->
+<!--                <th class="slds-text-title_caps" scope="col">-->
+<!--                    <div class="slds-truncate" title="Title">Title</div>-->
+<!--                </th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+            <aura:iteration items="{!v.files}" var="file">
+<!--                <tr>-->
+<!--                    <th scope="row">-->
+                <lightning:layoutItem size="5">
+<!--                        <div class="slds-truncate gallery-image">-->
+                            <!--store contentDocument Id in data-Id attribute-->
+                            <a onclick="{!c.getSelectedFile}" data-Id="{!file.contentVersionId}"><img style="width:100%; height:100%; padding:5%;" src="{!'/sfc/servlet.shepherd/version/download/' + file.contentVersionId}"/></a>
+<!--                        </div>-->
+<!--                    </th>-->
+<!--                </tr>-->
+                </lightning:layoutItem>
+            </aura:iteration>
+<!--            </tbody>-->
+<!--        </table>-->
+<!--    </div>-->
+    </lightning:layout>
+    </lightning:card>
+    <aura:if isTrue="{!v.hasModalOpen}">
+        <section onclick="{!c.closeModel}"
+                 role="dialog"
+                 aria-modal="true"
+                 class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <div class="slds-modal__content slds-p-around_medium slds-text-align_center" style="background: transparent; min-width:80%; min-height:80%;">
+                    <div style="width: 100%; height: 100%; margin: 0 auto; text-align: left">
+                        <!--<lightning:fileCard> to preview file using content document Id -->
+                        <img src="{!'/sfc/servlet.shepherd/version/download/' + v.selectedDocumentId}"/>
+<!--                        <lightning:fileCard fileId="{!v.selectedDocumentId}"/>-->
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+
+</aura:component>
