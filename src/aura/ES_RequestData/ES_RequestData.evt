@@ -1,0 +1,3 @@
+<aura:event type="COMPONENT" description="ES_RequestData">
+    <aura:attribute name="formData" type="object" access="public"/>
+</aura:event>

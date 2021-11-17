@@ -1,0 +1,25 @@
+.THIS.article-tile {
+    width: 20%;
+    height: 20%;
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+
+.THIS.article-tile:hover {
+    box-shadow: 3px 3px 3px grey;
+    transform: scale(1.02);
+}
+
+.THIS .empty-photo-image {
+    min-height: 200px;
+    max-height: 200px;
+    min-width: 225px;
+    max-width: 225px;
+}
+
+.THIS .photo-image {
+    min-height: 200px;
+    max-height: 200px;
+    min-width: 225px;
+    max-width: 225px;
+}
