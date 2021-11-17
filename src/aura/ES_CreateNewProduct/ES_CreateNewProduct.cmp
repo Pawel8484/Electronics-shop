@@ -6,25 +6,15 @@
     <aura:attribute type="String" name="currentStep" default="step1"/>
     <aura:attribute type="Boolean" name="productAdded" default="false"/>
     <aura:attribute type="String" name="mainPictureId" default=""/>
-    <aura:attribute type="String" name="standardPrice" default="0"/>
+    <aura:attribute type="String" name="standardPrice"/>
     <aura:attribute type="Integer" name="prod"/>
-
     <aura:attribute type="String" name="isUpdated" default="false"/>
 
-    <!--    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>-->
     <aura:handler event="c:ES_SetMainImage" action="{!c.setMainPicture}"/>
     <lightning:navigation aura:id="navService"/>
     <div class="slds-align_absolute-center">
         <div class="createProductContainer slds-m-around_small ">
             <lightning:card>
-
-                <!--                <div class="progressStep">-->
-                <!--                    <lightning:progressIndicator currentStep="{!v.currentStep}" type="path">-->
-                <!--                        <lightning:progressStep class="progressStepItem" label="Create product" value="step1"/>-->
-                <!--                        <lightning:progressStep class="progressStepItem" label="Add images" value="step2"/>-->
-                <!--                        <lightning:progressStep class="progressStepItem" label="Set price" value="step3"/>-->
-                <!--                    </lightning:progressIndicator>-->
-                <!--                </div>-->
                 <aura:if isTrue="{!v.currentStep == 'step1'}">
                     <div>
                         <lightning:recordEditForm objectApiName="Product2"
@@ -95,10 +85,6 @@
                         <lightning:input label="Standard Price" type="number" formatter="currency" step="0.01"
                                          value="{!v.standardPrice}" required="true"/>
                     </div>
-                    <!--                    <div class="slds-text-align_center">-->
-                    <!--                        <lightning:button label="Save" onclick="{!c.addPrice}" type="submit"-->
-                    <!--                                          class="slds-m-top_medium"/>-->
-                    <!--                    </div>-->
                     <aura:if isTrue="{!v.isUpdated == 'false'}">
                         <div class="slds-text-align_center">
                             <lightning:button label="Previous" onclick="{!c.backToSecondStep}"

@@ -3,7 +3,6 @@
 
     <aura:attribute type="String" name="recordId" default=""/>
     <aura:attribute type="String" name="standardPrice"/>
-
     <aura:attribute type="String" name="isUpdated" default="true"/>
 
     <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>

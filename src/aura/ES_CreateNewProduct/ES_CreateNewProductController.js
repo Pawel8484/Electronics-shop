@@ -23,10 +23,6 @@
         component.set("v.mainPictureId", event.getParam("mainPictureId"));
     },
 
-//    addPrice: function (component, event, helper) {
-//        helper.addPrice(component);
-//    },
-
     saveNewProduct: function (component, event, helper) {
         helper.saveNewProduct(component);
     },
