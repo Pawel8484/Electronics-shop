@@ -6,7 +6,7 @@
     <aura:attribute type="String" name="currentStep" default="step1"/>
     <aura:attribute type="Boolean" name="productAdded" default="false"/>
     <aura:attribute type="String" name="mainPictureId" default=""/>
-    <aura:attribute type="String" name="standardPrice"/>
+    <aura:attribute type="String" name="standardPrice" default=""/>
     <aura:attribute type="Integer" name="prod"/>
     <aura:attribute type="String" name="isUpdated" default="false"/>
 
@@ -83,7 +83,7 @@
                     </div>
                     <div class="priceContainer slds-p-around_medium">
                         <lightning:input label="Standard Price" type="number" formatter="currency" step="0.01"
-                                         value="{!v.standardPrice}" required="true"/>
+                                         value="{!v.standardPrice}" required="true" aura:id="price"/>
                     </div>
                     <aura:if isTrue="{!v.isUpdated == 'false'}">
                         <div class="slds-text-align_center">
