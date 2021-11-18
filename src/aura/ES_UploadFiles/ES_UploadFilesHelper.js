@@ -4,7 +4,6 @@
         let uploadedFiles = component.get("v.files");
         for (const file of newUploadedFiles) {
             uploadedFiles.push(file);
-            console.log(file);
         }
         component.set("v.files", uploadedFiles);
         component.set("v.selectedMain", uploadedFiles[0].contentVersionId);
@@ -46,7 +45,6 @@
         });
         action.setCallback(this, function(response) {
          let state = response.getState();
-         console.log(state);
          if(state==='SUCCESS'){
          let mainPictureId = response.getReturnValue();
          component.set("v.selectedMain", mainPictureId);

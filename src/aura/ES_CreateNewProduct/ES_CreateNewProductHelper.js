@@ -140,10 +140,10 @@
 
     navigateToRecordPage: function (component){
       var navEvent = $A.get("e.force:navigateToList");
-                 navEvent.setParams({
-                     "scope": "Product2"
-                 });
-                 navEvent.fire();
+         navEvent.setParams({
+             "scope": "Product2"
+         });
+         navEvent.fire();
 
     const action = component.get("c.deleteProduct");
     action.setParams({
