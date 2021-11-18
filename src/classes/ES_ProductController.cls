@@ -25,4 +25,9 @@ public with sharing class ES_ProductController {
     public static String getMainPictureId(String productId) {
         return ES_ProductService.getMainPictureId(productId).MainPicture__c;
     }
+
+    @AuraEnabled
+    public static void deleteProduct(String productId) {
+        ES_ProductService.deleteProduct(productId);
+    }
 }

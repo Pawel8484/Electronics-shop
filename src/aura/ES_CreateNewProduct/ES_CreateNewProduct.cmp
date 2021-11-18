@@ -58,6 +58,9 @@
                                 </div>
                             </div>
                             <div class="slds-text-align_center">
+                                <aura:if isTrue="{!v.isUpdated == 'false'}">
+                                <lightning:button variant="destructive" label="Cancel" onclick="{!c.cancel}" class="slds-m-top_medium"/>
+                                </aura:if>
                                 <lightning:button type="submit" name="Submit" label="Next" class="slds-m-top_medium"/>
                             </div>
                         </lightning:recordEditForm>
@@ -71,6 +74,9 @@
                         <c:ES_UploadFiles recordId="{!v.recordId}"/>
                     </div>
                     <div class="slds-text-align_center">
+                        <aura:if isTrue="{!v.isUpdated == 'false'}">
+                        <lightning:button variant="destructive" label="Cancel" onclick="{!c.cancel}" class="slds-m-top_medium"/>
+                        </aura:if>
                         <lightning:button label="Previous" onclick="{!c.backToFirstStep}"
                                           class="slds-m-top_medium"/>
                         <lightning:button label="Next" onclick="{!c.setThirdStep}"
@@ -87,11 +93,12 @@
                     </div>
                     <aura:if isTrue="{!v.isUpdated == 'false'}">
                         <div class="slds-text-align_center">
+                            <lightning:button variant="destructive" label="Cancel" onclick="{!c.cancel}" class="slds-m-top_medium"/>
                             <lightning:button label="Previous" onclick="{!c.backToSecondStep}"
                                               class="slds-m-top_medium"/>
-                            <lightning:button label="Save" onclick="{!c.saveNewProduct}" type="submit"
+                            <lightning:button variant="brand" label="Save" onclick="{!c.saveNewProduct}" type="submit"
                                               class="slds-m-top_medium"/>
-                            <lightning:button label="Save and New" onclick="{!c.saveAndNewProduct}" type="submit"
+                            <lightning:button variant="brand" label="Save and New" onclick="{!c.saveAndNewProduct}" type="submit"
                                               class="slds-m-top_medium"/>
                         </div>
                     </aura:if>
@@ -99,7 +106,7 @@
                         <div class="slds-text-align_center">
                             <lightning:button label="Previous" onclick="{!c.backToSecondStep}"
                                               class="slds-m-top_medium"/>
-                            <lightning:button label="Save" onclick="{!c.saveUpdatedProduct}" type="submit"
+                            <lightning:button variant="brand" label="Save" onclick="{!c.saveUpdatedProduct}" type="submit"
                                               class="slds-m-top_medium"/>
                         </div>
                     </aura:if>

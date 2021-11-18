@@ -34,4 +34,8 @@
     saveAndNewProduct: function (component, event, helper) {
         helper.saveAndNewProduct(component);
     },
+
+    cancel: function (component, event, helper) {
+        helper.cancel(component);
+    },
 })

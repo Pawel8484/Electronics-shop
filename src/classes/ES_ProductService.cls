@@ -18,7 +18,7 @@ public with sharing class ES_ProductService {
     }
 
     public static void setPrice(String price, String productId) {
-        Pricebook2 standardPB = [select id from Pricebook2 where isStandard = true];
+        Pricebook2 standardPB = [SELECT id FROM Pricebook2 WHERE isStandard = true];
         PricebookEntry pricebookEntry = new PricebookEntry();
         pricebookEntry.Pricebook2Id = standardPB.Id;
         pricebookEntry.Product2Id = productId;
@@ -29,7 +29,7 @@ public with sharing class ES_ProductService {
         } catch (Exception ex) {
             System.debug(ex.getMessage());
         } finally {
-            PricebookEntry secondPricebookEntry = [SELECT Id From PricebookEntry Where Product2Id = :productId AND Pricebook2Id = :standardPB.Id];
+            PricebookEntry secondPricebookEntry = [SELECT Id FROM PricebookEntry WHERE Product2Id = :productId AND Pricebook2Id = :standardPB.Id];
             pricebookEntry.Id = secondPricebookEntry.Id;
             update pricebookEntry;
         }
@@ -44,4 +44,8 @@ public with sharing class ES_ProductService {
         return [SELECT MainPicture__c FROM Product2 WHERE Id = :productId LIMIT 1];
     }
 
+    public static void deleteProduct(String productId) {
+        List<Product2> productToDelete = [SELECT Id FROM Product2 WHERE Id = :productId LIMIT 1];
+        delete productToDelete;
+    }
 }
