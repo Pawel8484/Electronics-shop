@@ -21,14 +21,14 @@
                 this.showError(errors[0].message);
             }
         } else {
-            this.showError('Unknown error');
+            this.showError($A.get("$Label.Unknown_error"));
         }
     },
 
     showError: function(error) {
         const toastEvent = $A.get("e.force:showToast");
         toastEvent.setParams({
-            "title": "Server Error",
+            "title": $A.get("$Label.Error"),
             "message": error,
             "type": "error"
         });

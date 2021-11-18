@@ -22,12 +22,12 @@
                 <img class="logo" src="{!$Resource.shop_logo}"/>
             </lightning:layoutItem>
             <lightning:layoutItem size="3" class="searchbox">
-                <lightning:input name="searchInput" aura:id="searchInput" placeholder="Keywords..."/>
+                <lightning:input name="searchInput" aura:id="searchInput" placeholder="{!$Label.c.Keywords}"/>
             </lightning:layoutItem>
             <lightning:layoutItem size="1" class="searchbox">
                 <lightning:combobox name="selectedCategory" aura:id="selectedCategory"
                                     value="Select category..."
-                                    placeholder="Category"
+                                    placeholder="{!$Label.c.Category}"
                                     options="{! v.options }"/>
             </lightning:layoutItem>
             <lightning:layoutItem>

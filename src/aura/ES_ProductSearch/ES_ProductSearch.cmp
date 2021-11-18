@@ -6,7 +6,6 @@
     <aura:attribute name="isAllProductDisplayed" type="Boolean" default="true"/>
 
     <aura:handler name="requestData" event="c:ES_RequestData" action="{!c.onRequestData}"/>
-<!--    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>-->
 
     <div>
         <lightning:card>
@@ -14,7 +13,7 @@
         </lightning:card>
     </div>
     <div class="slds-m-vertical_small">
-        <lightning:card title="{!if(v.isAllProductDisplayed == false, 'Search Results', '')}">
+        <lightning:card title="{!if(v.isAllProductDisplayed == false, $Label.c.Search_Results, '')}">
             <c:ES_ProductSearchResults requestData="{!v.requestData}"/>
         </lightning:card>
     </div>
