@@ -67,6 +67,7 @@
         var fieldValue = component.find("price").get("v.validity");
         if(fieldValue.valueMissing === false){
         let setPrice = component.get("c.setPrice");
+//        let setPrice = component.get("c.setUpdatedPrice");
         setPrice.setParams({
             "price": component.get("v.standardPrice"),
             "productId": component.get("v.recordId"),
