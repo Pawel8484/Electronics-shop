@@ -42,13 +42,7 @@
             "productId": component.get("v.recordId"),
         });
         $A.enqueueAction(setPrice);
-        let toastEvent = $A.get("e.force:showToast");
-        toastEvent.setParams({
-            "title": "Success",
-            "message": "Product has been added.",
-            "type": "success",
-        });
-        toastEvent.fire();
+        this.showSuccessToast($A.get("$Label.c.Product_has_been_added"));
         let recordId = component.get("v.recordId");
          component.find("navService").navigate({
            "type": "standard__recordPage",
@@ -64,11 +58,12 @@
         component.set("v.recordId", "");
         component.set("v.currentStep", "step1");
         } else {
-        this.showErrorToast("Complete this field.");
+        this.showErrorToast($A.get("$Label.c.Complete_this_field"));
         }
     },
 
     saveUpdatedProduct: function (component) {
+        const helper = this;
         var fieldValue = component.find("price").get("v.validity");
         if(fieldValue.valueMissing === false){
         let setPrice = component.get("c.setPrice");
@@ -77,13 +72,7 @@
             "productId": component.get("v.recordId"),
         });
         $A.enqueueAction(setPrice);
-        let toastEvent = $A.get("e.force:showToast");
-        toastEvent.setParams({
-            "title": "Success",
-            "message": "Product has been updated.",
-            "type": "success",
-        });
-        toastEvent.fire();
+        this.showSuccessToast($A.get("$Label.c.Product_has_been_updated"));
         let recordId = component.get("v.recordId");
          component.find("navService").navigate({
            "type": "standard__recordPage",
@@ -99,11 +88,12 @@
         component.set("v.recordId", "");
         component.set("v.currentStep", "step1");
         } else {
-        this.showErrorToast("Complete this field.");
+        this.showErrorToast($A.get("$Label.c.Complete_this_field"));
         }
     },
 
     saveAndNewProduct: function (component) {
+        const helper = this;
         var fieldValue = component.find("price").get("v.validity");
         if(fieldValue.valueMissing === false){
         let setPrice = component.get("c.setPrice");
@@ -112,19 +102,14 @@
             "productId": component.get("v.recordId"),
         });
         $A.enqueueAction(setPrice);
-        let toastEvent = $A.get("e.force:showToast");
-        toastEvent.setParams({
-            "title": "Success",
-            "message": "Product has been added.",
-            "type": "success",
-        });
+        this.showSuccessToast($A.get("$Label.c.Product_has_been_added"));
         component.set("v.mainPictureId", null);
         component.set("v.standardPrice", null);
         component.set("v.prod", null);
         component.set("v.recordId", "");
         component.set("v.currentStep", "step1");
         } else {
-        this.showErrorToast("Complete this field.");//todo add custom label
+        this.showErrorToast($A.get("$Label.c.Complete_this_field"));
         }
     },
 
@@ -133,10 +118,20 @@
         this.navigateToRecordPage(component);
     },
 
+    showSuccessToast: function (message){
+        let toastEvent = $A.get("e.force:showToast");
+        toastEvent.setParams({
+            "title": $A.get("$Label.c.Success"),
+            "message": message,
+            "type": "success",
+        });
+        toastEvent.fire();
+    },
+
     showErrorToast: function (message){
         const toastEvent = $A.get("e.force:showToast");
         toastEvent.setParams({
-            "title": "Error",
+            "title": $A.get("$Label.c.Error"),
             "message": message,
             "type": "error"
         });
@@ -161,4 +156,5 @@
     component.set("v.recordId", "");
     component.set("v.currentStep", "step1");
     },
+
 })
