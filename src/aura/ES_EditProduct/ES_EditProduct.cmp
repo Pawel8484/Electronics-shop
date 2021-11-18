@@ -5,7 +5,9 @@
     <aura:attribute type="String" name="standardPrice"/>
     <aura:attribute type="String" name="isUpdated" default="true"/>
 
+    <aura:attribute type="String" name="mainPictureId"/>
+
     <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
 
-    <c:ES_CreateNewProduct recordId="{!v.recordId}" standardPrice="{!v.standardPrice}" isUpdated="{!v.isUpdated}"/>
+    <c:ES_CreateNewProduct recordId="{!v.recordId}" standardPrice="{!v.standardPrice}" isUpdated="{!v.isUpdated}" mainPictureId="{!v.mainPictureId}"/>
 </aura:component>

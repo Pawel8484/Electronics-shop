@@ -22,8 +22,8 @@
                                                   aura:id="recordEditForm"
                                                   onsuccess="{!c.setSecondStep}">
                             <lightning:messages/>
-                            <div class="slds-text-heading_medium slds-p-around_medium slds-align_absolute-center">Step
-                                1: Product details
+                            <div class="slds-text-heading_medium slds-p-around_medium slds-align_absolute-center">
+                                    {!$Label.c.Step_1_Product_details}
                             </div>
                             <div class="slds-grid slds-wrap slds-p-around_medium">
                                 <div class="slds-col slds-size_1-of-2">
@@ -58,48 +58,55 @@
                                 </div>
                             </div>
                             <div class="slds-text-align_center">
-                                <lightning:button type="submit" name="Submit" label="Next" class="slds-m-top_medium"/>
+                                <aura:if isTrue="{!v.isUpdated == 'false'}">
+                                <lightning:button variant="destructive" label="{!$Label.c.Cancel}" onclick="{!c.cancel}" class="slds-m-top_medium"/>
+                                </aura:if>
+                                <lightning:button type="submit" name="Submit" label="{!$Label.c.Next}" class="slds-m-top_medium"/>
                             </div>
                         </lightning:recordEditForm>
                     </div>
                 </aura:if>
                 <aura:if isTrue="{!v.currentStep == 'step2'}">
-                    <div class="slds-text-heading_medium slds-p-around_medium slds-align_absolute-center">Step 2:
-                        Product photos
+                    <div class="slds-text-heading_medium slds-p-around_medium slds-align_absolute-center">
+                            {!$Label.c.Step_2_Product_photos}
                     </div>
                     <div class="uploadCon">
                         <c:ES_UploadFiles recordId="{!v.recordId}"/>
                     </div>
                     <div class="slds-text-align_center">
-                        <lightning:button label="Previous" onclick="{!c.backToFirstStep}"
+                        <aura:if isTrue="{!v.isUpdated == 'false'}">
+                        <lightning:button variant="destructive" label="{!$Label.c.Cancel}" onclick="{!c.cancel}" class="slds-m-top_medium"/>
+                        </aura:if>
+                        <lightning:button label="{!$Label.c.Previous}" onclick="{!c.backToFirstStep}"
                                           class="slds-m-top_medium"/>
-                        <lightning:button label="Next" onclick="{!c.setThirdStep}"
+                        <lightning:button label="{!$Label.c.Next}" onclick="{!c.setThirdStep}"
                                           class="slds-m-top_medium"/>
                     </div>
                 </aura:if>
                 <aura:if isTrue="{!v.currentStep == 'step3'}">
-                    <div class="slds-text-heading_medium slds-p-around_medium slds-align_absolute-center">Step 3:
-                        Product price
+                    <div class="slds-text-heading_medium slds-p-around_medium slds-align_absolute-center">
+                    {!$Label.c.Step_3_Product_price}
                     </div>
                     <div class="priceContainer slds-p-around_medium">
-                        <lightning:input label="Standard Price" type="number" formatter="currency" step="0.01"
+                        <lightning:input label="{!$Label.c.Standard_Price}" type="number" formatter="currency" step="0.01"
                                          value="{!v.standardPrice}" required="true" aura:id="price"/>
                     </div>
                     <aura:if isTrue="{!v.isUpdated == 'false'}">
                         <div class="slds-text-align_center">
-                            <lightning:button label="Previous" onclick="{!c.backToSecondStep}"
+                            <lightning:button variant="destructive" label="{!$Label.c.Cancel}" onclick="{!c.cancel}" class="slds-m-top_medium"/>
+                            <lightning:button label="{!$Label.c.Previous}" onclick="{!c.backToSecondStep}"
                                               class="slds-m-top_medium"/>
-                            <lightning:button label="Save" onclick="{!c.saveNewProduct}" type="submit"
+                            <lightning:button variant="brand" label="{!$Label.c.Save}" onclick="{!c.saveNewProduct}" type="submit"
                                               class="slds-m-top_medium"/>
-                            <lightning:button label="Save and New" onclick="{!c.saveAndNewProduct}" type="submit"
+                            <lightning:button variant="brand" label="{!$Label.c.Save_And_New}" onclick="{!c.saveAndNewProduct}" type="submit"
                                               class="slds-m-top_medium"/>
                         </div>
                     </aura:if>
                     <aura:if isTrue="{!v.isUpdated == 'true'}">
                         <div class="slds-text-align_center">
-                            <lightning:button label="Previous" onclick="{!c.backToSecondStep}"
+                            <lightning:button label="{!$Label.c.Previous}" onclick="{!c.backToSecondStep}"
                                               class="slds-m-top_medium"/>
-                            <lightning:button label="Save" onclick="{!c.saveUpdatedProduct}" type="submit"
+                            <lightning:button variant="brand" label="{!$Label.c.Save}" onclick="{!c.saveUpdatedProduct}" type="submit"
                                               class="slds-m-top_medium"/>
                         </div>
                     </aura:if>

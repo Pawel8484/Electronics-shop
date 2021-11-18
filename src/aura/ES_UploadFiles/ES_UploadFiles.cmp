@@ -26,7 +26,7 @@
                 </div>
                 <div class="slds-m-around_medium">
                     <aura:if isTrue="{!not(empty(v.files))}">
-                        <div class="slds-text-heading_medium slds-p-around_medium slds-align_absolute-center">Select main image</div>
+                        <div class="slds-text-heading_medium slds-p-around_medium slds-align_absolute-center">{!$Label.c.Select_main_image}</div>
                         <table class="slds-p-around_medium tableContainer">
                             <aura:iteration items="{!v.files}" var="file" indexVar="index">
                                 <tr class="slds-p-around_medium" aura:id="row" onclick="{!c.onClickRow}" data-id="{!file.contentVersionId}" data-index="{!index}"
