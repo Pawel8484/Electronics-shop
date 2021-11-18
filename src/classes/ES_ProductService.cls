@@ -35,6 +35,32 @@ public with sharing class ES_ProductService {
         }
     }
 
+//    public static void setPrice(String price, String productId) {
+//        Pricebook2 standardPB = [SELECT Id FROM Pricebook2 WHERE isStandard = true];
+//        PricebookEntry pricebookEntry = new PricebookEntry();
+//        pricebookEntry.Pricebook2Id = standardPB.Id;
+//        pricebookEntry.Product2Id = productId;
+//        pricebookEntry.UnitPrice = Decimal.valueOf(price);
+//        pricebookEntry.IsActive = true;
+//            insert pricebookEntry;
+//        }
+//
+//
+//    public static void setUpdatedPrice(String price, String productId) {
+//        Pricebook2 standardPB = [SELECT Id FROM Pricebook2 WHERE isStandard = true];
+//            PricebookEntry secondPricebookEntry = [SELECT Id FROM PricebookEntry WHERE Product2Id = :productId AND Pricebook2Id = :standardPB.Id];
+//            pricebookEntry.Id = secondPricebookEntry.Id;
+////
+//            update pricebookEntry;
+//
+//
+//    }
+
+
+
+
+
+
     public static PricebookEntry getPrice(String productId) {
         Pricebook2 standardPB = [select id from Pricebook2 where isStandard = true];
         return [SELECT Id, UnitPrice FROM PricebookEntry WHERE Product2Id = :productId AND Pricebook2Id = :standardPB.Id LIMIT 1];
