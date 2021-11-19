@@ -4,7 +4,7 @@
         picsAction.setParams({
             "productId": component.get("v.recordId"),
         });
-     picsAction.setCallback(this, function(response) {
+        picsAction.setCallback(this, function(response) {
          let state = response.getState();
          if(state==='SUCCESS'){
          let downloadedPics = response.getReturnValue();
