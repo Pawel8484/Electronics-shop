@@ -31,10 +31,8 @@ public with sharing class ES_ProductController {
         ES_ProductService.deleteProduct(productId);
     }
 
-
-
-//    @AuraEnabled
-//    public static void setUpdatedPrice(String price, String productId) {
-//        ES_ProductService.setUpdatedPrice(price, productId);
-//    }
+    @AuraEnabled
+    public static void setUpdatedPrice(String price, String productId) {
+        ES_ProductService.setUpdatedPrice(price, productId);
+    }
 }
