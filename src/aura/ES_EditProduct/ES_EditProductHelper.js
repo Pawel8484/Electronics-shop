@@ -13,7 +13,6 @@
         });
          action.setCallback(this, function(response) {
              const state = response.getState();
-             console.log(state);
              if(state==='SUCCESS'){
              const price = response.getReturnValue();
              component.set("v.standardPrice", price);
@@ -29,7 +28,6 @@
         });
          action.setCallback(this, function(response) {
              const state = response.getState();
-             console.log(state);
              if(state==='SUCCESS'){
              const mainPictureId = response.getReturnValue();
              component.set("v.mainPictureId", mainPictureId);
