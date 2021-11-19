@@ -9,7 +9,6 @@
     <aura:attribute name="selectedMain" type="String" default=""/>
 
     <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
-
     <aura:registerEvent name="reviewEdited" type="c:ES_SetMainImage"/>
 
     <div>
@@ -21,15 +20,14 @@
                                           accept="{!v.filetype}"
                                           recordId="{!v.recordId}"
                                           onuploadfinished="{!c.handleUploadFinished}"/>
-
-
                 </div>
                 <div class="slds-m-around_medium">
                     <aura:if isTrue="{!not(empty(v.files))}">
                         <div class="slds-text-heading_medium slds-p-around_medium slds-align_absolute-center">{!$Label.c.Select_main_image}</div>
                         <table class="slds-p-around_medium tableContainer">
                             <aura:iteration items="{!v.files}" var="file" indexVar="index">
-                                <tr class="slds-p-around_medium" aura:id="row" onclick="{!c.onClickRow}" data-id="{!file.contentVersionId}" data-index="{!index}"
+                                <tr class="slds-p-around_medium" aura:id="row" onclick="{!c.onClickRow}"
+                                    data-id="{!file.contentVersionId}" data-index="{!index}"
                                     style="{!if(v.selectedMain == file.contentVersionId, 'background-color: rgba(135,206,250); border-radius: 5%; transform: scale(1.02); box-shadow: 3px 3px 3px grey;', '')}">
                                     <td>
                                         <img src="{!'/sfc/servlet.shepherd/version/download/' + file.contentVersionId}"/>
@@ -47,6 +45,5 @@
             </lightning:card>
         </div>
     </div>
-
 </aura:component>
 
