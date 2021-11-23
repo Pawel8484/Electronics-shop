@@ -48,4 +48,22 @@ public with sharing class ES_ProductService {
         List<Product2> productToDelete = [SELECT Id FROM Product2 WHERE Id = :productId LIMIT 1];
         delete productToDelete;
     }
+
+    public static ES_Product[] getProductDTOs() {
+        ES_Product[] productDTOs = new ES_Product[]{};
+
+        for (Product2 product : getProducts()) {
+            ES_Product productWrapper = new ES_Product(product);
+            productDTOs.add(productWrapper);
+        }
+
+        return productWrappers;
+    }
+
+    private static Product2[] getProducts() {
+        return [
+                SELECT Id, Name, Family
+                FROM Product2
+        ];
+    }
 }
