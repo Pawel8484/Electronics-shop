@@ -2,22 +2,28 @@ import { LightningElement, api, wire, track } from 'lwc';
 import EMPTY_IMAGE from '@salesforce/resourceUrl/emptyImage';
 import getPriceBookWrappers from '@salesforce/apex/ES_PriceManagerController.getPriceBookWrappers';
 import getProductWrappers from '@salesforce/apex/ES_PriceManagerController.getProductWrappers';
+
 const columns = [
     { label: 'Name', fieldName: 'name' },
     { label: 'Family', fieldName: 'productFamily' },
     { label: 'Standard Price', fieldName: 'standardPrice' },
     { label: 'New Price', fieldName: 'customPrice' },
 ];
+
 export default class ES_PriceBookList extends LightningElement {
-    @api modal = false;
+
 	@wire(getPriceBookWrappers) pricebooks;
 	appResources = {
 		emptyImage: EMPTY_IMAGE,
 	};
 
     @track records;
-    @track error;
+
+    error;
+    priceValue;
+    selectedUnit;
     columns = columns;
+    isModalOpen = false;
 
     @wire(getProductWrappers)
     wiredProductWrappers({ error, data }) {
@@ -31,42 +37,23 @@ export default class ES_PriceBookList extends LightningElement {
     };
 
     openModal(){
-        this.modal = true;
+        this.isModalOpen = true;
     };
 
     closeModal(){
-        this.modal = false;
+        this.isModalOpen = false;
     };
 
     saveNewPricebook(){
 
     };
 
-     @track selectedOption;
-        changeHandler(event) {
-        const field = event.target.name;
-        if (field === 'optionSelect') {
-            this.selectedOption = event.target.value;
-//                alert("you have selected : " + this.selectedOption);
-            }
+    changeUnitHandler(event) {
+        this.selectedUnit = event.target.value;
     };
 
-     @track selectedUnitOption;
-        changeUnitHandler(event) {
-        const field = event.target.name;
-        if (field === 'optionUnitSelect') {
-            this.selectedUnitOption = event.target.value;
-//                alert("you have selected : " + this.selectedUnitOption);
-            }
-    };
-
-     @track enteredValue;
-     changeValueHandler(event){
-        const field = event.target.name;
-        if (field === 'userValue') {
-            this.enteredValue = event.target.value;
-//                alert("you have selected : " + this.enteredValue);
-            }
+     changePriceHandler(event){
+        this.priceValue = event.target.value;
     };
 
     handleclick(){
@@ -77,7 +64,7 @@ export default class ES_PriceBookList extends LightningElement {
 
         const selectedAfterPriceChange = new Array();
         for(const select of selected){
-            selectedAfterPriceChange.push({"id": select.id, "name": select.name, "productFamily": select.productFamily, "standardPrice": select.standardPrice, "customPrice": select.customPrice + Number(this.enteredValue)});
+            selectedAfterPriceChange.push({"id": select.id, "name": select.name, "productFamily": select.productFamily, "standardPrice": select.standardPrice, "customPrice": select.customPrice + Number(this.priceValue)});
         }
         console.log(selectedAfterPriceChange);
 
@@ -85,9 +72,5 @@ export default class ES_PriceBookList extends LightningElement {
         console.log(updatedProductList);
 //        arr1.map(obj => arr2.find(o => o.id === obj.id) || obj);
         this.records = updatedProductList;
-    };
-
-    get acceptedFormats() {
-        return ['.pdf', '.png'];
     };
 }

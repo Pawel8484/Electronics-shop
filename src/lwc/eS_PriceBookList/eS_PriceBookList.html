@@ -7,6 +7,7 @@
                     onclick={openModal}
                     icon-position="right">
             </lightning-button>
+
             <template if:true={pricebooks.data}>
                 <lightning-layout multiple-rows="true" pull-to-boundary="small">
                     <template for:each={pricebooks.data} for:item="pricebook">
@@ -16,7 +17,8 @@
                     </template>
                 </lightning-layout>
             </template>
-            <template if:true={modal}>
+
+            <template if:true={isModalOpen}>
                 <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content"
                          aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
                     <div class="slds-modal__container modal-window">
@@ -29,6 +31,7 @@
                                 <lightning-layout>
                                     <lightning-layout-item>
                                         <div class="slds-form-element slds-p-around_small">
+<!--                                            todo change this -->
                                             <label class="slds-form-element__label" for="text-input-id-47a">
                                                 <abbr class="slds-required" title="required">* </abbr>Price Book name</label>
                                             <div class="slds-form-element__control">
@@ -49,20 +52,6 @@
                                         </div>
                                     </lightning-layout-item>
                                 </lightning-layout>
-<!--                                    <div class="slds-col slds-size_3-of-12 slds-p-around_small">-->
-<!--                                        <input type="text" placeholder="Enter new Price Book name..."-->
-<!--                                               class="slds-input"/>-->
-<!--                                    </div>-->
-<!--                                    <div class="slds-col slds-size_3-of-12 slds-p-around_small">-->
-<!--                                        <lightning-file-upload-->
-<!--                                                label="Attach image"-->
-<!--                                                name="fileUploader"-->
-<!--                                                accept=".png, .jpg, .jpeg"-->
-<!--                                                record-id={myRecordId}-->
-
-<!--                                                multiple>-->
-<!--                                        </lightning-file-upload>-->
-<!--                                    </div>-->
                                 <lightning-layout class="slds-p-vertical_small" horizontal-align="end">
 <!--                                    <lightning-layout-item>-->
 <!--                                        <select class="slds-select" name="optionSelect" onchange={changeHandler}>-->
@@ -71,7 +60,7 @@
 <!--                                        </select>-->
 <!--                                    </lightning-layout-item>-->
                                     <lightning-layout-item>
-                                        <lightning-input type="number" name="userValue" variant="label-hidden" placeholder="Enter value ..." onchange={changeValueHandler}></lightning-input>
+                                        <lightning-input type="number" name="priceValue" variant="label-hidden" placeholder="Enter value ..." onchange={changePriceHandler}></lightning-input>
                                     </lightning-layout-item>
                                     <lightning-layout-item>
                                         <select class="slds-select" name="optionUnitSelect"
@@ -110,7 +99,6 @@
                 </section>
                 <div class="slds-backdrop slds-backdrop_open"></div>
             </template>
-
 
             <template if:true={pricebooks.error}>
                 <div class="slds-text-color_error">
