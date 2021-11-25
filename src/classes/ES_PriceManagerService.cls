@@ -13,7 +13,7 @@ public with sharing class ES_PriceManagerService {
 
     private static Pricebook2[] getPriceBooks() {
         return [
-                SELECT Id, Name, Description
+                SELECT Id, Name, Description, PhotoUrl__c, ValidFrom__c, ValidTo__c
                 FROM Pricebook2
         ];
     }
@@ -48,7 +48,6 @@ public with sharing class ES_PriceManagerService {
             ProductWrapper productWrapper = new ProductWrapper(productDTO);
             productWrappers.add(productWrapper);
         }
-
         return productWrappers;
     }
 

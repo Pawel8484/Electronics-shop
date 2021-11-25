@@ -1,0 +1,24 @@
+<template>
+    <lightning-card class="price-list-tile">
+        <div class="slds-var-p-horizontal_small price-list-tile-body">
+            <!-- <div class="slds-media"> -->
+            <div class="slds-grid_vertical slds-align_absolute-center">
+                <div>
+                    <img src={appResources.emptyImage} alt="Price Book" class="empty-image"/>
+                </div>
+                <div class="slds-p-around_small">
+                    <p>{pricebook.name}</p>
+                    <p>{pricebook.validFrom}</p>
+                    <p>{pricebook.validTo}</p>
+                </div>
+            </div>
+            <!-- <div class="slds-media__body"> -->
+            <!-- <p class="slds-var-m-bottom_xx-small">{pricelist.Name}</p>
+            <p class="slds-var-m-bottom_xx-small">{pricelist.Id}</p>
+            <p class="slds-var-m-bottom_xx-small">{pricelist.Description}</p> -->
+            <!-- <p class="slds-var-m-bottom_xx-small">{pricelist.Weight__c} Kg</p> -->
+            <!-- </div> -->
+            <!-- </div> -->
+        </div>
+    </lightning-card>
+</template>

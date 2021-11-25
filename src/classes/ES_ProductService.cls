@@ -53,11 +53,10 @@ public with sharing class ES_ProductService {
         ES_Product[] productDTOs = new ES_Product[]{};
 
         for (Product2 product : getProducts()) {
-            ES_Product productWrapper = new ES_Product(product);
-            productDTOs.add(productWrapper);
+            ES_Product productDTO = new ES_Product(product);
+            productDTOs.add(productDTO);
         }
-
-        return productWrappers;
+        return productDTOs;
     }
 
     private static Product2[] getProducts() {

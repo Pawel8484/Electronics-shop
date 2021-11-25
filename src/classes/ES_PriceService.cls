@@ -11,25 +11,24 @@ public with sharing class ES_PriceService {
         if (instance == null) {
             instance = new ES_PriceService();
         }
-
         return instance;
     }
 
     public Decimal getStandardPrice(Id productId) {
-        return standardPricebookEntriesByProductId.get(productId).UnitPrice;
+        return this.standardPricebookEntriesByProductId.get(productId).UnitPrice;
     }
 
     public Decimal getPrices(Id productId) {
         return null; //todo
     }
 
-    private static void getStandardPrices(String priceBookId){
+    private void getStandardPrices(){
         for (PricebookEntry pbe : getStandardPricebookEntries()) {
-            standardPricebookEntriesByProductId.put(pbe.Product2Id, pbe);
+            this.standardPricebookEntriesByProductId.put(pbe.Product2Id, pbe);
         }
     }
 
-    private static PricebookEntry[] getStandardPricebookEntries() {
+    private PricebookEntry[] getStandardPricebookEntries() {
         return [SELECT Product2Id, UnitPrice FROM PriceBookEntry WHERE Pricebook2.IsStandard = TRUE];
     }
 }
