@@ -1,7 +1,9 @@
 import { LightningElement, api, wire, track } from 'lwc';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import EMPTY_IMAGE from '@salesforce/resourceUrl/emptyImage';
 import getPriceBookWrappers from '@salesforce/apex/ES_PriceManagerController.getPriceBookWrappers';
 import getProductWrappers from '@salesforce/apex/ES_PriceManagerController.getProductWrappers';
+import savePriceBookWithProducts from '@salesforce/apex/ES_PriceManagerController.savePriceBookWithProducts';
 
 const columns = [
     { label: 'Name', fieldName: 'name' },
@@ -19,20 +21,20 @@ export default class ES_PriceBookList extends LightningElement {
 
     @track records;
 
-    error;
+    pricebookId = '';
+    pricebookName;
     priceValue;
-    selectedUnit;
+    selectedUnit = 'percent';
     columns = columns;
     isModalOpen = false;
 
-    @wire(getProductWrappers)
+    @wire(getProductWrappers, {pricebookId: '$pricebookId'})
     wiredProductWrappers({ error, data }) {
         if (data) {
             this.records = data;
-            this.error = undefined;
         } else if (error) {
-            this.error = error;
-            this.records = undefined;
+            this.showError(error.body.message);
+            this.records = [];
         }
     };
 
@@ -44,8 +46,28 @@ export default class ES_PriceBookList extends LightningElement {
         this.isModalOpen = false;
     };
 
-    saveNewPricebook(){
+    saveNewPricebook() {
+        const pricebook = {
+            name: this.pricebookName
+//            validFrom: '',
+//            validTo: ''
+        };
+        const pricebookToJSON = JSON.stringify(pricebook);
+        const recordsToJSON = JSON.stringify(this.records);
 
+        savePriceBookWithProducts({pricebook: pricebookToJSON, products: recordsToJSON})
+        .then(result => {
+            console.log(result);
+        })
+        .catch(error => {
+            console.error(error);
+            this.showError(error.body.message);
+        });
+
+    };
+
+    changePricebookNameHandler(event){
+        this.pricebookName = event.target.value;
     };
 
     changeUnitHandler(event) {
@@ -56,21 +78,59 @@ export default class ES_PriceBookList extends LightningElement {
         this.priceValue = event.target.value;
     };
 
-    handleclick(){
+    changeProductsPrice(){
         const el = this.template.querySelector('lightning-datatable');
 //        console.log(el);
-        const selected = el.getSelectedRows();
-        console.log(selected);
+        const selectedRows = el.getSelectedRows();
+        console.log(selectedRows);
 
-        const selectedAfterPriceChange = new Array();
-        for(const select of selected){
-            selectedAfterPriceChange.push({"id": select.id, "name": select.name, "productFamily": select.productFamily, "standardPrice": select.standardPrice, "customPrice": select.customPrice + Number(this.priceValue)});
+        const changedRecords = [];
+        for(const row of selectedRows){
+            changedRecords.push(
+                {
+                    "id": row.id,
+                    "name": row.name,
+                    "productFamily": row.productFamily,
+                    "standardPrice": row.standardPrice,
+                    "customPrice": this.calculatePrice(row)
+                }
+            );
         }
-        console.log(selectedAfterPriceChange);
+        console.log(changedRecords);
 
-        const updatedProductList = this.records.map(obj => selectedAfterPriceChange.find(o => o.name === obj.name) || obj);
+        const updatedProductList = this.records.map(obj => changedRecords.find(o => o.name === obj.name) || obj);
         console.log(updatedProductList);
 //        arr1.map(obj => arr2.find(o => o.id === obj.id) || obj);
         this.records = updatedProductList;
+    };
+
+    calculatePrice(row) {
+        switch (this.selectedUnit) {
+            case 'percent':
+            default: {
+                return row.customPrice + (row.customPrice * (Number(this.priceValue)/100));
+            }
+            case 'amount': {
+                return row.customPrice + Number(this.priceValue);
+            }
+        }
+    };
+
+    handlePriceBookView(event) {
+        this.pricebookId = event.detail;
+        this.openModal();
+    };
+
+    showError(message) {
+        this.showToast('Error', message, 'error');
+    };
+
+    showToast(title, message, variant) {
+        const evt = new ShowToastEvent({
+            title: title,
+            message: message,
+            variant: variant,
+        });
+        this.dispatchEvent(evt);
     };
 }

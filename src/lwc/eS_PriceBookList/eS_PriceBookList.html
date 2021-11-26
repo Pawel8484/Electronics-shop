@@ -12,7 +12,7 @@
                 <lightning-layout multiple-rows="true" pull-to-boundary="small">
                     <template for:each={pricebooks.data} for:item="pricebook">
                         <lightning-layout-item key={pricebook.id} size="3" class="slds-var-p-around_x-small">
-                            <c-e-s_-price-book-tile pricebook={pricebook}></c-e-s_-price-book-tile>
+                            <c-e-s_-price-book-tile pricebook={pricebook} onpricebookview={handlePriceBookView}></c-e-s_-price-book-tile>
                         </lightning-layout-item>
                     </template>
                 </lightning-layout>
@@ -31,12 +31,8 @@
                                 <lightning-layout>
                                     <lightning-layout-item>
                                         <div class="slds-form-element slds-p-around_small">
-<!--                                            todo change this -->
-                                            <label class="slds-form-element__label" for="text-input-id-47a">
-                                                <abbr class="slds-required" title="required">* </abbr>Price Book name</label>
-                                            <div class="slds-form-element__control">
-                                                <input type="text" id="text-input-id-47a" placeholder="Enter new Price Book name..." required class="slds-input" />
-                                            </div>
+                                            <lightning-input type="text" name="pricebookName" label="Price Book name" placeholder="Enter new Price Book name..." required
+                                                             onchange={changePricebookNameHandler}></lightning-input>
                                         </div>
                                     </lightning-layout-item>
                                     <lightning-layout-item>
@@ -60,7 +56,9 @@
 <!--                                        </select>-->
 <!--                                    </lightning-layout-item>-->
                                     <lightning-layout-item>
-                                        <lightning-input type="number" name="priceValue" variant="label-hidden" placeholder="Enter value ..." onchange={changePriceHandler}></lightning-input>
+                                        <lightning-input type="number" name="priceValue" variant="label-hidden"
+                                                         placeholder="Enter value ..." step="0.01"
+                                                         onchange={changePriceHandler}></lightning-input>
                                     </lightning-layout-item>
                                     <lightning-layout-item>
                                         <select class="slds-select" name="optionUnitSelect"
@@ -70,7 +68,7 @@
                                         </select>
                                     </lightning-layout-item>
                                     <lightning-layout-item>
-                                        <lightning-button class="slds-p-left_small" onclick={handleclick}
+                                        <lightning-button class="slds-p-left_small" onclick={changeProductsPrice}
                                                           value="Change Price"
                                                           label="Change Price"></lightning-button>
                                     </lightning-layout-item>

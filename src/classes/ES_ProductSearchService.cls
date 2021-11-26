@@ -17,7 +17,7 @@ public with sharing class ES_ProductSearchService {
         String term = String.escapeSingleQuotes('%' + selectedProductRequest.term + '%');
         String category = categoryVerification(selectedProductRequest.category);
         List<Product2> productList = [SELECT Id, Name, Family, MainPicture__c FROM Product2 WHERE Name LIKE :term AND Family LIKE :category];
-        List<PricebookEntry> priceList = [SELECT Id, Product2Id, Product2.Name, Product2.IsActive, UnitPrice FROM PricebookEntry WHERE Product2.IsActive = true AND Product2Id IN (SELECT Id FROM Product2 WHERE Name LIKE :term AND Family LIKE :category)];
+        List<PricebookEntry> priceList = [SELECT Id, Product2Id, Product2.Name, Product2.IsActive, UnitPrice, Pricebook2.IsStandard FROM PricebookEntry WHERE Product2.IsActive = true AND Pricebook2.IsStandard = true AND Product2Id IN (SELECT Id FROM Product2 WHERE Name LIKE :term AND Family LIKE :category)];
                 for (Product2 product : productList) {
                     for (PricebookEntry pricebookEntry : priceList) {
                         if(product.Id == pricebookEntry.Product2Id){
