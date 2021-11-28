@@ -8,9 +8,11 @@ export default class ES_PriceBookTile extends LightningElement {
 		emptyImage: EMPTY_IMAGE,
 	};
 
+
 	handleSelectedPriceBook() {
     	const selectEvent = new CustomEvent('pricebookview', {
-    		detail: this.pricebook.id
+    		detail: this.pricebook
+//    		detail: this.pricebook.id
     	});
     	this.dispatchEvent(selectEvent);
     }

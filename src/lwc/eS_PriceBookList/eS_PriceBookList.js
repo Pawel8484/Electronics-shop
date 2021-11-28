@@ -22,7 +22,9 @@ export default class ES_PriceBookList extends LightningElement {
     @track records;
 
     pricebookId = '';
-    pricebookName;
+    @api pricebookName;
+    startDate;
+    endDate;
     priceValue;
     selectedUnit = 'percent';
     columns = columns;
@@ -38,6 +40,14 @@ export default class ES_PriceBookList extends LightningElement {
         }
     };
 
+    addNewPriceBook(){
+        this.pricebookId = '';
+        this.pricebookName = '';
+        this.startDate = '';
+        this.endDate = '';
+        this.isModalOpen = true;
+    };
+
     openModal(){
         this.isModalOpen = true;
     };
@@ -48,13 +58,17 @@ export default class ES_PriceBookList extends LightningElement {
 
     saveNewPricebook() {
         const pricebook = {
-            name: this.pricebookName
-//            validFrom: '',
-//            validTo: ''
+            id: this.pricebookId,
+            name: this.pricebookName,
+            validFrom: this.startDate,
+            validTo: this.endDate
         };
         const pricebookToJSON = JSON.stringify(pricebook);
         const recordsToJSON = JSON.stringify(this.records);
+        console.log(recordsToJSON);
 
+        console.log(pricebook.id);
+        alert(pricebook.toString());
         savePriceBookWithProducts({pricebook: pricebookToJSON, products: recordsToJSON})
         .then(result => {
             console.log(result);
@@ -63,11 +77,19 @@ export default class ES_PriceBookList extends LightningElement {
             console.error(error);
             this.showError(error.body.message);
         });
-
+        this.closeModal();
     };
 
     changePricebookNameHandler(event){
         this.pricebookName = event.target.value;
+    };
+
+    changeStartDateHandler(event){
+        this.startDate = event.target.value;
+    };
+
+    changeEndDateHandler(event){
+        this.endDate = event.target.value;
     };
 
     changeUnitHandler(event) {
@@ -92,7 +114,8 @@ export default class ES_PriceBookList extends LightningElement {
                     "name": row.name,
                     "productFamily": row.productFamily,
                     "standardPrice": row.standardPrice,
-                    "customPrice": this.calculatePrice(row)
+                    "customPrice": this.calculatePrice(row),
+                    "pbeId": row.pbeId
                 }
             );
         }
@@ -117,7 +140,12 @@ export default class ES_PriceBookList extends LightningElement {
     };
 
     handlePriceBookView(event) {
-        this.pricebookId = event.detail;
+//        this.pricebookId = event.detail;
+        this.pricebookId = event.detail.id;
+        this.pricebookName = event.detail.name;
+        this.startDate = event.detail.validFrom;
+        this.endDate = event.detail.validTo;
+//
         this.openModal();
     };
 

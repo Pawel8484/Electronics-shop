@@ -4,7 +4,7 @@
         <div class="slds-card__body_inner">
             <lightning-button
                     label="Add new Price Book"
-                    onclick={openModal}
+                    onclick={addNewPriceBook}
                     icon-position="right">
             </lightning-button>
 
@@ -31,7 +31,7 @@
                                 <lightning-layout>
                                     <lightning-layout-item>
                                         <div class="slds-form-element slds-p-around_small">
-                                            <lightning-input type="text" name="pricebookName" label="Price Book name" placeholder="Enter new Price Book name..." required
+                                            <lightning-input type="text" name="pricebookName" value={pricebookName} label="Price Book name" placeholder="Enter new Price Book name..." required
                                                              onchange={changePricebookNameHandler}></lightning-input>
                                         </div>
                                     </lightning-layout-item>
@@ -45,6 +45,18 @@
 
                                                     multiple>
                                             </lightning-file-upload>
+                                        </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item>
+                                        <div class="slds-p-around_small">
+                                        <lightning-input type="date" name="startDate" value={startDate} label="Start date" required
+                                                         onchange={changeStartDateHandler}></lightning-input>
+                                        </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item>
+                                        <div class="slds-p-around_small">
+                                        <lightning-input type="date" name="endDate" value={endDate} label="End date" required
+                                                         onchange={changeEndDateHandler}></lightning-input>
                                         </div>
                                     </lightning-layout-item>
                                 </lightning-layout>

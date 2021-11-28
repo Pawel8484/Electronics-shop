@@ -7,18 +7,13 @@
                     <img src={appResources.emptyImage} alt="Price Book" class="empty-image"/>
                 </div>
                 <div class="slds-p-around_small">
-                    <p>{pricebook.name}</p>
-                    <p>{pricebook.validFrom}</p>
-                    <p>{pricebook.validTo}</p>
+                    <p>Name: {pricebook.name}</p>
+<!--                    <p>Start Date: {pricebook.validFrom}</p>-->
+                    <p>Start Date: <lightning-formatted-date-time value={pricebook.validFrom} year="numeric" month="numeric" day="numeric"></lightning-formatted-date-time></p>
+                    <p>End Date: <lightning-formatted-date-time value={pricebook.validTo} year="numeric" month="numeric" day="numeric"></lightning-formatted-date-time></p>
+<!--                    <p>End Date: {pricebook.validTo}</p>-->
                 </div>
             </div>
-            <!-- <div class="slds-media__body"> -->
-            <!-- <p class="slds-var-m-bottom_xx-small">{pricelist.Name}</p>
-            <p class="slds-var-m-bottom_xx-small">{pricelist.Id}</p>
-            <p class="slds-var-m-bottom_xx-small">{pricelist.Description}</p> -->
-            <!-- <p class="slds-var-m-bottom_xx-small">{pricelist.Weight__c} Kg</p> -->
-            <!-- </div> -->
-            <!-- </div> -->
         </div>
     </lightning-card>
 </template>

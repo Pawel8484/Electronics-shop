@@ -39,12 +39,16 @@ public with sharing class ES_PriceManagerService {
         }
 
         public Pricebook2 getPricebook() {
-            return new Pricebook2(
+            Pricebook2 pb = new Pricebook2(
                     Name = this.name,
                     ValidFrom__c = this.validFrom,
                     ValidTo__c = this.validTo,
                     PhotoUrl__c = this.photoUrl
             );
+            if(this.id != null){
+                pb.Id = this.id;
+            }
+            return pb;
         }
     }
 
@@ -66,16 +70,18 @@ public with sharing class ES_PriceManagerService {
     }
 
     public static Id savePriceBookWithProducts(PriceBookWrapper priceBookWrapper, ProductWrapper[] productWrappers){
+        System.debug(priceBookWrapper);
             Pricebook2 newPricebook = priceBookWrapper.getPricebook();
-            insert newPricebook;
+            upsert newPricebook;
 
             PricebookEntry[] newPricebookEntries = new PricebookEntry[]{};
             for (ProductWrapper productWrapper : productWrappers) {
                 PricebookEntry pbe = productWrapper.getPricebookEntry(newPricebook.Id);
+        System.debug(JSON.serialize(pbe));
                 newPricebookEntries.add(pbe);
             }
 //            insert pbe;
-            insert newPricebookEntries;
+            upsert newPricebookEntries;
             return newPricebook.Id;
     }
 
@@ -90,6 +96,8 @@ public with sharing class ES_PriceManagerService {
         public Decimal standardPrice;
         @AuraEnabled
         public Decimal customPrice;
+        @AuraEnabled
+        public Id pbeId;
 
         public ProductWrapper(ES_Product productDTO) {
             this.id = productDTO.product.Id;
@@ -101,14 +109,20 @@ public with sharing class ES_PriceManagerService {
 
         public void initializeCustomPrice(Id pricebookId, ES_Product productDTO) {
             this.customPrice = productDTO.customPrice.getPrice(pricebookId);
+            this.pbeId =  productDTO.customPrice.getPriceBookEntryId(pricebookId);
         }
 
+
         public PricebookEntry getPricebookEntry(Id pricebookId) {
-            return new PricebookEntry(
+            PricebookEntry pbe = new PricebookEntry(
                     Pricebook2Id = pricebookId,
                     Product2Id = this.id,
                     UnitPrice = this.customPrice
             );
+            if(this.pbeId != null){
+                pbe.Id = pbeId;
+            }
+            return pbe;
         }
     }
 }

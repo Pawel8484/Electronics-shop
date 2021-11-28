@@ -5,8 +5,8 @@ public with sharing class ES_PriceManagerController {
         try {
             return String.isNotEmpty(pricebookId) ? ES_PriceManagerService.getProductWrappers(pricebookId) : ES_PriceManagerService.getProductWrappers();
         } catch (Exception e) {
-            throw e;
-//            throw new AuraHandledException(e.getMessage());
+//            throw e;
+            throw new AuraHandledException(e.getMessage());
         }
     }
 
@@ -24,6 +24,7 @@ public with sharing class ES_PriceManagerController {
         try {
             ES_PriceManagerService.PriceBookWrapper priceBookWrapper = (ES_PriceManagerService.PriceBookWrapper)JSON.deserialize(pricebook, ES_PriceManagerService.PriceBookWrapper.class);
             ES_PriceManagerService.ProductWrapper[] productWrappers = (List<ES_PriceManagerService.ProductWrapper>)JSON.deserialize(products, List<ES_PriceManagerService.ProductWrapper>.class);
+            System.debug(productWrappers);
             return ES_PriceManagerService.savePriceBookWithProducts(priceBookWrapper, productWrappers);
         } catch (Exception e) {
             throw new AuraHandledException(e.getMessage());

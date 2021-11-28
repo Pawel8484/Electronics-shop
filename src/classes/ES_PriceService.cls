@@ -61,5 +61,9 @@ public with sharing class ES_PriceService {
         public Decimal getPrice(Id pricebookId) {
             return pricebookEntriesByPricebookIds?.get(pricebookId)?.UnitPrice;
         }
+
+        public Id getPriceBookEntryId(Id pricebookId) {
+            return pricebookEntriesByPricebookIds?.get(pricebookId)?.Id;
+        }
     }
 }
