@@ -41,9 +41,7 @@
                                                     label="Attach image"
                                                     name="fileUploader"
                                                     accept=".png, .jpg, .jpeg"
-                                                    record-id={myRecordId}
-
-                                                    multiple>
+                                                    onuploadfinished={handleUploadFinished}>
                                             </lightning-file-upload>
                                         </div>
                                     </lightning-layout-item>

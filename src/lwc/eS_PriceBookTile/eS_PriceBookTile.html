@@ -1,10 +1,17 @@
+<!--suppress ALL -->
 <template>
     <lightning-card class="price-list-tile">
         <div class="slds-var-p-horizontal_small price-list-tile-body" onclick={handleSelectedPriceBook}>
             <!-- <div class="slds-media"> -->
             <div class="slds-grid_vertical slds-align_absolute-center">
                 <div>
+                    <template if:false={pricebook.photoUrl}>
                     <img src={appResources.emptyImage} alt="Price Book" class="empty-image"/>
+                    </template>
+                    <template if:true={pricebook.photoUrl}>
+<!--                    <img src='/sfc/servlet.shepherd/version/download/' + {pricebook.photoUrl}/>-->
+                    <img src={photoUrl} class="pricebook-image"/>
+                    </template>
                 </div>
                 <div class="slds-p-around_small">
                     <p>Name: {pricebook.name}</p>

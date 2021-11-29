@@ -24,7 +24,7 @@ public with sharing class ES_PriceManagerController {
         try {
             ES_PriceManagerService.PriceBookWrapper priceBookWrapper = (ES_PriceManagerService.PriceBookWrapper)JSON.deserialize(pricebook, ES_PriceManagerService.PriceBookWrapper.class);
             ES_PriceManagerService.ProductWrapper[] productWrappers = (List<ES_PriceManagerService.ProductWrapper>)JSON.deserialize(products, List<ES_PriceManagerService.ProductWrapper>.class);
-            System.debug(productWrappers);
+            System.debug(priceBookWrapper);
             return ES_PriceManagerService.savePriceBookWithProducts(priceBookWrapper, productWrappers);
         } catch (Exception e) {
             throw new AuraHandledException(e.getMessage());

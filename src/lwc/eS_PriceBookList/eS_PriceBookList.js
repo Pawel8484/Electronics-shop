@@ -25,6 +25,7 @@ export default class ES_PriceBookList extends LightningElement {
     @api pricebookName;
     startDate;
     endDate;
+    uploadedFile;
     priceValue;
     selectedUnit = 'percent';
     columns = columns;
@@ -41,7 +42,7 @@ export default class ES_PriceBookList extends LightningElement {
     };
 
     addNewPriceBook(){
-        this.pricebookId = '';
+        this.pricebookId = null;
         this.pricebookName = '';
         this.startDate = '';
         this.endDate = '';
@@ -60,15 +61,13 @@ export default class ES_PriceBookList extends LightningElement {
         const pricebook = {
             id: this.pricebookId,
             name: this.pricebookName,
+            photoUrl: this.uploadedFile,
             validFrom: this.startDate,
             validTo: this.endDate
         };
         const pricebookToJSON = JSON.stringify(pricebook);
         const recordsToJSON = JSON.stringify(this.records);
-        console.log(recordsToJSON);
-
-        console.log(pricebook.id);
-        alert(pricebook.toString());
+        console.log(pricebookToJSON);
         savePriceBookWithProducts({pricebook: pricebookToJSON, products: recordsToJSON})
         .then(result => {
             console.log(result);
@@ -146,6 +145,8 @@ export default class ES_PriceBookList extends LightningElement {
         this.startDate = event.detail.validFrom;
         this.endDate = event.detail.validTo;
 //
+        this.uploadedFile = event.detail.photoUrl;
+//
         this.openModal();
     };
 
@@ -161,4 +162,11 @@ export default class ES_PriceBookList extends LightningElement {
         });
         this.dispatchEvent(evt);
     };
+
+    handleUploadFinished(event) {
+        // Get the list of uploaded files
+        const uploadedFiles = event.detail.files;
+        this.uploadedFile = uploadedFiles[0].contentVersionId;
+//        alert('No. of files uploaded: ' + uploadedFile.val);
+    }
 }

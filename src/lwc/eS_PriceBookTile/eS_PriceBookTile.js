@@ -8,6 +8,9 @@ export default class ES_PriceBookTile extends LightningElement {
 		emptyImage: EMPTY_IMAGE,
 	};
 
+	get photoUrl() {
+        return '/sfc/servlet.shepherd/version/download/' + this.pricebook.photoUrl;
+    }
 
 	handleSelectedPriceBook() {
     	const selectEvent = new CustomEvent('pricebookview', {
