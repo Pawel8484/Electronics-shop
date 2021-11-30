@@ -22,12 +22,6 @@ export default class ES_PriceBookList extends LightningElement {
 		emptyImage: EMPTY_IMAGE,
 	};
 
-
-//    @wire(getPriceBookWrappers) pricebooks;
-//    appResources = {
-//        emptyImage: EMPTY_IMAGE,
-//    };
-
     @track records;
 
     searchName = '';
@@ -44,6 +38,7 @@ export default class ES_PriceBookList extends LightningElement {
     isActiveBox;
     priceValue;
     selectedUnit = 'percent';
+    today = new Date().toISOString();
     columns = columns;
     isModalOpen = false;
 
@@ -77,29 +72,51 @@ export default class ES_PriceBookList extends LightningElement {
     };
 
     saveNewPricebook() {
-        const pricebook = {
-            id: this.pricebookId,
-            name: this.pricebookName,
-            photoUrl: this.uploadedFile,
-            validFrom: this.startDate,
-            validTo: this.endDate,
-            isActive: this.isActiveBox
-        };
+        const pricebook = this.buildPricebook();
         const pricebookToJSON = JSON.stringify(pricebook);
         const recordsToJSON = JSON.stringify(this.records);
         console.log(pricebookToJSON);
 
-        savePriceBookWithProducts({pricebook: pricebookToJSON, products: recordsToJSON})
-        .then(result => {
-            console.log(result);
-            refreshApex(this.pricebooks);
-        })
-        .catch(error => {
-            console.error(error);
-            this.showError(error.body.message);
-        });
-        this.closeModal();
+//        if(this.pricebookName && this.startDate && this.endDate){
+//        if(this.validateDate(this.startDate, this.endDate)){
+
+//        this.validateDate(this.startDate, this.endDate);
+
+        if (this.isValidForm()) {
+            savePriceBookWithProducts({pricebook: pricebookToJSON, products: recordsToJSON})
+            .then(result => {
+                console.log(result);
+                refreshApex(this.pricebooks);
+            })
+            .catch(error => {
+                console.error(error);
+                this.showError(error.body.message);
+            });
+            this.closeModal();
+        }
     };
+
+    buildPricebook() {
+        return {
+           id: this.pricebookId,
+           name: this.pricebookName,
+           photoUrl: this.uploadedFile,
+           validFrom: this.startDate,
+           validTo: this.endDate,
+           isActive: this.isActiveBox
+       };
+    };
+
+    isValidForm() {
+        const allValid = [
+            ...this.template.querySelectorAll('lightning-input[data-id="pricebook-input"]'),
+        ].reduce((validSoFar, inputCmp) => {
+            inputCmp.reportValidity();
+            return validSoFar && inputCmp.checkValidity();
+        }, true);
+
+        return allValid;
+    }
 
     changePricebookNameHandler(event){
         this.pricebookName = event.target.value;
@@ -198,6 +215,10 @@ export default class ES_PriceBookList extends LightningElement {
         this.showToast('Error', message, 'error');
     };
 
+    showSuccess(message) {
+        this.showToast('Success', message, 'success');
+    };
+
     showToast(title, message, variant) {
         const evt = new ShowToastEvent({
             title: title,
@@ -211,5 +232,5 @@ export default class ES_PriceBookList extends LightningElement {
         const uploadedFiles = event.detail.files;
         this.uploadedFile = uploadedFiles[0].contentVersionId;
 //        alert('No. of files uploaded: ' + uploadedFile.val);
-    }
+    };
 }

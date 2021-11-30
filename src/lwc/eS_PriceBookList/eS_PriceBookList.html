@@ -64,7 +64,7 @@
                                 <lightning-layout>
                                     <lightning-layout-item>
                                         <div class="slds-form-element slds-p-around_small">
-                                            <lightning-input type="text" name="pricebookName" value={pricebookName}
+                                            <lightning-input data-id="pricebook-input" type="text" name="pricebookName" value={pricebookName}
                                                              label="Price Book name"
                                                              placeholder="Enter new Price Book name..." required
                                                              onchange={changePricebookNameHandler}></lightning-input>
@@ -82,21 +82,21 @@
                                     </lightning-layout-item>
                                     <lightning-layout-item>
                                         <div class="slds-p-around_small">
-                                            <lightning-input type="date" name="startDate" value={startDate}
-                                                             label="Start date" required
+                                            <lightning-input data-id="pricebook-input" type="date" name="startDate" value={startDate}
+                                                             label="Start date" required min={today}
                                                              onchange={changeStartDateHandler}></lightning-input>
                                         </div>
                                     </lightning-layout-item>
                                     <lightning-layout-item>
                                         <div class="slds-p-around_small">
-                                            <lightning-input type="date" name="endDate" value={endDate} label="End date"
-                                                             required
+                                            <lightning-input data-id="pricebook-input" type="date" name="endDate" value={endDate} label="End date"
+                                                             required min={startDate}
                                                              onchange={changeEndDateHandler}></lightning-input>
                                         </div>
                                     </lightning-layout-item>
                                     <lightning-layout-item>
                                         <div class="slds-p-around_large">
-                                            <lightning-input type="checkbox" name="isActiveBox" checked={isActiveBox} label="Is Active"
+                                            <lightning-input data-id="pricebook-input" type="checkbox" name="isActiveBox" checked={isActiveBox} label="Is Active"
                                                              onclick={changeIsActiveHandler}></lightning-input>
                                         </div>
                                     </lightning-layout-item>
@@ -131,10 +131,12 @@
                         </div>
                         <footer class="slds-modal__footer">
                             <lightning-button
+                                    class="slds-p-around_xx-small"
                                     label="Close"
                                     onclick={closeModal}>
                             </lightning-button>
                             <lightning-button
+                                    class="slds-p-around_xx-small"
                                     label="Save"
                                     variant="brand"
                                     onclick={saveNewPricebook}>

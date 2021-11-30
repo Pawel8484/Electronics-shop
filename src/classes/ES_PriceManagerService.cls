@@ -142,7 +142,8 @@ public with sharing class ES_PriceManagerService {
             PricebookEntry pbe = new PricebookEntry(
                     Pricebook2Id = pricebookId,
                     Product2Id = this.id,
-                    UnitPrice = this.customPrice
+                    UnitPrice = this.customPrice,
+                    IsActive = true
             );
             if(this.pbeId != null){
                 pbe.Id = pbeId;
