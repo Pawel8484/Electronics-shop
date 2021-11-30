@@ -10,10 +10,20 @@ public with sharing class ES_PriceManagerController {
         }
     }
 
+//    @AuraEnabled(Cacheable=true)
+//    public static ES_PriceManagerService.PriceBookWrapper[] getPriceBookWrappers() {
+//        try {
+//            return ES_PriceManagerService.getPriceBookWrappers();
+//        } catch (Exception e) {
+//            throw new AuraHandledException(e.getMessage());
+//        }
+//    }
+
     @AuraEnabled(Cacheable=true)
-    public static ES_PriceManagerService.PriceBookWrapper[] getPriceBookWrappers() {
+    public static ES_PriceManagerService.PriceBookWrapper[] getPriceBookWrappers(String searchName, Datetime searchStartDate, Datetime searchEndDate) {
         try {
-            return ES_PriceManagerService.getPriceBookWrappers();
+            System.debug(searchName + searchStartDate + searchEndDate);
+            return ES_PriceManagerService.getPriceBookWrappers(searchName, searchStartDate, searchEndDate);
         } catch (Exception e) {
             throw new AuraHandledException(e.getMessage());
         }

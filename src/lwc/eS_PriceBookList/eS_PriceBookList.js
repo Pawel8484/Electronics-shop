@@ -4,6 +4,7 @@ import EMPTY_IMAGE from '@salesforce/resourceUrl/emptyImage';
 import getPriceBookWrappers from '@salesforce/apex/ES_PriceManagerController.getPriceBookWrappers';
 import getProductWrappers from '@salesforce/apex/ES_PriceManagerController.getProductWrappers';
 import savePriceBookWithProducts from '@salesforce/apex/ES_PriceManagerController.savePriceBookWithProducts';
+import {refreshApex} from '@salesforce/apex';
 
 const columns = [
     { label: 'Name', fieldName: 'name' },
@@ -14,18 +15,33 @@ const columns = [
 
 export default class ES_PriceBookList extends LightningElement {
 
-	@wire(getPriceBookWrappers) pricebooks;
+	@wire(getPriceBookWrappers, {searchName: '$searchName', searchStartDate: '$searchStartDate', searchEndDate: '$searchEndDate'}) pricebooks;
+
+
 	appResources = {
 		emptyImage: EMPTY_IMAGE,
 	};
 
+
+//    @wire(getPriceBookWrappers) pricebooks;
+//    appResources = {
+//        emptyImage: EMPTY_IMAGE,
+//    };
+
     @track records;
+
+    searchName = '';
+    searchStartDate = '1900-01-01T00:00:00.000Z';
+    searchEndDate = '2100-01-01T00:00:00.000Z';
+
+    pricebooks;
 
     pricebookId = '';
     @api pricebookName;
     startDate;
     endDate;
     uploadedFile;
+    isActiveBox;
     priceValue;
     selectedUnit = 'percent';
     columns = columns;
@@ -46,6 +62,9 @@ export default class ES_PriceBookList extends LightningElement {
         this.pricebookName = '';
         this.startDate = '';
         this.endDate = '';
+        this.uploadedFile = '';
+        this.selectedUnit = 'percent';
+        this.isActiveBox = false;
         this.isModalOpen = true;
     };
 
@@ -63,14 +82,17 @@ export default class ES_PriceBookList extends LightningElement {
             name: this.pricebookName,
             photoUrl: this.uploadedFile,
             validFrom: this.startDate,
-            validTo: this.endDate
+            validTo: this.endDate,
+            isActive: this.isActiveBox
         };
         const pricebookToJSON = JSON.stringify(pricebook);
         const recordsToJSON = JSON.stringify(this.records);
         console.log(pricebookToJSON);
+
         savePriceBookWithProducts({pricebook: pricebookToJSON, products: recordsToJSON})
         .then(result => {
             console.log(result);
+            refreshApex(this.pricebooks);
         })
         .catch(error => {
             console.error(error);
@@ -97,6 +119,11 @@ export default class ES_PriceBookList extends LightningElement {
 
      changePriceHandler(event){
         this.priceValue = event.target.value;
+    };
+
+     changeIsActiveHandler(event){
+        this.isActiveBox = event.target.checked;
+        alert(isActiveBox);
     };
 
     changeProductsPrice(){
@@ -144,10 +171,27 @@ export default class ES_PriceBookList extends LightningElement {
         this.pricebookName = event.detail.name;
         this.startDate = event.detail.validFrom;
         this.endDate = event.detail.validTo;
-//
         this.uploadedFile = event.detail.photoUrl;
-//
+        this.isActiveBox = event.detail.isActive;
         this.openModal();
+    };
+
+    handleSearchNameChange(event) {
+        window.clearTimeout(this.delayTimeout);
+        const searchName = event.target.value;
+        this.delayTimeout = setTimeout(() => {
+            this.searchName = searchName;
+        }, 300);
+    };
+
+    handleSearchStartDateChange(event) {
+        this.searchStartDate = event.target.value;
+        alert(event.target.value);
+    };
+
+    handleSearchEndDateChange(event) {
+        this.searchEndDate = event.target.value;
+        alert(event.target.value);
     };
 
     showError(message) {
@@ -164,7 +208,6 @@ export default class ES_PriceBookList extends LightningElement {
     };
 
     handleUploadFinished(event) {
-        // Get the list of uploaded files
         const uploadedFiles = event.detail.files;
         this.uploadedFile = uploadedFiles[0].contentVersionId;
 //        alert('No. of files uploaded: ' + uploadedFile.val);

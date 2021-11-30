@@ -18,6 +18,9 @@
 <!--                    <p>Start Date: {pricebook.validFrom}</p>-->
                     <p>Start Date: <lightning-formatted-date-time value={pricebook.validFrom} year="numeric" month="numeric" day="numeric"></lightning-formatted-date-time></p>
                     <p>End Date: <lightning-formatted-date-time value={pricebook.validTo} year="numeric" month="numeric" day="numeric"></lightning-formatted-date-time></p>
+<!--                    <p>Is Active: value={pricebook.isActive}</p>-->
+                    <p><lightning-input type="checkbox" checked={pricebook.isActive} label="Is Active" disabled></lightning-input></p>
+
 <!--                    <p>End Date: {pricebook.validTo}</p>-->
                 </div>
             </div>

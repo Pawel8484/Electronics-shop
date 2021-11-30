@@ -1,9 +1,9 @@
 public with sharing class ES_PriceManagerService {
 
-    public static PriceBookWrapper[] getPriceBookWrappers() {
+    public static PriceBookWrapper[] getPriceBookWrappers(String searchName, Datetime searchStartDate, Datetime searchEndDate) {
         PriceBookWrapper[] priceBookWrappers = new PriceBookWrapper[]{};
 
-        for (Pricebook2 pb : getPriceBooks()) {
+        for (Pricebook2 pb : getPriceBooks(searchName, searchStartDate, searchEndDate)) {
             PriceBookWrapper pbWrapper = new PriceBookWrapper(pb);
             priceBookWrappers.add(pbWrapper);
         }
@@ -11,12 +11,33 @@ public with sharing class ES_PriceManagerService {
         return priceBookWrappers;
     }
 
-    private static Pricebook2[] getPriceBooks() {
+    private static Pricebook2[] getPriceBooks(String searchName, Datetime searchStartDate, Datetime searchEndDate) {
+        String searchKeyword = '%' + searchName + '%';
+
         return [
-                SELECT Id, Name, Description, PhotoUrl__c, ValidFrom__c, ValidTo__c
-                FROM Pricebook2
+                SELECT Id, Name, Description, PhotoUrl__c, ValidFrom__c, ValidTo__c, IsActive
+                FROM Pricebook2 WHERE Name LIKE :searchKeyword
+                AND ValidFrom__c >= :searchStartDate AND ValidTo__c <= :searchEndDate ORDER BY ValidFrom__c ASC
         ];
     }
+
+//    public static PriceBookWrapper[] getPriceBookWrappers() {
+//        PriceBookWrapper[] priceBookWrappers = new PriceBookWrapper[]{};
+//
+//        for (Pricebook2 pb : getPriceBooks()) {
+//            PriceBookWrapper pbWrapper = new PriceBookWrapper(pb);
+//            priceBookWrappers.add(pbWrapper);
+//        }
+//
+//        return priceBookWrappers;
+//    }
+//
+//    private static Pricebook2[] getPriceBooks() {
+//        return [
+//                SELECT Id, Name, Description, PhotoUrl__c, ValidFrom__c, ValidTo__c
+//                FROM Pricebook2
+//        ];
+//    }
 
     public class PriceBookWrapper {
         @AuraEnabled
@@ -29,6 +50,8 @@ public with sharing class ES_PriceManagerService {
         public Datetime validFrom;
         @AuraEnabled
         public Datetime validTo;
+        @AuraEnabled
+        public Boolean isActive;
 
         public PriceBookWrapper(Pricebook2 pb) {
             this.id = pb.Id;
@@ -36,6 +59,7 @@ public with sharing class ES_PriceManagerService {
             this.photoUrl = pb.PhotoUrl__c;
             this.validFrom = pb.ValidFrom__c;
             this.validTo = pb.ValidTo__c;
+            this.isActive = pb.IsActive;
         }
 
         public Pricebook2 getPricebook() {
@@ -43,7 +67,8 @@ public with sharing class ES_PriceManagerService {
                     Name = this.name,
                     ValidFrom__c = this.validFrom,
                     ValidTo__c = this.validTo,
-                    PhotoUrl__c = this.photoUrl
+                    PhotoUrl__c = this.photoUrl,
+                    IsActive = this.isActive
             );
             if(this.id != null){
                 pb.Id = this.id;

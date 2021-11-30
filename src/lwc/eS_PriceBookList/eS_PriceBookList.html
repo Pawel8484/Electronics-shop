@@ -9,10 +9,37 @@
             </lightning-button>
 
             <template if:true={pricebooks.data}>
+                <lightning-layout class="slds-align_absolute-center">
+                    <lightning-layout-item class="slds-size_1-of-3">
+                        <lightning-input type="search"
+                                         onchange={handleSearchNameChange}
+                                         class="slds-p-around_small"
+                                         label="Price Book Name"
+                                         placeholder="Enter Price Book name you are looking for..."
+                                         value={searchName}>
+                        </lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item>
+                        <lightning-input type="date"
+                                         label="Start Date"
+                                         class="slds-p-around_small"
+                                         onchange={handleSearchStartDateChange}>
+                        </lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item>
+                        <lightning-input type="date"
+                                         label="End Date"
+                                         class="slds-p-around_small"
+                                         onchange={handleSearchEndDateChange}>
+                        </lightning-input>
+                    </lightning-layout-item>
+                </lightning-layout>
                 <lightning-layout multiple-rows="true" pull-to-boundary="small">
+
                     <template for:each={pricebooks.data} for:item="pricebook">
                         <lightning-layout-item key={pricebook.id} size="3" class="slds-var-p-around_x-small">
-                            <c-e-s_-price-book-tile pricebook={pricebook} onpricebookview={handlePriceBookView}></c-e-s_-price-book-tile>
+                            <c-e-s_-price-book-tile pricebook={pricebook}
+                                                    onpricebookview={handlePriceBookView}></c-e-s_-price-book-tile>
                         </lightning-layout-item>
                     </template>
                 </lightning-layout>
@@ -23,15 +50,23 @@
                          aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
                     <div class="slds-modal__container modal-window">
                         <header class="slds-modal__header">
-                            <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Create new Price
-                                Book</h2>
+<!--                            <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Create new Price-->
+<!--                                Book</h2>-->
+                            <template if:false={pricebookId}>
+                                <h2 class="slds-modal__title slds-hyphenate">Create new Price Book</h2>
+                            </template>
+                            <template if:true={pricebookId}>
+                                <h2 class="slds-modal__title slds-hyphenate">Update Price Book</h2>
+                            </template>
                         </header>
                         <div class="slds-modal__content">
                             <div class="slds-p-horizontal_medium slds-p-top_medium">
                                 <lightning-layout>
                                     <lightning-layout-item>
                                         <div class="slds-form-element slds-p-around_small">
-                                            <lightning-input type="text" name="pricebookName" value={pricebookName} label="Price Book name" placeholder="Enter new Price Book name..." required
+                                            <lightning-input type="text" name="pricebookName" value={pricebookName}
+                                                             label="Price Book name"
+                                                             placeholder="Enter new Price Book name..." required
                                                              onchange={changePricebookNameHandler}></lightning-input>
                                         </div>
                                     </lightning-layout-item>
@@ -47,24 +82,26 @@
                                     </lightning-layout-item>
                                     <lightning-layout-item>
                                         <div class="slds-p-around_small">
-                                        <lightning-input type="date" name="startDate" value={startDate} label="Start date" required
-                                                         onchange={changeStartDateHandler}></lightning-input>
+                                            <lightning-input type="date" name="startDate" value={startDate}
+                                                             label="Start date" required
+                                                             onchange={changeStartDateHandler}></lightning-input>
                                         </div>
                                     </lightning-layout-item>
                                     <lightning-layout-item>
                                         <div class="slds-p-around_small">
-                                        <lightning-input type="date" name="endDate" value={endDate} label="End date" required
-                                                         onchange={changeEndDateHandler}></lightning-input>
+                                            <lightning-input type="date" name="endDate" value={endDate} label="End date"
+                                                             required
+                                                             onchange={changeEndDateHandler}></lightning-input>
+                                        </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item>
+                                        <div class="slds-p-around_large">
+                                            <lightning-input type="checkbox" name="isActiveBox" checked={isActiveBox} label="Is Active"
+                                                             onclick={changeIsActiveHandler}></lightning-input>
                                         </div>
                                     </lightning-layout-item>
                                 </lightning-layout>
                                 <lightning-layout class="slds-p-vertical_small" horizontal-align="end">
-<!--                                    <lightning-layout-item>-->
-<!--                                        <select class="slds-select" name="optionSelect" onchange={changeHandler}>-->
-<!--                                            <option value="decrease"> decrease </option>-->
-<!--                                            <option value="increase"> increase </option>-->
-<!--                                        </select>-->
-<!--                                    </lightning-layout-item>-->
                                     <lightning-layout-item>
                                         <lightning-input type="number" name="priceValue" variant="label-hidden"
                                                          placeholder="Enter value ..." step="0.01"
