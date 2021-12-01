@@ -3,7 +3,7 @@
     <lightning-card title="Price Book List" icon-name="utility:picklist_type">
         <div class="slds-card__body_inner">
             <lightning-button
-                    label="Add new Price Book"
+                    label="Create new Price Book"
                     onclick={addNewPriceBook}
                     icon-position="right">
             </lightning-button>
@@ -96,8 +96,11 @@
                                     </lightning-layout-item>
                                     <lightning-layout-item>
                                         <div class="slds-p-around_large">
-                                            <lightning-input data-id="pricebook-input" type="checkbox" name="isActiveBox" checked={isActiveBox} label="Is Active"
+                                            <div> Is Active </div>
+                                            <div class="slds-align_absolute-center">
+                                            <lightning-input data-id="pricebook-input" type="checkbox" name="isActiveBox" checked={isActiveBox}
                                                              onclick={changeIsActiveHandler}></lightning-input>
+                                            </div>
                                         </div>
                                     </lightning-layout-item>
                                 </lightning-layout>

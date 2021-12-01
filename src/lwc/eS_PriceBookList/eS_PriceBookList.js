@@ -4,13 +4,14 @@ import EMPTY_IMAGE from '@salesforce/resourceUrl/emptyImage';
 import getPriceBookWrappers from '@salesforce/apex/ES_PriceManagerController.getPriceBookWrappers';
 import getProductWrappers from '@salesforce/apex/ES_PriceManagerController.getProductWrappers';
 import savePriceBookWithProducts from '@salesforce/apex/ES_PriceManagerController.savePriceBookWithProducts';
+import checkIfNewPricebookOverlapWithOther from '@salesforce/apex/ES_PriceManagerController.checkIfNewPricebookOverlapWithOther';
 import {refreshApex} from '@salesforce/apex';
 
 const columns = [
     { label: 'Name', fieldName: 'name' },
     { label: 'Family', fieldName: 'productFamily' },
-    { label: 'Standard Price', fieldName: 'standardPrice' },
-    { label: 'New Price', fieldName: 'customPrice' },
+    { label: 'Standard Price', fieldName: 'standardPrice'},
+    { label: 'New Price', fieldName: 'customPrice'},
 ];
 
 export default class ES_PriceBookList extends LightningElement {
@@ -30,6 +31,7 @@ export default class ES_PriceBookList extends LightningElement {
 
     pricebooks;
 
+    pricebook = {};
     pricebookId = '';
     @api pricebookName;
     startDate;
@@ -38,7 +40,18 @@ export default class ES_PriceBookList extends LightningElement {
     isActiveBox;
     priceValue;
     selectedUnit = 'percent';
-    today = new Date().toISOString();
+//    today = new Date().toISOString().split('T')[0];
+
+    get today() {
+        const today = new Date();
+        const newDate = this.isEmpty(this.pricebook.validFrom) ? today : new Date(this.pricebook.validFrom);
+
+        if(today > newDate){
+            return this.pricebook.validFrom;
+     }
+        return today.toISOString().split('T')[0];
+    };
+
     columns = columns;
     isModalOpen = false;
 
@@ -77,22 +90,24 @@ export default class ES_PriceBookList extends LightningElement {
         const recordsToJSON = JSON.stringify(this.records);
         console.log(pricebookToJSON);
 
-//        if(this.pricebookName && this.startDate && this.endDate){
-//        if(this.validateDate(this.startDate, this.endDate)){
-
-//        this.validateDate(this.startDate, this.endDate);
-
         if (this.isValidForm()) {
-            savePriceBookWithProducts({pricebook: pricebookToJSON, products: recordsToJSON})
+
+//            this.isNewPricebookOverlapWithOther(pricebook);
+
+            checkIfNewPricebookOverlapWithOther({pricebook: pricebookToJSON})
+                .then(result => {
+                    return savePriceBookWithProducts({pricebook: pricebookToJSON, products: recordsToJSON});
+                })
             .then(result => {
-                console.log(result);
+                this.showSuccess('Operation completed successfully');
                 refreshApex(this.pricebooks);
+                this.closeModal();
             })
             .catch(error => {
                 console.error(error);
                 this.showError(error.body.message);
             });
-            this.closeModal();
+
         }
     };
 
@@ -116,7 +131,18 @@ export default class ES_PriceBookList extends LightningElement {
         }, true);
 
         return allValid;
-    }
+    };
+
+    isNewPricebookOverlapWithOther(pricebook){
+            checkIfNewPricebookOverlapWithOther({pricebook: pricebookToJSON})
+            .then(result => {
+            console.log(result);
+            })
+            .catch(error => {
+            console.error(error);
+            this.showError(error.body.message);
+            });
+    };
 
     changePricebookNameHandler(event){
         this.pricebookName = event.target.value;
@@ -174,16 +200,27 @@ export default class ES_PriceBookList extends LightningElement {
         switch (this.selectedUnit) {
             case 'percent':
             default: {
-                return row.customPrice + (row.customPrice * (Number(this.priceValue)/100));
+                const result = Math.round(row.customPrice + (row.customPrice * (Number(this.priceValue)/100)));
+                if(result > 0){
+                    return result;
+                }
+                return 0;
+//                return Math.round(row.customPrice + (row.customPrice * (Number(this.priceValue)/100)));
             }
             case 'amount': {
-                return row.customPrice + Number(this.priceValue);
+                const result = Math.round(row.customPrice + Number(this.priceValue));
+                if(result > 0){
+                    return result;
+                }
+                return 0;
+//                return Math.round(row.customPrice + Number(this.priceValue));
             }
         }
     };
 
     handlePriceBookView(event) {
 //        this.pricebookId = event.detail;
+        this.pricebook = event.detail;
         this.pricebookId = event.detail.id;
         this.pricebookName = event.detail.name;
         this.startDate = event.detail.validFrom;
@@ -233,4 +270,8 @@ export default class ES_PriceBookList extends LightningElement {
         this.uploadedFile = uploadedFiles[0].contentVersionId;
 //        alert('No. of files uploaded: ' + uploadedFile.val);
     };
+
+    isEmpty(value) {
+        return value === null || value === undefined || value === '';
+    }
 }

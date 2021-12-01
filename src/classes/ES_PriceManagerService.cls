@@ -1,7 +1,8 @@
 public with sharing class ES_PriceManagerService {
 
     public static PriceBookWrapper[] getPriceBookWrappers(String searchName, Datetime searchStartDate, Datetime searchEndDate) {
-        PriceBookWrapper[] priceBookWrappers = new PriceBookWrapper[]{};
+        PriceBookWrapper[] priceBookWrappers = new PriceBookWrapper[]{
+        };
 
         for (Pricebook2 pb : getPriceBooks(searchName, searchStartDate, searchEndDate)) {
             PriceBookWrapper pbWrapper = new PriceBookWrapper(pb);
@@ -16,8 +17,10 @@ public with sharing class ES_PriceManagerService {
 
         return [
                 SELECT Id, Name, Description, PhotoUrl__c, ValidFrom__c, ValidTo__c, IsActive
-                FROM Pricebook2 WHERE Name LIKE :searchKeyword
-                AND ValidFrom__c >= :searchStartDate AND ValidTo__c <= :searchEndDate ORDER BY ValidFrom__c ASC
+                FROM Pricebook2
+                WHERE Name LIKE :searchKeyword
+                AND ValidFrom__c >= :searchStartDate AND ValidTo__c <= :searchEndDate
+                ORDER BY ValidFrom__c ASC
         ];
     }
 
@@ -70,7 +73,7 @@ public with sharing class ES_PriceManagerService {
                     PhotoUrl__c = this.photoUrl,
                     IsActive = this.isActive
             );
-            if(this.id != null){
+            if (this.id != null) {
                 pb.Id = this.id;
             }
             return pb;
@@ -82,7 +85,8 @@ public with sharing class ES_PriceManagerService {
     }
 
     public static ProductWrapper[] getProductWrappers(Id pricebookId) {
-        ProductWrapper[] productWrappers = new ProductWrapper[]{};
+        ProductWrapper[] productWrappers = new ProductWrapper[]{
+        };
 
         for (ES_Product productDTO : ES_ProductService.getProductDTOs()) {
             ProductWrapper productWrapper = new ProductWrapper(productDTO);
@@ -94,20 +98,42 @@ public with sharing class ES_PriceManagerService {
         return productWrappers;
     }
 
-    public static Id savePriceBookWithProducts(PriceBookWrapper priceBookWrapper, ProductWrapper[] productWrappers){
+    public static Id savePriceBookWithProducts(PriceBookWrapper priceBookWrapper, ProductWrapper[] productWrappers) {
         System.debug(priceBookWrapper);
-            Pricebook2 newPricebook = priceBookWrapper.getPricebook();
-            upsert newPricebook;
+        Pricebook2 newPricebook = priceBookWrapper.getPricebook();
+        upsert newPricebook;
 
-            PricebookEntry[] newPricebookEntries = new PricebookEntry[]{};
-            for (ProductWrapper productWrapper : productWrappers) {
-                PricebookEntry pbe = productWrapper.getPricebookEntry(newPricebook.Id);
-        System.debug(JSON.serialize(pbe));
-                newPricebookEntries.add(pbe);
-            }
+        PricebookEntry[] newPricebookEntries = new PricebookEntry[]{
+        };
+        for (ProductWrapper productWrapper : productWrappers) {
+            PricebookEntry pbe = productWrapper.getPricebookEntry(newPricebook.Id);
+            System.debug(JSON.serialize(pbe));
+            newPricebookEntries.add(pbe);
+        }
 //            insert pbe;
-            upsert newPricebookEntries;
-            return newPricebook.Id;
+        upsert newPricebookEntries;
+        return newPricebook.Id;
+    }
+
+    public static void checkIfNewPricebookOverlapWithOther(PriceBookWrapper priceBookWrapper) {
+
+        if (priceBookWrapper.isActive) {
+            String overlapMessage = 'This Price Book overlaps the following active Price Books: ';
+
+            List<Pricebook2> overlapPricebookList = [
+                    SELECT Id, Name, Description, PhotoUrl__c, ValidFrom__c, ValidTo__c, IsActive
+                    FROM Pricebook2
+                    WHERE IsActive = true AND ValidFrom__c <= :priceBookWrapper.validTo AND ValidTo__c >= :priceBookWrapper.validFrom
+            ];
+
+            if (overlapPricebookList.size() != 0) {
+                for (Pricebook2 pricebook2 : overlapPricebookList) {
+                    overlapMessage += pricebook2.Name + ', ';
+                }
+                overlapMessage = overlapMessage.removeEnd(', ');
+                throw new PriceBookValidationException(overlapMessage);
+            }
+        }
     }
 
     public class ProductWrapper {
@@ -134,7 +160,7 @@ public with sharing class ES_PriceManagerService {
 
         public void initializeCustomPrice(Id pricebookId, ES_Product productDTO) {
             this.customPrice = productDTO.customPrice.getPrice(pricebookId);
-            this.pbeId =  productDTO.customPrice.getPriceBookEntryId(pricebookId);
+            this.pbeId = productDTO.customPrice.getPriceBookEntryId(pricebookId);
         }
 
 
@@ -145,10 +171,15 @@ public with sharing class ES_PriceManagerService {
                     UnitPrice = this.customPrice,
                     IsActive = true
             );
-            if(this.pbeId != null){
+            if (this.pbeId != null) {
                 pbe.Id = pbeId;
             }
             return pbe;
         }
     }
+
+    public class PriceBookValidationException extends Exception {
+
+    }
+
 }

@@ -14,12 +14,12 @@
                     </template>
                 </div>
                 <div class="slds-p-around_small">
-                    <p>Name: {pricebook.name}</p>
+                    <p class="slds-align_absolute-center">Name: {pricebook.name}</p>
 <!--                    <p>Start Date: {pricebook.validFrom}</p>-->
-                    <p>Start Date: <lightning-formatted-date-time value={pricebook.validFrom} year="numeric" month="numeric" day="numeric"></lightning-formatted-date-time></p>
-                    <p>End Date: <lightning-formatted-date-time value={pricebook.validTo} year="numeric" month="numeric" day="numeric"></lightning-formatted-date-time></p>
+                    <p class="slds-align_absolute-center">Start Date:&nbsp;<lightning-formatted-date-time value={pricebook.validFrom} year="numeric" month="2-digit" day="2-digit"></lightning-formatted-date-time></p>
+                    <p class="slds-align_absolute-center">End Date:&nbsp;<lightning-formatted-date-time value={pricebook.validTo} year="numeric" month="2-digit" day="2-digit"></lightning-formatted-date-time></p>
 <!--                    <p>Is Active: value={pricebook.isActive}</p>-->
-                    <p><lightning-input type="checkbox" checked={pricebook.isActive} label="Is Active" disabled></lightning-input></p>
+                    <p class="slds-align_absolute-center"><lightning-input type="checkbox" checked={pricebook.isActive} label="Is Active" disabled></lightning-input></p>
 
 <!--                    <p>End Date: {pricebook.validTo}</p>-->
                 </div>
