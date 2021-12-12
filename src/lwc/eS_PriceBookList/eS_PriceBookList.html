@@ -1,0 +1,161 @@
+<!--suppress ALL -->
+<template>
+    <lightning-card title="Price Book List" icon-name="utility:picklist_type">
+        <div class="slds-card__body_inner">
+            <lightning-button
+                    label={label.Create_new_Price_Book}
+                    onclick={addNewPriceBook}
+                    icon-position="right">
+            </lightning-button>
+            <template if:true={pricebooks.data}>
+                <lightning-layout class="slds-align_absolute-center">
+                    <lightning-layout-item class="slds-size_1-of-3">
+                        <lightning-input type="search"
+                                         onchange={handleSearchNameChange}
+                                         class="slds-p-around_small"
+                                         label={label.Price_Book_Name}
+                                         placeholder={label.Enter_Price_Book_name_you_are_looking_for}
+                                         value={searchName}>
+                        </lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item>
+                        <lightning-input type="date"
+                                         label={label.Start_Date}
+                                         class="slds-p-around_small"
+                                         onchange={handleSearchStartDateChange}>
+                        </lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item>
+                        <lightning-input type="date"
+                                         label={label.End_Date}
+                                         class="slds-p-around_small"
+                                         onchange={handleSearchEndDateChange}>
+                        </lightning-input>
+                    </lightning-layout-item>
+                </lightning-layout>
+                <lightning-layout multiple-rows="true" pull-to-boundary="small">
+                    <template for:each={pricebooks.data} for:item="pricebook">
+                        <lightning-layout-item key={pricebook.id} size="3" class="slds-var-p-around_x-small">
+                            <c-e-s_-price-book-tile pricebook={pricebook}
+                                                    onpricebookview={handlePriceBookView}></c-e-s_-price-book-tile>
+                        </lightning-layout-item>
+                    </template>
+                </lightning-layout>
+            </template>
+            <template if:true={isModalOpen}>
+                <section role="dialog" tabindex="-1" aria-label="Meaningful description of the modal content"
+                         aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container modal-window">
+                        <header class="slds-modal__header">
+                            <template if:false={pricebookId}>
+                                <h2 class="slds-modal__title slds-hyphenate">{label.Create_new_Price_Book}</h2>
+                            </template>
+                            <template if:true={pricebookId}>
+                                <h2 class="slds-modal__title slds-hyphenate">{label.Update_Price_Book}</h2>
+                            </template>
+                        </header>
+                        <div class="slds-modal__content">
+                            <div class="slds-p-horizontal_medium slds-p-top_medium">
+                                <lightning-layout>
+                                    <lightning-layout-item>
+                                        <div class="slds-form-element slds-p-around_small">
+                                            <lightning-input data-id="pricebook-input" type="text" name="pricebookName"
+                                                             value={pricebookName}
+                                                             label={label.Price_Book_Name}
+                                                             placeholder={label.Enter_new_Price_Book_name} required
+                                                             onchange={changePricebookNameHandler}></lightning-input>
+                                        </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item>
+                                        <div class="slds-p-around_small">
+                                            <lightning-file-upload
+                                                    label={label.Attach_image}
+                                                    name="fileUploader"
+                                                    accept=".png, .jpg, .jpeg"
+                                                    onuploadfinished={handleUploadFinished}>
+                                            </lightning-file-upload>
+                                        </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item>
+                                        <div class="slds-p-around_small">
+                                            <lightning-input data-id="pricebook-input" type="date" name="startDate"
+                                                             value={startDate}
+                                                             label={label.Start_Date} required min={today}
+                                                             onchange={changeStartDateHandler}></lightning-input>
+                                        </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item>
+                                        <div class="slds-p-around_small">
+                                            <lightning-input data-id="pricebook-input" type="date" name="endDate"
+                                                             value={endDate} label={label.End_Date}
+                                                             required min={startDate}
+                                                             onchange={changeEndDateHandler}></lightning-input>
+                                        </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item>
+                                        <div class="slds-p-around_large">
+                                            <div>{label.Is_Active}</div>
+                                            <div class="slds-align_absolute-center">
+                                                <lightning-input data-id="pricebook-input" type="checkbox"
+                                                                 name="isActiveBox" checked={isActiveBox}
+                                                                 onclick={changeIsActiveHandler}></lightning-input>
+                                            </div>
+                                        </div>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                                <lightning-layout class="slds-p-vertical_small" horizontal-align="end">
+                                    <lightning-layout-item class="slds-p-horizontal_xx-small slds-p-vertical_xx-small lgc-bg">
+                                        <lightning-helptext content={label.Enter_minus_sign_before_number_if_you_want_to_decrease_price}></lightning-helptext>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item>
+                                        <lightning-input type="number" name="priceValue" variant="label-hidden"
+                                                         placeholder={label.Enter_value} step="0.01"
+                                                         onchange={changePriceHandler}></lightning-input>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item>
+                                        <select class="slds-select" name="optionUnitSelect"
+                                                onchange={changeUnitHandler}>
+                                            <option value="precent"> %</option>
+                                            <option value="amount"> PLN</option>
+                                        </select>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item>
+                                        <lightning-button class="slds-p-left_small" onclick={changeProductsPrice}
+                                                          value="Change Price"
+                                                          label={label.Change_Price}></lightning-button>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </div>
+                            <div style="height: 300px;">
+                                <lightning-datatable
+                                        key-field="id"
+                                        data={records}
+                                        columns={columns}>
+                                </lightning-datatable>
+                            </div>
+                        </div>
+                        <footer class="slds-modal__footer">
+                            <lightning-button
+                                    class="slds-p-around_xx-small"
+                                    label={label.Close}
+                                    onclick={closeModal}>
+                            </lightning-button>
+                            <lightning-button
+                                    class="slds-p-around_xx-small"
+                                    label={label.Save}
+                                    variant="brand"
+                                    onclick={saveNewPricebook}>
+                            </lightning-button>
+                        </footer>
+                    </div>
+                </section>
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>
+            <template if:true={pricebooks.error}>
+                <div class="slds-text-color_error">
+                    {label.An_error_occurred_while_loading_the_list}
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

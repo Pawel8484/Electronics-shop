@@ -1,0 +1,32 @@
+<!--suppress ALL -->
+<template>
+    <lightning-card class="price-list-tile">
+        <div class="slds-var-p-horizontal_small price-list-tile-body" onclick={handleSelectedPriceBook}>
+            <div class="slds-grid_vertical slds-align_absolute-center">
+                <div>
+                    <template if:false={pricebook.photoUrl}>
+                        <img src={appResources.emptyImage} alt="Price Book" class="empty-image"/>
+                    </template>
+                    <template if:true={pricebook.photoUrl}>
+                        <img src={photoUrl} class="pricebook-image"/>
+                    </template>
+                </div>
+                <div class="slds-p-around_small">
+                    <p class="slds-align_absolute-center">{label.Name}: {pricebook.name}</p>
+                    <p class="slds-align_absolute-center">{label.Start_Date}:&nbsp;<lightning-formatted-date-time
+                            value={pricebook.validFrom} year="numeric" month="2-digit"
+                            day="2-digit"></lightning-formatted-date-time>
+                    </p>
+                    <p class="slds-align_absolute-center">{label.End_Date}:&nbsp;<lightning-formatted-date-time
+                            value={pricebook.validTo} year="numeric" month="2-digit"
+                            day="2-digit"></lightning-formatted-date-time>
+                    </p>
+                    <p class="slds-align_absolute-center">
+                        <lightning-input type="checkbox" checked={pricebook.isActive} label={label.Is_Active}
+                                         disabled></lightning-input>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </lightning-card>
+</template>

@@ -1,3 +1,6 @@
 /.idea/
 /IlluminatedCloud/
 /Electronics Shop.iml
+/manifest/
+/.sfdx/*
+/sfdx
