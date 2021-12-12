@@ -7,30 +7,67 @@ import savePriceBookWithProducts from '@salesforce/apex/ES_PriceManagerControlle
 import checkIfNewPricebookOverlapWithOther from '@salesforce/apex/ES_PriceManagerController.checkIfNewPricebookOverlapWithOther';
 import {refreshApex} from '@salesforce/apex';
 
+import Create_new_Price_Book from '@salesforce/label/c.Create_new_Price_Book';
+import Price_Book_Name from '@salesforce/label/c.Price_Book_Name';
+import Enter_Price_Book_name_you_are_looking_for from '@salesforce/label/c.Enter_Price_Book_name_you_are_looking_for';
+import Start_Date from '@salesforce/label/c.Start_Date';
+import End_Date from '@salesforce/label/c.End_Date';
+import Update_Price_Book from '@salesforce/label/c.Update_Price_Book';
+import Price_Book_name2 from '@salesforce/label/c.Price_Book_name2';
+import Enter_new_Price_Book_name from '@salesforce/label/c.Enter_new_Price_Book_name';
+import Attach_image from '@salesforce/label/c.Attach_image';
+import Is_Active from '@salesforce/label/c.Is_Active';
+import Enter_value from '@salesforce/label/c.Enter_value';
+import Change_Price from '@salesforce/label/c.Change_Price';
+import Close from '@salesforce/label/c.Close';
+import Save from '@salesforce/label/c.Save';
+import An_error_occurred_while_loading_the_list from '@salesforce/label/c.An_error_occurred_while_loading_the_list';
+import Name from '@salesforce/label/c.Name';
+import Family from '@salesforce/label/c.Family';
+import Standard_Price from '@salesforce/label/c.Standard_Price';
+import Operation_completed_successfully from '@salesforce/label/c.Operation_completed_successfully';
+import New_Price from '@salesforce/label/c.New_Price';
+import Enter_minus_sign_before_number_if_you_want_to_decrease_price from '@salesforce/label/c.Enter_minus_sign_before_number_if_you_want_to_decrease_price';
+
 const columns = [
-    { label: 'Name', fieldName: 'name' },
-    { label: 'Family', fieldName: 'productFamily' },
-    { label: 'Standard Price', fieldName: 'standardPrice'},
-    { label: 'New Price', fieldName: 'customPrice'},
+    { label: Name, fieldName: 'name' },
+    { label: Family, fieldName: 'productFamily' },
+    { label: Standard_Price, fieldName: 'standardPrice'},
+    { label: New_Price, fieldName: 'customPrice'},
 ];
 
 export default class ES_PriceBookList extends LightningElement {
 
 	@wire(getPriceBookWrappers, {searchName: '$searchName', searchStartDate: '$searchStartDate', searchEndDate: '$searchEndDate'}) pricebooks;
 
-
 	appResources = {
 		emptyImage: EMPTY_IMAGE,
 	};
 
-    @track records;
+	label = {
+        Create_new_Price_Book,
+        Price_Book_Name,
+        Enter_Price_Book_name_you_are_looking_for,
+        Start_Date,
+        End_Date,
+        Update_Price_Book,
+        Price_Book_name2,
+        Enter_new_Price_Book_name,
+        Attach_image,
+        Is_Active,
+        Enter_value,
+        Change_Price,
+        Close,
+        Save,
+        An_error_occurred_while_loading_the_list,
+        Enter_minus_sign_before_number_if_you_want_to_decrease_price
+    };
 
+    @track records;
     searchName = '';
     searchStartDate = '1900-01-01T00:00:00.000Z';
     searchEndDate = '2100-01-01T00:00:00.000Z';
-
     pricebooks;
-
     pricebook = {};
     pricebookId = '';
     @api pricebookName;
@@ -40,20 +77,9 @@ export default class ES_PriceBookList extends LightningElement {
     isActiveBox;
     priceValue;
     selectedUnit = 'percent';
-//    today = new Date().toISOString().split('T')[0];
-
-    get today() {
-        const today = new Date();
-        const newDate = this.isEmpty(this.pricebook.validFrom) ? today : new Date(this.pricebook.validFrom);
-
-        if(today > newDate){
-            return this.pricebook.validFrom;
-     }
-        return today.toISOString().split('T')[0];
-    };
-
     columns = columns;
     isModalOpen = false;
+    startRecords = {};
 
     @wire(getProductWrappers, {pricebookId: '$pricebookId'})
     wiredProductWrappers({ error, data }) {
@@ -74,6 +100,7 @@ export default class ES_PriceBookList extends LightningElement {
         this.selectedUnit = 'percent';
         this.isActiveBox = false;
         this.isModalOpen = true;
+        this.startRecords = this.records;
     };
 
     openModal(){
@@ -82,32 +109,30 @@ export default class ES_PriceBookList extends LightningElement {
 
     closeModal(){
         this.isModalOpen = false;
+        this.pricebookId = null;
+        this.selectedUnit = 'percent';
     };
 
     saveNewPricebook() {
         const pricebook = this.buildPricebook();
         const pricebookToJSON = JSON.stringify(pricebook);
         const recordsToJSON = JSON.stringify(this.records);
-        console.log(pricebookToJSON);
 
         if (this.isValidForm()) {
-
-//            this.isNewPricebookOverlapWithOther(pricebook);
-
             checkIfNewPricebookOverlapWithOther({pricebook: pricebookToJSON})
                 .then(result => {
+                this.records = this.isEmpty(this.pricebook.id) ? this.startRecords : this.records;
                     return savePriceBookWithProducts({pricebook: pricebookToJSON, products: recordsToJSON});
                 })
             .then(result => {
-                this.showSuccess('Operation completed successfully');
+                this.showSuccess(Operation_completed_successfully);
                 refreshApex(this.pricebooks);
-                this.closeModal();
+                this.isModalOpen = false;
+                this.selectedUnit = 'percent';
             })
             .catch(error => {
-                console.error(error);
                 this.showError(error.body.message);
             });
-
         }
     };
 
@@ -133,15 +158,14 @@ export default class ES_PriceBookList extends LightningElement {
         return allValid;
     };
 
-    isNewPricebookOverlapWithOther(pricebook){
-            checkIfNewPricebookOverlapWithOther({pricebook: pricebookToJSON})
-            .then(result => {
-            console.log(result);
-            })
-            .catch(error => {
-            console.error(error);
-            this.showError(error.body.message);
-            });
+    get today() {
+        const today = new Date();
+        const newDate = this.isEmpty(this.pricebook.validFrom) ? today : new Date(this.pricebook.validFrom);
+
+        if(today > newDate){
+            return this.pricebook.validFrom;
+     }
+        return today.toISOString().split('T')[0];
     };
 
     changePricebookNameHandler(event){
@@ -166,14 +190,11 @@ export default class ES_PriceBookList extends LightningElement {
 
      changeIsActiveHandler(event){
         this.isActiveBox = event.target.checked;
-        alert(isActiveBox);
     };
 
     changeProductsPrice(){
         const el = this.template.querySelector('lightning-datatable');
-//        console.log(el);
         const selectedRows = el.getSelectedRows();
-        console.log(selectedRows);
 
         const changedRecords = [];
         for(const row of selectedRows){
@@ -188,11 +209,7 @@ export default class ES_PriceBookList extends LightningElement {
                 }
             );
         }
-        console.log(changedRecords);
-
         const updatedProductList = this.records.map(obj => changedRecords.find(o => o.name === obj.name) || obj);
-        console.log(updatedProductList);
-//        arr1.map(obj => arr2.find(o => o.id === obj.id) || obj);
         this.records = updatedProductList;
     };
 
@@ -205,7 +222,6 @@ export default class ES_PriceBookList extends LightningElement {
                     return result;
                 }
                 return 0;
-//                return Math.round(row.customPrice + (row.customPrice * (Number(this.priceValue)/100)));
             }
             case 'amount': {
                 const result = Math.round(row.customPrice + Number(this.priceValue));
@@ -213,13 +229,11 @@ export default class ES_PriceBookList extends LightningElement {
                     return result;
                 }
                 return 0;
-//                return Math.round(row.customPrice + Number(this.priceValue));
             }
         }
     };
 
     handlePriceBookView(event) {
-//        this.pricebookId = event.detail;
         this.pricebook = event.detail;
         this.pricebookId = event.detail.id;
         this.pricebookName = event.detail.name;
@@ -240,12 +254,10 @@ export default class ES_PriceBookList extends LightningElement {
 
     handleSearchStartDateChange(event) {
         this.searchStartDate = event.target.value;
-        alert(event.target.value);
     };
 
     handleSearchEndDateChange(event) {
         this.searchEndDate = event.target.value;
-        alert(event.target.value);
     };
 
     showError(message) {
@@ -268,7 +280,6 @@ export default class ES_PriceBookList extends LightningElement {
     handleUploadFinished(event) {
         const uploadedFiles = event.detail.files;
         this.uploadedFile = uploadedFiles[0].contentVersionId;
-//        alert('No. of files uploaded: ' + uploadedFile.val);
     };
 
     isEmpty(value) {

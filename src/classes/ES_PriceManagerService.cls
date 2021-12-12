@@ -24,24 +24,6 @@ public with sharing class ES_PriceManagerService {
         ];
     }
 
-//    public static PriceBookWrapper[] getPriceBookWrappers() {
-//        PriceBookWrapper[] priceBookWrappers = new PriceBookWrapper[]{};
-//
-//        for (Pricebook2 pb : getPriceBooks()) {
-//            PriceBookWrapper pbWrapper = new PriceBookWrapper(pb);
-//            priceBookWrappers.add(pbWrapper);
-//        }
-//
-//        return priceBookWrappers;
-//    }
-//
-//    private static Pricebook2[] getPriceBooks() {
-//        return [
-//                SELECT Id, Name, Description, PhotoUrl__c, ValidFrom__c, ValidTo__c
-//                FROM Pricebook2
-//        ];
-//    }
-
     public class PriceBookWrapper {
         @AuraEnabled
         public Id id;
@@ -99,7 +81,6 @@ public with sharing class ES_PriceManagerService {
     }
 
     public static Id savePriceBookWithProducts(PriceBookWrapper priceBookWrapper, ProductWrapper[] productWrappers) {
-        System.debug(priceBookWrapper);
         Pricebook2 newPricebook = priceBookWrapper.getPricebook();
         upsert newPricebook;
 
@@ -107,10 +88,8 @@ public with sharing class ES_PriceManagerService {
         };
         for (ProductWrapper productWrapper : productWrappers) {
             PricebookEntry pbe = productWrapper.getPricebookEntry(newPricebook.Id);
-            System.debug(JSON.serialize(pbe));
             newPricebookEntries.add(pbe);
         }
-//            insert pbe;
         upsert newPricebookEntries;
         return newPricebook.Id;
     }
@@ -118,12 +97,12 @@ public with sharing class ES_PriceManagerService {
     public static void checkIfNewPricebookOverlapWithOther(PriceBookWrapper priceBookWrapper) {
 
         if (priceBookWrapper.isActive) {
-            String overlapMessage = 'This Price Book overlaps the following active Price Books: ';
+            String overlapMessage = System.Label.This_Price_Book_overlaps_the_following_active_Price_Books +' ';
 
             List<Pricebook2> overlapPricebookList = [
                     SELECT Id, Name, Description, PhotoUrl__c, ValidFrom__c, ValidTo__c, IsActive
                     FROM Pricebook2
-                    WHERE IsActive = true AND ValidFrom__c <= :priceBookWrapper.validTo AND ValidTo__c >= :priceBookWrapper.validFrom
+                    WHERE IsActive = true AND ValidFrom__c <= :priceBookWrapper.validTo AND ValidTo__c >= :priceBookWrapper.validFrom AND (NOT Id = :priceBookWrapper.id)
             ];
 
             if (overlapPricebookList.size() != 0) {
@@ -181,5 +160,4 @@ public with sharing class ES_PriceManagerService {
     public class PriceBookValidationException extends Exception {
 
     }
-
 }
