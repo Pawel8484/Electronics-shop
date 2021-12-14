@@ -1,0 +1,21 @@
+<!--suppress ALL -->
+<template>
+    <lightning-layout class="slds-align_absolute-center">
+        <lightning-layout-item class="slds-size_1-of-3">
+            <lightning-input type="search"
+                             onchange={handleSearchNameChange}
+                             class="slds-p-around_small"
+                             label="Product Name"
+                             placeholder="Enter Product name you are looking for"
+                             value={searchName}>
+            </lightning-input>
+        </lightning-layout-item>
+    </lightning-layout>
+    <lightning-layout multiple-rows="true" pull-to-boundary="small">
+        <template for:each={products} for:item="product">
+            <lightning-layout-item key={product.id} size="3" class="slds-var-p-around_x-small">
+                <c-e-s_-product-tile-experience-cloud product={product} onproductview={handleProductView}></c-e-s_-product-tile-experience-cloud>
+            </lightning-layout-item>
+        </template>
+    </lightning-layout>
+</template>

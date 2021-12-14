@@ -1,0 +1,32 @@
+<!--suppress ALL -->
+<template>
+    <div class="slds-box slds-theme_default slds-m-around_small slds-align_absolute-center article-tile" onclick={handleSelectedProduct}>
+    <article class="slds-post">
+        <lightning-layout>
+            <lightning-layout-item size="12">
+                <!--        <aura:if isTrue="{!not(empty(v.product.mainPicture))}">-->
+                <img src={photoUrl} class="photo-image"/>
+                <!--        </aura:if>-->
+                <!--        <aura:if isTrue="{!empty(v.product.mainPicture)}">-->
+                <!--            <img onerror="{!c.imageError}" class="slds-align_absolute-center empty-photo-image"-->
+                <!--                 src="{!$Resource.emptyImage}"/>-->
+                <!--        </aura:if>-->
+                <header class="slds-post__header slds-media">
+                    <div class="slds-media__body">
+                        <div class="slds-align_absolute-center">
+                            {product.name}
+                        </div>
+                    </div>
+                </header>
+                <div class="slds-media__body">
+                    <div class="slds-float_right" style="font-size:20px;">
+                        <p>
+                            <lightning-formatted-number value={product.price} format-style="currency"></lightning-formatted-number>
+                        </p>
+                    </div>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+    </article>
+    </div>
+</template>
