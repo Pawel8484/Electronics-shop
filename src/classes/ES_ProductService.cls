@@ -49,20 +49,20 @@ public with sharing class ES_ProductService {
         delete productToDelete;
     }
 
-    public static ES_Product[] getProductDTOs() {
+    public static ES_Product[] getProductDTOs(Set<Id> productIds) {
         ES_Product[] productDTOs = new ES_Product[]{};
 
-        for (Product2 product : getProducts()) {
+        for (Product2 product : getProducts(productIds)) {
             ES_Product productDTO = new ES_Product(product);
             productDTOs.add(productDTO);
         }
+        System.debug('ProductDTOs: ' + productDTOs);
         return productDTOs;
     }
 
-    private static Product2[] getProducts() {
-        return [
-                SELECT Id, Name, Family
-                FROM Product2
-        ];
+    private static Product2[] getProducts(Set<Id> productIds) {
+        return productIds.isEmpty() ?
+                [SELECT Id, Name, Family, MainPicture__c FROM Product2] :
+                [SELECT Id, Name, Family, MainPicture__c FROM Product2 WHERE Id IN :productIds];
     }
 }

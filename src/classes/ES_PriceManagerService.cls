@@ -1,5 +1,10 @@
 public with sharing class ES_PriceManagerService {
 
+    public static Pricebook2 getActivePricebook() {
+        List<Pricebook2> activePricebook = [SELECT Id, ValidFrom__c, ValidTo__c, IsActive FROM Pricebook2 WHERE ValidFrom__c <= TODAY AND ValidTo__c >= TODAY AND IsActive = TRUE];
+        return activePricebook.isEmpty() ? [SELECT Id FROM Pricebook2 WHERE IsStandard = TRUE] : activePricebook;
+    }
+
     public static PriceBookWrapper[] getPriceBookWrappers(String searchName, Datetime searchStartDate, Datetime searchEndDate) {
         PriceBookWrapper[] priceBookWrappers = new PriceBookWrapper[]{
         };
@@ -63,14 +68,18 @@ public with sharing class ES_PriceManagerService {
     }
 
     public static ProductWrapper[] getProductWrappers() {
-        return getProductWrappers(null);
+        return getProductWrappers(null, new Set<Id>());
     }
 
     public static ProductWrapper[] getProductWrappers(Id pricebookId) {
+        return getProductWrappers(pricebookId, new Set<Id>());
+    }
+
+    public static ProductWrapper[] getProductWrappers(Id pricebookId, Set<Id> productIds) {
         ProductWrapper[] productWrappers = new ProductWrapper[]{
         };
 
-        for (ES_Product productDTO : ES_ProductService.getProductDTOs()) {
+        for (ES_Product productDTO : ES_ProductService.getProductDTOs(productIds)) {
             ProductWrapper productWrapper = new ProductWrapper(productDTO);
             if (pricebookId != null) {
                 productWrapper.initializeCustomPrice(pricebookId, productDTO);
@@ -123,6 +132,8 @@ public with sharing class ES_PriceManagerService {
         @AuraEnabled
         public String productFamily;
         @AuraEnabled
+        public String mainPicture;
+        @AuraEnabled
         public Decimal standardPrice;
         @AuraEnabled
         public Decimal customPrice;
@@ -133,12 +144,14 @@ public with sharing class ES_PriceManagerService {
             this.id = productDTO.product.Id;
             this.name = productDTO.product.Name;
             this.productFamily = productDTO.product.Family;
+            this.mainPicture = productDTO.product.MainPicture__c;
             this.standardPrice = productDTO.standardPrice;
             this.customPrice = this.standardPrice;
         }
 
         public void initializeCustomPrice(Id pricebookId, ES_Product productDTO) {
-            this.customPrice = productDTO.customPrice.getPrice(pricebookId);
+            System.debug(productDTO);
+            this.customPrice = productDTO.customPrice?.getPrice(pricebookId) != null ? productDTO.customPrice.getPrice(pricebookId) : this.standardPrice;
             this.pbeId = productDTO.customPrice.getPriceBookEntryId(pricebookId);
         }
 

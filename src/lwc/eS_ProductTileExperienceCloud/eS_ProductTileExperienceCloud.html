@@ -18,10 +18,23 @@
                         </div>
                     </div>
                 </header>
-                <div class="slds-media__body">
+                <div class="slds-media__body" if:true={isCustomPriceLowerThanStandardPrice}>
+                    <div class="slds-float_right">
+                        <p style="font-size:15px; text-decoration: line-through">
+                            <lightning-formatted-number value={product.standardPrice} format-style="currency"></lightning-formatted-number>
+                        </p>
+                        <p style="font-size:20px;">
+                            <lightning-formatted-number value={product.customPrice} format-style="currency"></lightning-formatted-number>
+                        </p>
+                    </div>
+                </div>
+                <div class="slds-media__body" if:false={isCustomPriceLowerThanStandardPrice}>
                     <div class="slds-float_right" style="font-size:20px;">
+                        <p style="font-size:15px; color:white">
+                            .
+                        </p>
                         <p>
-                            <lightning-formatted-number value={product.price} format-style="currency"></lightning-formatted-number>
+                            <lightning-formatted-number value={product.customPrice} format-style="currency"></lightning-formatted-number>
                         </p>
                     </div>
                 </div>

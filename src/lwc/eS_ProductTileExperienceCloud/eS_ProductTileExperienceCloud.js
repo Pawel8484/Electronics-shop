@@ -14,4 +14,8 @@ export default class ES_ProductTileExperienceCloud extends LightningElement {
         });
         this.dispatchEvent(selectEvent);
     };
+
+    get isCustomPriceLowerThanStandardPrice(){
+        return this.product.customPrice < this.product.standardPrice;
+    }
 }

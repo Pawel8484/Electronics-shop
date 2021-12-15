@@ -12,8 +12,7 @@ export default class ES_ProductListExperience extends NavigationMixin(LightningE
     @wire(getProductsWrap, {searchName: '$searchName'})
         wiredProductsWrap({ error, data }) {
             if (data) {
-                this.products = data.products;
-
+                this.products = data;
             } else if (error) {
                 this.showError(error.body.message);
                 this.products = [];
