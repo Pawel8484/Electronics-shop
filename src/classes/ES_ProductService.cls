@@ -17,14 +17,28 @@ public with sharing class ES_ProductService {
         update product2main;
     }
 
+//    public static void setPrice(String price, String productId) {
+//        Pricebook2 standardPB = [SELECT Id FROM Pricebook2 WHERE isStandard = true];
+//        PricebookEntry pricebookEntry = new PricebookEntry();
+//        pricebookEntry.Pricebook2Id = standardPB.Id;
+//        pricebookEntry.Product2Id = productId;
+//        pricebookEntry.UnitPrice = Decimal.valueOf(price);
+//        pricebookEntry.IsActive = true;
+//        insert pricebookEntry;
+//    }
+
     public static void setPrice(String price, String productId) {
-        Pricebook2 standardPB = [SELECT Id FROM Pricebook2 WHERE isStandard = true];
-        PricebookEntry pricebookEntry = new PricebookEntry();
-        pricebookEntry.Pricebook2Id = standardPB.Id;
-        pricebookEntry.Product2Id = productId;
-        pricebookEntry.UnitPrice = Decimal.valueOf(price);
-        pricebookEntry.IsActive = true;
-        insert pricebookEntry;
+        List<Pricebook2> pricebooks = [SELECT Id FROM Pricebook2];
+        List<PricebookEntry> pbes = new List<PricebookEntry>();
+        for (Pricebook2 pricebook2 : pricebooks) {
+            PricebookEntry pricebookEntry = new PricebookEntry();
+            pricebookEntry.Pricebook2Id = pricebook2.Id;
+            pricebookEntry.Product2Id = productId;
+            pricebookEntry.UnitPrice = Decimal.valueOf(price);
+            pricebookEntry.IsActive = true;
+            pbes.add(pricebookEntry);
+        }
+        insert pbes;
     }
 
     public static void setUpdatedPrice(String price, String productId) {
@@ -64,5 +78,7 @@ public with sharing class ES_ProductService {
         return productIds.isEmpty() ?
                 [SELECT Id, Name, Family, MainPicture__c FROM Product2] :
                 [SELECT Id, Name, Family, MainPicture__c FROM Product2 WHERE Id IN :productIds];
+
+//        return [SELECT Id, Name, Family, MainPicture__c FROM Product2 WHERE Id IN :productIds];
     }
 }

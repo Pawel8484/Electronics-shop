@@ -1,0 +1,15 @@
+.filter-panel {
+    border: 1px solid lightgrey;
+    margin: 1.25rem;
+    border-radius: 0.25rem;
+    padding: 1rem;
+}
+
+.filter-name {
+    padding: 0px 0.25rem;
+}
+
+/*.price-window {
+    padding: 0px 0.25rem;
+}
+*/

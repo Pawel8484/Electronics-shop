@@ -1,21 +1,143 @@
 <!--suppress ALL -->
 <template>
-    <lightning-layout class="slds-align_absolute-center">
-        <lightning-layout-item class="slds-size_1-of-3">
+
+    <lightning-layout multiple-rows="true" horizontal-align="center">
+        <lightning-layout-item size="3">
             <lightning-input type="search"
                              onchange={handleSearchNameChange}
                              class="slds-p-around_small"
-                             label="Product Name"
                              placeholder="Enter Product name you are looking for"
                              value={searchName}>
             </lightning-input>
         </lightning-layout-item>
+        <lightning-layout-item size="12">
+            <lightning-layout>
+                <lightning-layout-item class="filter-panel" size="2">
+                    <lightning-layout multiple-rows="true">
+                        <lightning-layout-item size="12" class="filter-name">
+                            <div>
+                                Category
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" style="padding-top: 1rem">
+                            <lightning-input type="checkbox" label="Mobile phone" name="phone"></lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" style="padding-bottom: 2rem">
+                            <lightning-input type="checkbox" label="Laptop" name="laptop"></lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" class="filter-name" style="padding-bottom: 1rem">
+                            <div>
+                                Price
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" class="filter-name">
+                            <lightning-layout vertical-align="center" horizontal-align="center">
+                                <lightning-layout-item size="5">
+                                    <lightning-input type="number"
+                                                     onchange={handleSearchMinPrice}
+                                                     class="price-window"
+                                                     placeholder="min"
+                                                     variant="label-hidden"
+                                                     value={searchMinPrice}>
+                                    </lightning-input>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="2">
+                                    <div class="slds-align_absolute-center">
+                                        -
+                                    </div>
+                                </lightning-layout-item>
+                                <lightning-layout-item size="5">
+                                    <lightning-input type="number"
+                                                     onchange={handleSearchMaxPrice}
+                                                     class="price-window"
+                                                     placeholder="max"
+                                                     variant="label-hidden"
+                                                     value={searchMaxPrice}>
+                                    </lightning-input>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" class="filter-name" style="padding-top: 2rem">
+                            <div>
+                                Brand Name
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" style="padding-top: 1rem">
+                            <lightning-input type="checkbox" label="Apple" name="apple"></lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12">
+                            <lightning-input type="checkbox" label="Dell" name="dell"></lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12">
+                            <lightning-input type="checkbox" label="Oppo" name="oppo"></lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12">
+                            <lightning-input type="checkbox" label="OnePlus" name="oneplus"></lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12">
+                            <lightning-input type="checkbox" label="Samsung" name="samsung"></lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12">
+                            <lightning-input type="checkbox" label="Xiaomi" name="xiaomi"></lightning-input>
+                        </lightning-layout-item>
+
+                    </lightning-layout>
+                </lightning-layout-item>
+                <lightning-layout-item size="9">
+                    <lightning-layout multiple-rows="true" pull-to-boundary="small">
+                        <template for:each={products} for:item="product">
+                            <lightning-layout-item key={product.id} size="4" class="slds-var-p-around_x-small">
+                                <c-e-s_-product-tile-experience-cloud product={product}
+                                                                      onproductview={handleProductView}></c-e-s_-product-tile-experience-cloud>
+                            </lightning-layout-item>
+                        </template>
+                    </lightning-layout>
+
+
+                </lightning-layout-item>
+            </lightning-layout>
+        </lightning-layout-item>
     </lightning-layout>
-    <lightning-layout multiple-rows="true" pull-to-boundary="small">
-        <template for:each={products} for:item="product">
-            <lightning-layout-item key={product.id} size="3" class="slds-var-p-around_x-small" >
-                <c-e-s_-product-tile-experience-cloud product={product} onproductview={handleProductView}></c-e-s_-product-tile-experience-cloud>
-            </lightning-layout-item>
-        </template>
-    </lightning-layout>
+
+
+    <!--    <lightning-layout class="slds-align_absolute-center">-->
+    <!--        <lightning-layout-item class="slds-size_1-of-3">-->
+    <!--            <lightning-input type="search"-->
+    <!--                             onchange={handleSearchNameChange}-->
+    <!--                             class="slds-p-around_small"-->
+    <!--                             label="Product Name"-->
+    <!--                             placeholder="Enter Product name you are looking for"-->
+    <!--                             value={searchName}>-->
+    <!--            </lightning-input>-->
+    <!--        </lightning-layout-item>-->
+    <!--    </lightning-layout>-->
+    <!--    <lightning-layout>-->
+    <!--        <lightning-layout class="slds-size_1-of-6 filter-panel">-->
+    <!--            <div>-->
+    <!--                Price-->
+    <!--            </div>-->
+    <!--            <div>-->
+
+    <!--            <lightning-input type="minPrice"-->
+    <!--                             onchange={handleSearchMinPrice}-->
+    <!--                             class="slds-p-around_small"-->
+    <!--                             placeholder="From"-->
+    <!--                             value={searchMinPrice}>-->
+    <!--            </lightning-input>-->
+    <!--            <lightning-input type="maxPrice"-->
+    <!--                             onchange={handleSearchMaxPrice}-->
+    <!--                             class="slds-p-around_small"-->
+    <!--                             placeholder="To"-->
+    <!--                             value={searchMaxPrice}>-->
+    <!--            </lightning-input>-->
+    <!--            </div>-->
+    <!--        </lightning-layout>-->
+    <!--    <lightning-layout multiple-rows="true" pull-to-boundary="small">-->
+    <!--        <template for:each={products} for:item="product">-->
+    <!--            <lightning-layout-item key={product.id} size="4" class="slds-var-p-around_x-small" >-->
+    <!--                <c-e-s_-product-tile-experience-cloud product={product} onproductview={handleProductView}></c-e-s_-product-tile-experience-cloud>-->
+    <!--            </lightning-layout-item>-->
+    <!--        </template>-->
+    <!--    </lightning-layout>-->
+    <!--    </lightning-layout>-->
 </template>

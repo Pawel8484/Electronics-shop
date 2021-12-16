@@ -13,14 +13,14 @@
                 <!--        </aura:if>-->
                 <header class="slds-post__header slds-media">
                     <div class="slds-media__body">
-                        <div class="slds-align_absolute-center">
+                        <div class="slds-align_absolute-center" style="font-size:15px;">
                             {product.name}
                         </div>
                     </div>
                 </header>
                 <div class="slds-media__body" if:true={isCustomPriceLowerThanStandardPrice}>
                     <div class="slds-float_right">
-                        <p style="font-size:15px; text-decoration: line-through">
+                        <p style="font-size:15px; text-decoration: line-through; color:red;">
                             <lightning-formatted-number value={product.standardPrice} format-style="currency"></lightning-formatted-number>
                         </p>
                         <p style="font-size:20px;">
