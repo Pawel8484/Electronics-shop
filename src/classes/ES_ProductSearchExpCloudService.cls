@@ -12,7 +12,7 @@ public with sharing class ES_ProductSearchExpCloudService {
         Set<Id> productsIds = getFilteredProductIds(searchRequest, activePricebook);
         System.debug('AP: ' + activePricebook);
 //        return ES_PriceManagerService.getProductWrappers(activePricebook.Id, productsIds);
-        return productsIds.isEmpty() ? null : ES_PriceManagerService.getProductWrappers(activePricebook.Id, productsIds);
+        return productsIds.isEmpty() ? new ES_PriceManagerService.ProductWrapper[]{} : ES_PriceManagerService.getProductWrappers(activePricebook.Id, productsIds);
     }
 
 //    private static Set<Id> getFilteredProductIds(SearchRequest searchRequest) {
@@ -29,6 +29,7 @@ public with sharing class ES_ProductSearchExpCloudService {
 //        String name1 = searchRequest.searchName;
         Integer minPrice = searchRequest.minPrice;
         Integer maxPrice = searchRequest.maxPrice;
+        List<String> brands = searchRequest.brands;
         System.debug(name1 +'  ' + minPrice + '......' + maxPrice + 'AP: ' + activePricebook);
 //        List<Product2> productList = [SELECT Id, Name, Family, MainPicture__c FROM Product2 WHERE Name LIKE :name1];
 //        List<Product2> productList = [SELECT Product2, Product2.Id FROM PricebookEntry WHERE Product2.Id IN :[SELECT Product2.Id, Product2.Name, Pricebook2.Id, UnitPrice FROM PricebookEntry WHERE Product2.Name LIKE :name1 AND UnitPrice >= :minPrice AND UnitPrice <= :maxPrice]];
@@ -49,6 +50,7 @@ public with sharing class ES_ProductSearchExpCloudService {
         public String searchName;
         public Integer minPrice;
         public Integer maxPrice;
+        public List<String> brands;
     }
 
 }

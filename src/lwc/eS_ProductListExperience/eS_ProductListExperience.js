@@ -17,9 +17,22 @@ export default class ES_ProductListExperience extends NavigationMixin(LightningE
         minPrice: 0,
         maxPrice: null,
         category: null,
-        manufacturer: null
+        brands: []
     };
 
+     get options() {
+        return [
+            { label: 'Apple', value: 'Apple' },
+            { label: 'Dell', value: 'Dell' },
+        ];
+    }
+
+     get categoryOptions() {
+        return [
+            { label: 'Mobile Phone', value: 'Mobile Phone' },
+            { label: 'Laptop', value: 'Laptop' },
+        ];
+    }
 //    @wire(getProductsWrap, {searchName: '$searchName', searchMinPrice: '$searchMinPrice', searchMaxPrice: '$searchMaxPrice'})
 //        wiredProductsWrap({ error, data }) {
 //            if (data) {
@@ -132,5 +145,15 @@ export default class ES_ProductListExperience extends NavigationMixin(LightningE
 
     maxPriceValue(maxPrice){
         return maxPrice == '' ? null : maxPrice;
+    }
+
+    handleBrandsChange(e) {
+        this.searchRequest.brands = e.detail.value;
+        console.log(this.searchRequest.brands);
+    }
+
+    handleCategoryChange(e) {
+        this.searchRequest.brands = e.detail.value;
+        console.log(this.searchRequest.brands);
     }
 }

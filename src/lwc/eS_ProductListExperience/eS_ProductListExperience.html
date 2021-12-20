@@ -19,12 +19,24 @@
                                 Category
                             </div>
                         </lightning-layout-item>
-                        <lightning-layout-item size="12" style="padding-top: 1rem">
-                            <lightning-input type="checkbox" label="Mobile phone" name="phone"></lightning-input>
-                        </lightning-layout-item>
-                        <lightning-layout-item size="12" style="padding-bottom: 2rem">
-                            <lightning-input type="checkbox" label="Laptop" name="laptop"></lightning-input>
-                        </lightning-layout-item>
+<!--                        <lightning-layout-item size="12" style="padding-top: 1rem">-->
+<!--                            <lightning-input type="checkbox" label="Mobile phone" name="phone"></lightning-input>-->
+<!--                        </lightning-layout-item>-->
+<!--                        <lightning-layout-item size="12" style="padding-bottom: 2rem">-->
+<!--                            <lightning-input type="checkbox" label="Laptop" name="laptop"></lightning-input>-->
+<!--                        </lightning-layout-item>-->
+
+                            <lightning-layout-item size="12">
+                                <lightning-checkbox-group name="Checkbox Group"
+                                                          label="Checkbox Group"
+                                                          options={categoryOptions}
+                                                          value={searchRequest.brands}
+                                                          variant="label-hidden"
+                                                          onchange={handleBrandsChange}>
+
+                                </lightning-checkbox-group>
+                            </lightning-layout-item>
+
                         <lightning-layout-item size="12" class="filter-name" style="padding-bottom: 1rem">
                             <div>
                                 Price
@@ -62,23 +74,34 @@
                                 Brand Name
                             </div>
                         </lightning-layout-item>
-                        <lightning-layout-item size="12" style="padding-top: 1rem">
-                            <lightning-input type="checkbox" label="Apple" name="apple"></lightning-input>
-                        </lightning-layout-item>
+                        <!--                        <lightning-layout-item size="12" style="padding-top: 1rem">-->
+                        <!--                            <lightning-input type="checkbox" label="Apple" name="apple"></lightning-input>-->
+                        <!--                        </lightning-layout-item>-->
+                        <!--                        <lightning-layout-item size="12">-->
+                        <!--                            <lightning-input type="checkbox" label="Dell" name="dell"></lightning-input>-->
+                        <!--                        </lightning-layout-item>-->
+                        <!--                        <lightning-layout-item size="12">-->
+                        <!--                            <lightning-input type="checkbox" label="Oppo" name="oppo"></lightning-input>-->
+                        <!--                        </lightning-layout-item>-->
+                        <!--                        <lightning-layout-item size="12">-->
+                        <!--                            <lightning-input type="checkbox" label="OnePlus" name="oneplus"></lightning-input>-->
+                        <!--                        </lightning-layout-item>-->
+                        <!--                        <lightning-layout-item size="12">-->
+                        <!--                            <lightning-input type="checkbox" label="Samsung" name="samsung"></lightning-input>-->
+                        <!--                        </lightning-layout-item>-->
+                        <!--                        <lightning-layout-item size="12">-->
+                        <!--                            <lightning-input type="checkbox" label="Xiaomi" name="xiaomi"></lightning-input>-->
+                        <!--                        </lightning-layout-item>-->
+
                         <lightning-layout-item size="12">
-                            <lightning-input type="checkbox" label="Dell" name="dell"></lightning-input>
-                        </lightning-layout-item>
-                        <lightning-layout-item size="12">
-                            <lightning-input type="checkbox" label="Oppo" name="oppo"></lightning-input>
-                        </lightning-layout-item>
-                        <lightning-layout-item size="12">
-                            <lightning-input type="checkbox" label="OnePlus" name="oneplus"></lightning-input>
-                        </lightning-layout-item>
-                        <lightning-layout-item size="12">
-                            <lightning-input type="checkbox" label="Samsung" name="samsung"></lightning-input>
-                        </lightning-layout-item>
-                        <lightning-layout-item size="12">
-                            <lightning-input type="checkbox" label="Xiaomi" name="xiaomi"></lightning-input>
+                            <lightning-checkbox-group name="Checkbox Group"
+                                                      label="Checkbox Group"
+                                                      options={options}
+                                                      value={searchRequest.brands}
+                                                      variant="label-hidden"
+                                                      onchange={handleBrandsChange}>
+
+                            </lightning-checkbox-group>
                         </lightning-layout-item>
 
                     </lightning-layout>
