@@ -16,7 +16,7 @@ export default class ES_ProductListExperience extends NavigationMixin(LightningE
         searchName: '',
         minPrice: 0,
         maxPrice: null,
-        category: null,
+        categories: [],
         brands: []
     };
 
@@ -149,11 +149,13 @@ export default class ES_ProductListExperience extends NavigationMixin(LightningE
 
     handleBrandsChange(e) {
         this.searchRequest.brands = e.detail.value;
-        console.log(this.searchRequest.brands);
+        this.getProducts();
+//        console.log(this.searchRequest.brands);
     }
 
     handleCategoryChange(e) {
-        this.searchRequest.brands = e.detail.value;
-        console.log(this.searchRequest.brands);
+        this.searchRequest.categories = e.detail.value;
+        this.getProducts();
+//        console.log(this.searchRequest.categories);
     }
 }
