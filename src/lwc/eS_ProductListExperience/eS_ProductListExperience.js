@@ -24,6 +24,10 @@ export default class ES_ProductListExperience extends NavigationMixin(LightningE
         return [
             { label: 'Apple', value: 'Apple' },
             { label: 'Dell', value: 'Dell' },
+            { label: 'Oppo', value: 'Oppo' },
+            { label: 'OnePlus', value: 'OnePlus' },
+            { label: 'Samsung', value: 'Samsung' },
+            { label: 'Xiaomi', value: 'Xiaomi' },
         ];
     }
 

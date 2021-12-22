@@ -29,15 +29,15 @@ public with sharing class ES_ProductSearchExpCloudService {
 //        String name1 = searchRequest.searchName;
         Integer minPrice = searchRequest.minPrice;
         Integer maxPrice = searchRequest.maxPrice;
-        List<String> brands = searchRequest.brands;
         List<String> categories = validateCategories(searchRequest.categories);
+        List<String> brands = validateBrands(searchRequest.brands);
         System.debug(name1 +'  ' + minPrice + '......' + maxPrice + 'categories' + categories + 'AP: ' + activePricebook);
 //        List<Product2> productList = [SELECT Id, Name, Family, MainPicture__c FROM Product2 WHERE Name LIKE :name1];
 //        List<Product2> productList = [SELECT Product2, Product2.Id FROM PricebookEntry WHERE Product2.Id IN :[SELECT Product2.Id, Product2.Name, Pricebook2.Id, UnitPrice FROM PricebookEntry WHERE Product2.Name LIKE :name1 AND UnitPrice >= :minPrice AND UnitPrice <= :maxPrice]];
 
 //        PricebookEntry[] pbes = new PricebookEntry[]{};
 //        PricebookEntry[] pbes = [SELECT Product2Id FROM PricebookEntry WHERE Product2.Name LIKE :name1 AND UnitPrice >= :minPrice AND UnitPrice <= :maxPrice AND Product2.Family IN :categories AND Product2.BrandName__c IN :brandNames];
-        PricebookEntry[] pbes = [SELECT Product2Id FROM PricebookEntry WHERE Product2.Name LIKE :name1 AND UnitPrice >= :minPrice AND UnitPrice <= :maxPrice AND Pricebook2Id = :activePricebook.Id AND Product2.Family IN :categories];
+        PricebookEntry[] pbes = [SELECT Product2Id FROM PricebookEntry WHERE Product2.Name LIKE :name1 AND UnitPrice >= :minPrice AND UnitPrice <= :maxPrice AND Pricebook2Id = :activePricebook.Id AND Product2.Family IN :categories AND Product2.Brand__c IN :brands];
 
         Set<Id> productIds = new Set<Id>();
         for(PricebookEntry pbe : pbes) {
@@ -49,6 +49,10 @@ public with sharing class ES_ProductSearchExpCloudService {
 
     private static List<String> validateCategories(List<String> categories){
         return categories.isEmpty() ? new List<String>{'Mobile Phone', 'Laptop'} : categories;
+    }
+
+    private static List<String> validateBrands(List<String> brands){
+        return brands.isEmpty() ? new List<String>{'Samsung', 'Apple', 'Xiaomi', 'Oppo', 'OnePlus', 'Dell'} : brands;
     }
 
     public class SearchRequest {

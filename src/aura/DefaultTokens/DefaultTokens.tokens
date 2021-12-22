@@ -1,0 +1,5 @@
+<aura:tokens>
+    <aura:token name="profileMenuBackgroundColor" value="#fff"/>
+    <aura:token name="profileMenuItemBackgroundColorHover" value="#efefef"/>
+    <aura:token name="profileMenuItemBorderColorHover" value="#0099de"/>
+</aura:tokens>

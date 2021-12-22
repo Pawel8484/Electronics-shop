@@ -1,0 +1,13 @@
+<aura:component description="ES_UserProfileMenu" implements="forceCommunity:profileMenuInterface, flexipage:availableForAllPageTypes" access="global">
+
+    <div class="slds-p-around_x-small">
+        <lightning:layout>
+            <lightning:layoutItem size="6">
+                <c:eS_UserProfile/>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="6" class="slds-align_absolute-center">
+                <c:eS_CartMenu/>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+</aura:component>
