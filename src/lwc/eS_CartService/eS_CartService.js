@@ -1,27 +1,22 @@
-const productIds = [];
-
 const addProduct = (productId) => {
-    console.log('addProduct ' + productId);
-    productIds.push(productId);
-    sessionStorage.setItem("productIds", JSON.stringify(productIds));
-    console.log(JSON.parse(sessionStorage.getItem("productIds")));
-
+    const listOfProducts = JSON.parse(sessionStorage.getItem('productsIds')) || [];
+    listOfProducts.push(productId);
+    console.log('listOfProducts', listOfProducts);
+    sessionStorage.setItem("productsIds", JSON.stringify(listOfProducts));
 };
 
 const removeProduct = (productId) => {
-    console.log('removeProduct ' + productId);
+    const listOfProducts = JSON.parse(sessionStorage.getItem('productsIds')) || [];
 
-//    productIds = JSON.parse(localStorage.getItem("productIds"));
+    const modifiedListOfProducts = listOfProducts.filter(id => id!== productId);
+    console.log('modifiedListOfProducts', modifiedListOfProducts);
 
-    const productIds2 = productIds.filter(function(id) {
-                               return id != productId
-   });
-
-   productIds = [...productIds2];
-
-    sessionStorage.setItem("productIds", JSON.stringify(productIds));
-    console.log('productIds: ' + productIds);
+    sessionStorage.setItem("productsIds", JSON.stringify(modifiedListOfProducts));
 };
+
+//const isEmpty = (value) => {
+//    return value === undefined || value === null || value === '';
+//}
 
 export {
     addProduct,
