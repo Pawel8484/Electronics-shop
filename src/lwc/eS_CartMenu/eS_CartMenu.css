@@ -1,0 +1,8 @@
+.container {
+    cursor: pointer;
+    padding-left: 1rem;
+}
+
+.container:hover > .cart-icon {
+    --sds-c-icon-color-foreground-default: var(--lwc-brandAccessibleActive, #003143);
+}

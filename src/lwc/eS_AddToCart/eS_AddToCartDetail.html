@@ -1,0 +1,12 @@
+<template>
+    <lightning-button-stateful
+            class="cart-button"
+            label-when-off="Add to cart"
+            label-when-on="Remove from cart"
+            icon-name-when-off="utility:cart"
+            icon-name-when-on="utility:cart"
+            variant="success"
+            selected={markedState}
+            onclick={handleAddProduct}>
+    </lightning-button-stateful>
+</template>

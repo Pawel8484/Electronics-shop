@@ -1,0 +1,23 @@
+<!--suppress ALL -->
+<template>
+    <h2>Cart ({cart.totalQuantity})</h2>
+    <lightning-layout>
+        <lightning-layout-item size="9" padding="around-small">
+            <lightning-layout multiple-rows="true" horizontal-align="center" class="container">
+                <template for:each={cart.items} for:item="item">
+                    <lightning-layout-item key={item.product.id} size="12" padding="around-small" class="product-container">
+                        <c-e-s_-cart-item item={item} ondelete={handleItemDelete} onquantitychange={handleQuantityChange}></c-e-s_-cart-item>
+                    </lightning-layout-item>
+                </template>
+            </lightning-layout>
+        </lightning-layout-item>
+        <lightning-layout-item size="3" padding="around-small">
+            <div class="container">
+                <div class="price-container">
+                    {cart.totalPrice}<br/>
+                    {cart.totalCustomPrice}
+                </div>
+            </div>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>

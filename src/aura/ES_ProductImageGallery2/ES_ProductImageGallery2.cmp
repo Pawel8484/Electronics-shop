@@ -1,5 +1,6 @@
 <aura:component description="ES_ProductImageGallery2"
-                implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId"
+                access="global"
+                implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes"
                 controller="ES_ProductController">
 
     <aura:attribute name="recordId" type="String"/>

@@ -1,0 +1,8 @@
+.cart-icon {
+    border-radius: var(--sds-c-badge-radius-border, 50rem);
+    background-color: rgb(242, 242, 242);
+}
+
+.cart-button {
+    --sds-c-button-text-color: #fff;
+}

@@ -1,0 +1,22 @@
+<!--suppress ALL -->
+    <template>
+        <lightning-card>
+        <lightning-layout multiple-rows="true" horizontal-align="center">
+            <lightning-layout-item size="6">
+                <p>Product name: <lightning-formatted-text value={name} ></lightning-formatted-text></p>
+                <p>Product family: <lightning-formatted-text value={family} ></lightning-formatted-text></p>
+                <p>Display: <lightning-formatted-text value={display} ></lightning-formatted-text></p>
+                <p>Processor: <lightning-formatted-text value={processor} ></lightning-formatted-text></p>
+                <p>Camera: <lightning-formatted-text value={camera} ></lightning-formatted-text></p>
+                <p>Memory: <lightning-formatted-text value={memory} ></lightning-formatted-text></p>
+                <p>Battery: <lightning-formatted-text value={battery} ></lightning-formatted-text></p>
+                <p>System: <lightning-formatted-text value={operatingSystem} ></lightning-formatted-text></p>
+
+            </lightning-layout-item>
+            <lightning-layout-item size="6">
+                <p><lightning-formatted-number value={customPrice} format-style="currency"></lightning-formatted-number></p>
+                <c-e-s_-add-to-cart product-id={recordId} variant="detail"></c-e-s_-add-to-cart>
+            </lightning-layout-item>
+        </lightning-layout>
+        </lightning-card>
+    </template>

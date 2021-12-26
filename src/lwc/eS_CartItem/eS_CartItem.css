@@ -1,0 +1,9 @@
+.item-photo {
+    padding:0.2rem;
+    height: 5rem;
+    width: 5rem;
+}
+
+.quantity {
+    max-width: 4rem;
+}

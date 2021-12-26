@@ -17,14 +17,28 @@ public with sharing class ES_ProductService {
         update product2main;
     }
 
+//    public static void setPrice(String price, String productId) {
+//        Pricebook2 standardPB = [SELECT Id FROM Pricebook2 WHERE isStandard = true];
+//        PricebookEntry pricebookEntry = new PricebookEntry();
+//        pricebookEntry.Pricebook2Id = standardPB.Id;
+//        pricebookEntry.Product2Id = productId;
+//        pricebookEntry.UnitPrice = Decimal.valueOf(price);
+//        pricebookEntry.IsActive = true;
+//        insert pricebookEntry;
+//    }
+
     public static void setPrice(String price, String productId) {
-        Pricebook2 standardPB = [SELECT Id FROM Pricebook2 WHERE isStandard = true];
-        PricebookEntry pricebookEntry = new PricebookEntry();
-        pricebookEntry.Pricebook2Id = standardPB.Id;
-        pricebookEntry.Product2Id = productId;
-        pricebookEntry.UnitPrice = Decimal.valueOf(price);
-        pricebookEntry.IsActive = true;
-        insert pricebookEntry;
+        List<Pricebook2> pricebooks = [SELECT Id FROM Pricebook2];
+        List<PricebookEntry> pbes = new List<PricebookEntry>();
+        for (Pricebook2 pricebook2 : pricebooks) {
+            PricebookEntry pricebookEntry = new PricebookEntry();
+            pricebookEntry.Pricebook2Id = pricebook2.Id;
+            pricebookEntry.Product2Id = productId;
+            pricebookEntry.UnitPrice = Decimal.valueOf(price);
+            pricebookEntry.IsActive = true;
+            pbes.add(pricebookEntry);
+        }
+        insert pbes;
     }
 
     public static void setUpdatedPrice(String price, String productId) {
@@ -49,20 +63,22 @@ public with sharing class ES_ProductService {
         delete productToDelete;
     }
 
-    public static ES_Product[] getProductDTOs() {
+    public static ES_Product[] getProductDTOs(Set<Id> productIds) {
         ES_Product[] productDTOs = new ES_Product[]{};
 
-        for (Product2 product : getProducts()) {
+        for (Product2 product : getProducts(productIds)) {
             ES_Product productDTO = new ES_Product(product);
             productDTOs.add(productDTO);
         }
+        System.debug('ProductDTOs: ' + productDTOs);
         return productDTOs;
     }
 
-    private static Product2[] getProducts() {
-        return [
-                SELECT Id, Name, Family
-                FROM Product2
-        ];
+    private static Product2[] getProducts(Set<Id> productIds) {
+        return productIds.isEmpty() ?
+                [SELECT Id, Name, Family, MainPicture__c, Battery__c, Camera__c, Description, Display__c, Memory__c, Processor__c, System__c FROM Product2] :
+                [SELECT Id, Name, Family, MainPicture__c, Battery__c, Camera__c, Description, Display__c, Memory__c, Processor__c, System__c FROM Product2 WHERE Id IN :productIds];
+
+//        return [SELECT Id, Name, Family, MainPicture__c FROM Product2 WHERE Id IN :productIds];
     }
 }

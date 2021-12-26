@@ -1,0 +1,28 @@
+.article-tile {
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+
+.article-tile:hover {
+    box-shadow: 3px 3px 3px grey;
+    transform: scale(1.02);
+}
+
+.empty-photo-image {
+    min-height: 200px;
+    max-height: 200px;
+    min-width: 225px;
+    max-width: 225px;
+}
+
+.photo-image {
+    min-height: 200px;
+    max-height: 200px;
+    min-width: 225px;
+    max-width: 225px;
+}
+
+.cart-icon {
+    border-radius: var(--sds-c-badge-radius-border, 50rem);
+    background-color: rgb(242, 242, 242);
+}

@@ -21,6 +21,7 @@ public with sharing class ES_PriceService {
     }
 
     public ProductPrice getPrices(Id productId) {
+        System.debug(this.productPricesByProductIds.get(productId));
         return this.productPricesByProductIds.get(productId);
     }
 
@@ -48,7 +49,7 @@ public with sharing class ES_PriceService {
     }
 
     private PricebookEntry[] getPricebookEntries() {
-        return [SELECT Pricebook2Id, Product2Id, UnitPrice FROM PriceBookEntry WHERE Pricebook2.IsStandard = FALSE];
+        return [SELECT Pricebook2Id, Product2Id, UnitPrice FROM PriceBookEntry];
     }
 
     public class ProductPrice {
