@@ -76,8 +76,8 @@ public with sharing class ES_ProductService {
 
     private static Product2[] getProducts(Set<Id> productIds) {
         return productIds.isEmpty() ?
-                [SELECT Id, Name, Family, MainPicture__c FROM Product2] :
-                [SELECT Id, Name, Family, MainPicture__c FROM Product2 WHERE Id IN :productIds];
+                [SELECT Id, Name, Family, MainPicture__c, Battery__c, Camera__c, Description, Display__c, Memory__c, Processor__c, System__c FROM Product2] :
+                [SELECT Id, Name, Family, MainPicture__c, Battery__c, Camera__c, Description, Display__c, Memory__c, Processor__c, System__c FROM Product2 WHERE Id IN :productIds];
 
 //        return [SELECT Id, Name, Family, MainPicture__c FROM Product2 WHERE Id IN :productIds];
     }

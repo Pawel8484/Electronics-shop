@@ -1,0 +1,32 @@
+<template>
+    <div>
+    <lightning-layout vertical-align="center">
+        <lightning-layout-item size="1">
+            <img src={photoUrl} class="item-photo"/>
+        </lightning-layout-item>
+        <lightning-layout-item flexibility="grow">
+            <div class="slds-m-left_small">
+                {item.product.name}
+            </div>
+        </lightning-layout-item>
+        <lightning-layout-item size="2">
+            {item.product.customPrice}
+        </lightning-layout-item>
+        <lightning-layout-item flexibility="shrink">
+<!--            <input value={item.quantity} type="number" max="10" onchange={handleQuantityChange} class="slds-input">-->
+<!--            <lightning-input type="number" value={item.quantity} max="10" onchange={handleQuantityChange} variant="label-hidden"></lightning-input>-->
+            <div class="quantity">
+                <lightning-combobox
+                        variant="label-hidden"
+                        value={quantity}
+                        options={quantityOptions}
+                        onchange={handleQuantityChange} ></lightning-combobox>
+            </div>
+        </lightning-layout-item>
+        <lightning-layout-item flexibility="shrink">
+            <lightning-button-icon icon-name="utility:delete" alternative-text="Delete" class="slds-m-left_small" title="Delete" onclick={handleDelete}></lightning-button-icon>
+        </lightning-layout-item>
+
+    </lightning-layout>
+    </div>
+</template>

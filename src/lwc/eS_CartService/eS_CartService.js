@@ -14,11 +14,23 @@ const removeProduct = (productId) => {
     sessionStorage.setItem("productsIds", JSON.stringify(modifiedListOfProducts));
 };
 
-//const isEmpty = (value) => {
-//    return value === undefined || value === null || value === '';
-//}
+const hasProduct = (productId) => {
+    const listOfProducts = JSON.parse(sessionStorage.getItem('productsIds')) || [];
+    return !isEmpty(listOfProducts.find(id => id === productId));
+};
+
+const getProducts = () => {
+    const listOfProducts = JSON.parse(sessionStorage.getItem('productsIds')) || [];
+    return listOfProducts;
+};
+
+const isEmpty = (value) => {
+    return value === undefined || value === null || value === '';
+};
 
 export {
     addProduct,
-    removeProduct
+    removeProduct,
+    hasProduct,
+    getProducts
 };

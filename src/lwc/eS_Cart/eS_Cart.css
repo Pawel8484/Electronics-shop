@@ -1,0 +1,9 @@
+.container {
+    border: 1px solid lightgrey;
+    border-radius: 0.25rem;
+    height: 100%;
+}
+
+.product-container {
+    border-bottom: 1px solid lightgrey;
+}

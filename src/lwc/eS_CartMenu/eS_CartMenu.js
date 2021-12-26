@@ -8,10 +8,10 @@ export default class ES_CartMenu extends NavigationMixin(LightningElement) {
 
     navigateToCart() {
         this[NavigationMixin.Navigate]({
-            type: 'comm__namedPage',
-            attributes: {
-                name: 'Home'
-            }
-        });
+               type: 'comm__namedPage',
+               attributes: {
+                   name: 'cart__c'
+               }
+           });
     }
 }

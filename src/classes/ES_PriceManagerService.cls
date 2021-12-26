@@ -134,6 +134,18 @@ public with sharing class ES_PriceManagerService {
         @AuraEnabled
         public String mainPicture;
         @AuraEnabled
+        public String battery;
+        @AuraEnabled
+        public String camera;
+        @AuraEnabled
+        public String display;
+        @AuraEnabled
+        public String memory;
+        @AuraEnabled
+        public String processor;
+        @AuraEnabled
+        public String operatingSystem;
+        @AuraEnabled
         public Decimal standardPrice;
         @AuraEnabled
         public Decimal customPrice;
@@ -145,12 +157,17 @@ public with sharing class ES_PriceManagerService {
             this.name = productDTO.product.Name;
             this.productFamily = productDTO.product.Family;
             this.mainPicture = productDTO.product.MainPicture__c;
+            this.battery = productDTO.product.Battery__c;
+            this.camera = productDTO.product.Camera__c;
+            this.display = productDTO.product.Display__c;
+            this.memory = productDTO.product.Memory__c;
+            this.processor = productDTO.product.Processor__c;
+            this.operatingSystem = productDTO.product.System__c;
             this.standardPrice = productDTO.standardPrice;
             this.customPrice = this.standardPrice;
         }
 
         public void initializeCustomPrice(Id pricebookId, ES_Product productDTO) {
-            System.debug(productDTO);
             this.customPrice = productDTO.customPrice?.getPrice(pricebookId) != null ? productDTO.customPrice.getPrice(pricebookId) : this.standardPrice;
             this.pbeId = productDTO.customPrice.getPriceBookEntryId(pricebookId);
         }
