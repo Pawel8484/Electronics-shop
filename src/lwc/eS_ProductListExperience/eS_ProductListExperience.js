@@ -1,5 +1,6 @@
 import { LightningElement, api, wire, track } from 'lwc';
 import getProductsWrap from '@salesforce/apex/ES_ProductSearchExpCloudController.getProductsWrapper';
+import getActivePricebookToShowOnSearcherPage from '@salesforce/apex/ES_ProductSearchExpCloudController.getActivePricebookToShowOnSearcherPage';
 import { NavigationMixin } from 'lightning/navigation';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
@@ -8,6 +9,7 @@ export default class ES_ProductListExperience extends NavigationMixin(LightningE
     @track products;
     product;
     productId;
+    activePricebookUrl;
 //    searchName = '';
 //    searchMinPrice = 0;
 //    searchMaxPrice = null;
@@ -36,7 +38,11 @@ export default class ES_ProductListExperience extends NavigationMixin(LightningE
             { label: 'Mobile Phone', value: 'Mobile Phone' },
             { label: 'Laptop', value: 'Laptop' },
         ];
-    }
+    };
+
+    get photoUrl() {
+        return '/sfc/servlet.shepherd/version/download/' + this.activePricebookUrl;
+    };
 //    @wire(getProductsWrap, {searchName: '$searchName', searchMinPrice: '$searchMinPrice', searchMaxPrice: '$searchMaxPrice'})
 //        wiredProductsWrap({ error, data }) {
 //            if (data) {
@@ -49,6 +55,7 @@ export default class ES_ProductListExperience extends NavigationMixin(LightningE
 
     connectedCallback() {
         this.getProducts();
+        this.getActivePricebook();
     }
 
     getProducts() {
@@ -56,6 +63,18 @@ export default class ES_ProductListExperience extends NavigationMixin(LightningE
             .then((result) => {
                  console.log(result);
                  this.products = result;
+            })
+            .catch((error) => {
+                console.error(error);
+                this.showError(error.body.message);
+            });
+    }
+
+    getActivePricebook() {
+        getActivePricebookToShowOnSearcherPage()
+             .then((result) => {
+                 console.log(result);
+                 this.activePricebookUrl = result;
             })
             .catch((error) => {
                 console.error(error);

@@ -5,6 +5,12 @@ public with sharing class ES_PriceManagerService {
         return activePricebook.isEmpty() ? [SELECT Id FROM Pricebook2 WHERE IsStandard = TRUE] : activePricebook;
     }
 
+    public static String getActivePricebookToShowOnSearcherPage() {
+        List<Pricebook2> activePB = [SELECT PhotoUrl__c FROM Pricebook2 WHERE ValidFrom__c <= TODAY AND ValidTo__c >= TODAY AND IsActive = TRUE];
+        String activePricebookPhotoUrl = activePB.get(0).PhotoUrl__c;
+        return activePricebookPhotoUrl;
+    }
+
     public static PriceBookWrapper[] getPriceBookWrappers(String searchName, Datetime searchStartDate, Datetime searchEndDate) {
         PriceBookWrapper[] priceBookWrappers = new PriceBookWrapper[]{
         };
@@ -106,7 +112,7 @@ public with sharing class ES_PriceManagerService {
     public static void checkIfNewPricebookOverlapWithOther(PriceBookWrapper priceBookWrapper) {
 
         if (priceBookWrapper.isActive) {
-            String overlapMessage = System.Label.This_Price_Book_overlaps_the_following_active_Price_Books +' ';
+            String overlapMessage = System.Label.This_Price_Book_overlaps_the_following_active_Price_Books + ' ';
 
             List<Pricebook2> overlapPricebookList = [
                     SELECT Id, Name, Description, PhotoUrl__c, ValidFrom__c, ValidTo__c, IsActive
@@ -168,7 +174,7 @@ public with sharing class ES_PriceManagerService {
         }
 
         public void initializeCustomPrice(Id pricebookId, ES_Product productDTO) {
-            this.customPrice = productDTO.customPrice?.getPrice(pricebookId) != null ? productDTO.customPrice.getPrice(pricebookId) : this.standardPrice;
+            this.customPrice = productDTO.customPrice ?.getPrice(pricebookId) != null ? productDTO.customPrice.getPrice(pricebookId) : this.standardPrice;
             this.pbeId = productDTO.customPrice.getPriceBookEntryId(pricebookId);
         }
 

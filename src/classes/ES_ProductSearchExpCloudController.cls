@@ -11,4 +11,13 @@ public with sharing class ES_ProductSearchExpCloudController {
             throw new AuraHandledException(e.getMessage());
         }
     }
+
+    @AuraEnabled(Cacheable=true)
+    public static String getActivePricebookToShowOnSearcherPage() {
+        try {
+            return ES_PriceManagerService.getActivePricebookToShowOnSearcherPage();
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
 }
